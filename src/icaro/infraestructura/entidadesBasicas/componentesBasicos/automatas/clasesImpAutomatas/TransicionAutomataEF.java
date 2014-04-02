@@ -13,9 +13,10 @@ import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 public class TransicionAutomataEF {
     private String identEstadoOrigen;
     private String identEstadoSiguiente;
-    private Integer tipoEstadoSiguiente = 2 ; // estado intermedio por defecto
+    private Integer tipoEstadoOrigen = 2 ; // estado intermedio por defecto
     private String input;
-    private String identAccion;
+    private Class identClaseAccion;
+    private String identMetodoAccion;
     private Integer tipoTransicion;
     
     /**
@@ -27,18 +28,35 @@ public class TransicionAutomataEF {
      * @param idAccion  Nombre de la acción definida en el automata , puede ser null o "vacia"
      * @param modalidadAccion  definida en el automata puede ser ( bloqueante o paralela )
      */
-    public  TransicionAutomataEF (String idEstadoOrigen,String input,
-           String idEstadoSiguiente,String idAccion, String modalidadAccion){
-       this.identEstadoOrigen =  idEstadoOrigen; 
+    public  TransicionAutomataEF (String input,
+           Class idAccionClass ,String idEstadoSiguiente, String modalidadAccion){
+       this.identEstadoOrigen =  null;
+       this.tipoEstadoOrigen = 2;
        this.input = input;
-       this.identAccion = idAccion;
+       this.identClaseAccion = idAccionClass;
        this.identEstadoSiguiente=idEstadoSiguiente;
-       if (idAccion == null | idAccion.equals(NombresPredefinidos.ACCION_VACIA_AUTOMATA_EF))
+       if (identClaseAccion == null )
            this.tipoTransicion =NombresPredefinidos.TRANSICION_AUTOMATA_EF_SIN_ACCION;
        else if (modalidadAccion.equals(NombresPredefinidos.NOMBRE_MODO_CONCURRENTE_AUTOMATA_EF_SIN_ACCION))
                 this.tipoTransicion =NombresPredefinidos.TRANSICION_AUTOMATA_EF_ACCION_CONCUR;
             else this.tipoTransicion =NombresPredefinidos.TRANSICION_AUTOMATA_EF_ACCION_BLOQ;
 }
+    public  TransicionAutomataEF (String input,
+           Class idAccion,String idMetodoClase,String idEstadoSiguiente, String modalidadAccion){
+       this.identEstadoOrigen =  null; 
+       this.tipoEstadoOrigen = 2;
+       this.input = input;
+       this.identClaseAccion = idAccion;
+       this.identMetodoAccion = idMetodoClase;
+       this.identEstadoSiguiente=idEstadoSiguiente;
+       if (idAccion == null )
+           this.tipoTransicion =NombresPredefinidos.TRANSICION_AUTOMATA_EF_SIN_ACCION;
+       else if (modalidadAccion.equals(NombresPredefinidos.NOMBRE_MODO_CONCURRENTE_AUTOMATA_EF_SIN_ACCION))
+                this.tipoTransicion =NombresPredefinidos.TRANSICION_AUTOMATA_EF_ACCION_CONCUR;
+            else this.tipoTransicion =NombresPredefinidos.TRANSICION_AUTOMATA_EF_ACCION_BLOQ;
+}
+   
+    
     /**
      * 
      * @return
@@ -60,19 +78,29 @@ public class TransicionAutomataEF {
      *
      * @param tipoEst puede ser estado intermedio o estado final . Habría que controlar el tipo
      */
-    public void setTipoEstadoSiguiente ( Integer tipoEst){
-       this.tipoEstadoSiguiente= tipoEst;
+    public void setTipoEstadoOrigen ( Integer tipoEst){
+       this.tipoEstadoOrigen= tipoEst;
    }
     /**
      *
      * @return
      */
-    public Integer  getTipoEstadoSiguiente ( ){
-       return this.tipoEstadoSiguiente;
+    public Integer  getTipoEstadoOrigen ( ){
+       return this.tipoEstadoOrigen;
    }
     
    public String  getInput ( ){
        return this.input;
+   }
+    /**
+     *
+     * @param input
+     */
+    public void setIdentMetodoAccion ( String identMetodo){
+       this.identMetodoAccion= identMetodo;
+   }
+    public String  getIdentMetodoAccion ( ){
+       return this.identMetodoAccion;
    }
     /**
      *
@@ -90,8 +118,8 @@ public class TransicionAutomataEF {
      *
      * @return
      */
-    public String  getidentAccion ( ){
-       return this.identAccion;
+    public Class  getClaseAccion ( ){
+       return this.identClaseAccion;
    }
     /**
      *

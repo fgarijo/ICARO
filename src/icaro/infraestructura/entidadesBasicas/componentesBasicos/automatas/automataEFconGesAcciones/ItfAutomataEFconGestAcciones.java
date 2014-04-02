@@ -22,7 +22,7 @@ public interface ItfAutomataEFconGestAcciones {
 	 *  Devuelve falso si no ha podido hacer la transición o true si la ha efectuado correctamente
 	 *@param  input  Input a procesar
 	 */
-	public boolean transita(String input);
+	public boolean transita(Object input);
 
 	/**
 	 * 	Dice si el recurso est en estado activo, es decir, que puede
@@ -30,6 +30,7 @@ public interface ItfAutomataEFconGestAcciones {
 	 * 
 	 * @return est en estado activo o no
 	 */
+        public boolean ejecutarTransicion(Object input, Object... params);
 	public boolean estadoActivo();
 	
 	/**
@@ -37,6 +38,7 @@ public interface ItfAutomataEFconGestAcciones {
 	 *
 	 *@return    Cadena con la informacin
 	 */
+        @Override
 	public String toString();
 
     public String estadoActual();

@@ -1,29 +1,28 @@
 /*
-    Copyright 2001 Telefnica I+D. All rights reserved
-  */
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFconGesAcciones.imp;
 
-
-//import icaro.infraestructura.entidadesBasicas.componentesBasicos.automata.factoriaEInterfaces.imp.XMLParserTablaAutomataSinAcciones;
+import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFconGesAcciones.InterpreteAutomataEFconGestAcciones;
+import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFconGesAcciones.ItfAutomataEFconGestAcciones;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFsinAcciones.imp.*;
-import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFsinAcciones.ItfUsoAutomataEFsinAcciones;
+import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.clasesImpAutomatas.TablaEstadosAutomataEFinputObjts;
+import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.clasesImpAutomatas.TransicionAutomataEF;
+import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.gestorAcciones.ItfGestorAcciones;
+import icaro.infraestructura.patronAgenteReactivo.control.acciones.AccionesSemanticasAgenteReactivo;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.ItfUsoRecursoTrazas;
 import java.io.Serializable;
+import java.util.logging.Level;
 
 import org.apache.log4j.Logger;
 
-
 /**
- *  Clase que define autmatas de estados finitos, sin acciones semanticas a ejecutar en las transiciones, 
- *  escritos en XML
  *
- *@author     lvaro Rodrguez
- *@created    5 de septiembre de 2001
- *@modified	  02 de Marzo de 2007
+ * @author FGarijo
  */
-
-public class InterpreteAutomataEFconGestAccioneslImp extends InterpreteAutomataEFconGestAcciones
-        implements ItfUsoAutomataEFsinAcciones, Serializable{
+public class InterpreteAutomataEFconGestAccionesImp extends InterpreteAutomataEFconGestAcciones{
+//        implements ItfAutomataEFconGestAcciones, Serializable{
 	
 	
 	public static final String ESTADO_CREADO = "creado";
@@ -41,6 +40,8 @@ public class InterpreteAutomataEFconGestAccioneslImp extends InterpreteAutomataE
 	 * @uml.property  name="dEBUG"
 	 */
 	public boolean DEBUG = false;
+//        private AccionesSemanticasAgenteReactivo accionesSemAgteReactivo ;
+        private String accionesSemAgteReactivoSimpleName;
 
 	/**
 	 * Controla la profundidad de las trazas
@@ -51,7 +52,7 @@ public class InterpreteAutomataEFconGestAccioneslImp extends InterpreteAutomataE
 	/**
 	 * @uml.property  name="estadoActual"
 	 */
-	private String estadoActual;
+//	private String estadoActual;
 
 	/**
 	 * Tabla que representa los estados del autmata
@@ -59,7 +60,7 @@ public class InterpreteAutomataEFconGestAccioneslImp extends InterpreteAutomataE
 	 * @uml.associationEnd  multiplicity="(1 1)"
 	 */
 //	private InterpreteTablaEstadosAutomataSinAcciones interpTablaEstados;
-    private TablaEstadosAutomataEF interpTablaEstados;
+//    private TablaEstadosAutomataEF interpTablaEstados;
 	/**
 	 *  No se muestra traza
 	 */
@@ -93,25 +94,27 @@ public class InterpreteAutomataEFconGestAccioneslImp extends InterpreteAutomataE
 	 *@param  nivelTraza               Profundidad de las trazas (usar constantes
 	 *      definidas estticas en esta clase)
 	 */
-	public InterpreteAutomataEFconGestAccioneslImp(TablaEstadosAutomataEF intpTablaEstados, int nivelTraza)
-	{
-
+	public InterpreteAutomataEFconGestAccionesImp(TablaEstadosAutomataEFinputObjts tablaEstados,Boolean activarTrazas){
+	
+            super (tablaEstados,activarTrazas );
+            accionesSemAgteReactivoSimpleName =AccionesSemanticasAgenteReactivo.class.getSimpleName();
+            
     //    XMLParserTablaAutomataSinAcciones parser = new XMLParserTablaAutomataSinAcciones();
 		//String ruta = tid.tecHabla.agentes.componentes.infraestructura.configuracion.Configuracion.obtenerParametro("RUTA_FICHEROS_DEFINICION_AUTOMATAS");
 
 	//	interpTablaEstados = parser.extraeTablaEstadosDesdeFicheroXML(NombreFicheroDescriptor);
 
 		// colocamos el autmata en el estado inicial
-		this.interpTablaEstados =intpTablaEstados;
-        estadoActual = interpTablaEstados.dameEstadoInicial();
-
-		// actualizamos el DEBUG para las trazas
-		if (nivelTraza == 2)
-			DEBUG = true;
-		else
-			DEBUG = false;
-
-		traza = nivelTraza;
+//		this.interpTablaEstados =intpTablaEstados;
+//        estadoActual = interpTablaEstados.dameEstadoInicial();
+//
+//		// actualizamos el DEBUG para las trazas
+//		if (nivelTraza == 2)
+//			DEBUG = true;
+//		else
+//			DEBUG = false;
+//
+//		traza = nivelTraza;
 //        String NombreFicheroDescriptor = interpTablaEstados.dameFicheroDefEstados();
 
 //		logger.debug("Usando el automata de ciclo de vida del fichero: " + NombreFicheroDescriptor);
@@ -124,43 +127,90 @@ public class InterpreteAutomataEFconGestAccioneslImp extends InterpreteAutomataE
 	    }*/
 	}
 
-
+        @Override
+        public boolean ejecutarTransicion(Object input, Object... params){
+            
+            String inputAutomata = input.getClass().getSimpleName();
+           
+            if( inputAutomata.equals("String")){ // Si el input es de tipo String Tomamos como input la cadena que representa el input
+                inputAutomata = (String)input;
+            }
+//           if( tablaEstadosAutomata.esInputValidoDeEstado(estadoActual, inputAutomata)){
+               TransicionAutomataEF transicion = this.tablaEstadosAutomata.getTransicion(estadoActual()+inputAutomata);
+               if (transicion == null){
+                   // mensaje de error el input no es valido en el estado actual 
+                   return false;
+           }
+            Class accion = transicion.getClaseAccion();
+            if (accion == null){
+            this.cambiaEstado(transicion.getidentEstadoSiguiente());
+            return true;
+            } 
+            if (accion.getSuperclass().getSimpleName().equalsIgnoreCase(accionesSemAgteReactivoSimpleName)){
+                String metodoId = transicion.getIdentMetodoAccion();
+                if (metodoId!=null )
+                    try {
+                    // se trata de una claseAcciones semanticas, ejecutamos el metodo de la clase
+                        this.itfGestAcciones.ejecutarMetodo(accion,metodoId, params);
+                        return true;
+                    } catch (Exception ex) {
+                        java.util.logging.Logger.getLogger(InterpreteAutomataEFconGestAccionesImp.class.getName()).log(Level.SEVERE, null, ex);
+                        return false;
+                        }
+                    }
+            try { // se trata de una claseAcciones semanticas donde no se ha especificado el metodo, o de una accion sincrona o asincron
+                   this.itfGestAcciones.ejecutarAccion(accion, params);
+                    return true;
+                } catch (Exception ex) {
+                            java.util.logging.Logger.getLogger(InterpreteAutomataEFconGestAccionesImp.class.getName()).log(Level.SEVERE, null, ex);
+                            return false;
+                        }
+}
+        @Override
+  public boolean transita(Object input){
+      return ejecutarTransicion( input, (Object[]) null);
+  }
 	/**
 	 *  Dice si el automata se encuentra en un estado final o no
 	 *
 	 *@return    est en estado final o no
 	 */
-	public boolean esEstadoFinal()
+//        @Override
+//	public boolean esEstadoFinal(String identEstado)
+//	{
+//		return (interpTablaEstados.esEstadoFinal(identEstado));
+//	}
+
+        @Override
+        public boolean estasEnEstadoFinal()
 	{
-		return (interpTablaEstados.esEstadoFinal(estadoActual));
+		return (tablaEstadosAutomata.esEstadoFinal(estadoActual));
 	}
-
-
 	/**
 	 *  Admite un input y lo procesa segun la tabla de estados
 	 *
 	 *@param  input  Input a procesar
 	 */
-	public void transita(String input)
-	{
-		String siguiente;
-		// comprobar que es un input reconocido por el estado actual
-		if (interpTablaEstados.esInputValidoDeEstado(estadoActual, input))
-		{
-			siguiente = interpTablaEstados.dameEstadoSiguiente(estadoActual, input);
-			// cambiar al siguiente estado
-//			logger.info("Transicion en el ciclo de vida usando input:" + input + "  :" + estadoActual + " -> " + siguiente);
-			cambiaEstado(siguiente);
-		}
-		else
-		{
-			logger.info("AVISO: Input de ciclo de vida ignorado.El input: " + input + " no pertenece a los inputs vlidos para el estado actual: " + estadoActual);
-			/*trazas.aceptaNuevaTraza(new InfoTraza("AutomataCicloVidaRecurso",
-					"AVISO: Input de ciclo de vida ignorado.El input: " + input + " no pertenece a los inputs vlidos para el estado actual: " + estadoActual,
-					InfoTraza.NivelTraza.info));*/
-		}
-
-	}
+//	public void transita(String input)
+//	{
+//		String siguiente;
+//		// comprobar que es un input reconocido por el estado actual
+//		if (interpTablaEstados.esInputValidoDeEstado(estadoActual, input))
+//		{
+//			siguiente = interpTablaEstados.dameEstadoSiguiente(estadoActual, input);
+//			// cambiar al siguiente estado
+////			logger.info("Transicion en el ciclo de vida usando input:" + input + "  :" + estadoActual + " -> " + siguiente);
+//			cambiaEstado(siguiente);
+//		}
+//		else
+//		{
+//			logger.info("AVISO: Input de ciclo de vida ignorado.El input: " + input + " no pertenece a los inputs vlidos para el estado actual: " + estadoActual);
+//			/*trazas.aceptaNuevaTraza(new InfoTraza("AutomataCicloVidaRecurso",
+//					"AVISO: Input de ciclo de vida ignorado.El input: " + input + " no pertenece a los inputs vlidos para el estado actual: " + estadoActual,
+//					InfoTraza.NivelTraza.info));*/
+//		}
+//
+//	}
 
 
 
@@ -169,9 +219,10 @@ public class InterpreteAutomataEFconGestAccioneslImp extends InterpreteAutomataE
 	 *
 	 *@return    Cadena con la informacin
 	 */
+        @Override
 	public String toString()
 	{
-		String dev = interpTablaEstados.toString();
+		String dev = tablaEstadosAutomata.toString();
 		dev += "\nEstado actual= " + estadoActual;
 		return dev;
 	}
@@ -180,9 +231,11 @@ public class InterpreteAutomataEFconGestAccioneslImp extends InterpreteAutomataE
 	/**
 	 *  Devuelve el autmata a su estado inicial
 	 */
+        @Override
 	public void volverAEstadoInicial()
 	{
-		this.cambiaEstado(this.interpTablaEstados.dameEstadoInicial());
+	String estado = this.tablaEstadosAutomata.dameEstadoInicial();	
+            this.cambiaEstado(estado);
 	}
 
 
@@ -202,6 +255,7 @@ public class InterpreteAutomataEFconGestAccioneslImp extends InterpreteAutomataE
 	 * 
 	 * @return est en estado activo o no
 	 */
+        @Override
 	public boolean estadoActivo(){
 		return this.estadoActual.equals("activo");
 	}
@@ -210,6 +264,7 @@ public class InterpreteAutomataEFconGestAccioneslImp extends InterpreteAutomataE
 	 * Dice el estado del autmata en el que se encuentra el recurso
 	 * @return el estado en que se encuentra
 	 */
+        @Override
 	public String estadoActual(){
 		return this.estadoActual;
 	}
@@ -274,6 +329,7 @@ public class InterpreteAutomataEFconGestAccioneslImp extends InterpreteAutomataE
 	 * @param logger
 	 * @uml.property  name="logger"
 	 */
+      
 	public void setLogger(Logger logger){
 		this.logger = logger;
 	}
@@ -281,6 +337,7 @@ public class InterpreteAutomataEFconGestAccioneslImp extends InterpreteAutomataE
 	 * @return
 	 * @uml.property  name="logger"
 	 */
+
 	public Logger getLogger(){
 		return logger;
 	}

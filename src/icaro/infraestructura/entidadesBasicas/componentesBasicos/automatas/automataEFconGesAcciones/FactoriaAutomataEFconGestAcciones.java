@@ -58,10 +58,10 @@ public   InterpreteAutomataEFconGestAcciones crearInterpreteAutomataEFconGestAcc
 
             try {
 //                verificar que existe la ruta donde deben encontrarse las acciones
-               tablaEstadosAutomata = xmLParserTablaEstadosAutomata.extraeTablaEstadosDesdeFicheroXML(nombreFicheroTablaEstados);
+//               tablaEstadosAutomata = xmLParserTablaEstadosAutomata.extraeTablaEstadosDesdeFicheroXML(nombreFicheroTablaEstados);
 //                this.accionesSemanticas = new EjecutorDeAccionesImp(accionesSemanticasEspecificas);
 //                automataControl = new AutomataEFEImp(nombreFicheroTablaEstados, accionesSemanticas, AutomataEFEImp.NIVEL_TRAZA_DESACTIVADO,nombreAgente );
-                return new InterpreteAutomataEFconGestAcciones(tablaEstadosAutomata,activarTrazas);
+//                return new InterpreteAutomataEFconGestAcciones(tablaEstadosAutomata,activarTrazas);
                 }
                 catch (Exception ExcepcionNoSePudoCrearAutomataEFE)
                 {
@@ -76,13 +76,13 @@ public   InterpreteAutomataEFconGestAcciones crearInterpreteAutomataEFconGestAcc
 
            // return  itfGestionControlAgteCreado = (ItfGestionControlAgteReactivo) new ProcesadorEventosImp(percConsumidor,automataControl,percProductor, nombreDelAgente);
 
-
+return null;  // ***********
     //elijo la implementacin adecuada (aunque podra haber ms)
 
 }
 
  
-    protected GestorAccionesImp accionesSemanticas;
+// **   protected GestorAccionesImp accionesSemanticas;
 
     protected InterpreteAutomataEFconGestAcciones automataControl=null;
     /**
@@ -108,48 +108,48 @@ public   InterpreteAutomataEFconGestAcciones crearInterpreteAutomataEFconGestAcc
 
 //    private ItfProductorPercepcion percepcionProductor;
 
-    @Override
-    public ProcesadorInfoReactivoImp crearControlAgteReactivo(AccionesSemanticasAgenteReactivo accionesSemanticasEspecificas, String nombreFicheroTablaEstados, AgenteReactivoAbstracto agente)throws ExcepcionEnComponente {
-
-        new ConfiguracionTrazas(logger);
-
-        trazas = NombresPredefinidos.RECURSO_TRAZAS_OBJ;
-
-         accionesSemanticasEspecificas.setLogger(logger);
-       
-        // crea las Acciones semnticas referidas al contenedor de acciones
-
-        // crea el automata de control
-   //     AutomataEFEAbstracto ac = null;
-
-            try {
-                nombreAgente = agente.getIdentAgente();
-                this.accionesSemanticas = new EjecutorDeAccionesImp(accionesSemanticasEspecificas);
-                automataControl = new AutomataEFEImp(nombreFicheroTablaEstados, accionesSemanticas, AutomataEFEImp.NIVEL_TRAZA_DESACTIVADO,nombreAgente );
-                return new ProcesadorInfoReactivoImp(automataControl, accionesSemanticasEspecificas,  agente);
-                }
-                catch (Exception ExcepcionNoSePudoCrearAutomataEFE)
-                {
-                logger.error("Error al crear el automata del agente " + nombreAgente + " utilizando el fichero " + nombreFicheroTablaEstados);
-                trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
-                        "Error al crear el automata del agente " + nombreAgente + " utilizando el fichero " + nombreFicheroTablaEstados,
-                        InfoTraza.NivelTraza.error));
-                throw new ExcepcionEnComponente ("AutomataEFEImp", "no se pudo crear el Automata EFE","Automta EFE","automataControl = new AutomataEFEImp(" );
-                }
-        // Crea el procesador de eventos
-     //    this.procesadorEventos = new ProcesadorEventosImp(percConsumidor, automataControl,percProductor, nombreDelAgente);
-
-           // return  itfGestionControlAgteCreado = (ItfGestionControlAgteReactivo) new ProcesadorEventosImp(percConsumidor,automataControl,percProductor, nombreDelAgente);
-
-
-    //elijo la implementacin adecuada (aunque podra haber ms)
-    }
-    @Override
-    public ProcesadorEventosImp crearControlAgteReactivo(AccionesSemanticasAgenteReactivo accionesSemanticasEspecificas, String nombreFicheroTablaEstados, String nombreDelAgente,ItfConsumidorPercepcion percConsumidor,
-			ItfProductorPercepcion percProductor)throws ExcepcionEnComponente {
-        return null;
-    }
-       
+//    @Override
+//    public ProcesadorInfoReactivoImp crearControlAgteReactivo(AccionesSemanticasAgenteReactivo accionesSemanticasEspecificas, String nombreFicheroTablaEstados, AgenteReactivoAbstracto agente)throws ExcepcionEnComponente {
+//
+//        new ConfiguracionTrazas(logger);
+//
+//        trazas = NombresPredefinidos.RECURSO_TRAZAS_OBJ;
+//
+//         accionesSemanticasEspecificas.setLogger(logger);
+//       
+//        // crea las Acciones semnticas referidas al contenedor de acciones
+//
+//        // crea el automata de control
+//   //     AutomataEFEAbstracto ac = null;
+//
+//            try {
+//                nombreAgente = agente.getIdentAgente();
+//                this.accionesSemanticas = new EjecutorDeAccionesImp(accionesSemanticasEspecificas);
+//                automataControl = new AutomataEFEImp(nombreFicheroTablaEstados, accionesSemanticas, AutomataEFEImp.NIVEL_TRAZA_DESACTIVADO,nombreAgente );
+//                return new ProcesadorInfoReactivoImp(automataControl, accionesSemanticasEspecificas,  agente);
+//                }
+//                catch (Exception ExcepcionNoSePudoCrearAutomataEFE)
+//                {
+//                logger.error("Error al crear el automata del agente " + nombreAgente + " utilizando el fichero " + nombreFicheroTablaEstados);
+//                trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
+//                        "Error al crear el automata del agente " + nombreAgente + " utilizando el fichero " + nombreFicheroTablaEstados,
+//                        InfoTraza.NivelTraza.error));
+//                throw new ExcepcionEnComponente ("AutomataEFEImp", "no se pudo crear el Automata EFE","Automta EFE","automataControl = new AutomataEFEImp(" );
+//                }
+//        // Crea el procesador de eventos
+//     //    this.procesadorEventos = new ProcesadorEventosImp(percConsumidor, automataControl,percProductor, nombreDelAgente);
+//
+//           // return  itfGestionControlAgteCreado = (ItfGestionControlAgteReactivo) new ProcesadorEventosImp(percConsumidor,automataControl,percProductor, nombreDelAgente);
+//
+//
+//    //elijo la implementacin adecuada (aunque podra haber ms)
+//    }
+//    @Override
+//    public ProcesadorEventosImp crearControlAgteReactivo(AccionesSemanticasAgenteReactivo accionesSemanticasEspecificas, String nombreFicheroTablaEstados, String nombreDelAgente,ItfConsumidorPercepcion percConsumidor,
+//			ItfProductorPercepcion percProductor)throws ExcepcionEnComponente {
+//        return null;
+//    }
+//       
 
     
 }

@@ -1,140 +1,191 @@
 package icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.clasesImpAutomatas;
 
-import icaro.infraestructura.entidadesBasicas.procesadorCognitivo.*;
+
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
+import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFconGesAcciones.ItfAutomataEFconGestAcciones;
+import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.gestorAcciones.ItfGestorAcciones;
 import icaro.infraestructura.entidadesBasicas.comunicacion.ComunicacionAgentes;
-import icaro.infraestructura.patronAgenteCognitivo.factoriaEInterfacesPatCogn.AgenteCognitivo;
-import icaro.infraestructura.patronAgenteCognitivo.procesadorObjetivos.factoriaEInterfacesPrObj.ItfProcesadorObjetivos;
-import icaro.infraestructura.patronAgenteCognitivo.procesadorObjetivos.gestorTareas.GestorTareas;
-import icaro.infraestructura.patronAgenteCognitivo.procesadorObjetivos.motorDeReglas.ItfConfigMotorDeReglas;
-import icaro.infraestructura.patronAgenteCognitivo.procesadorObjetivos.motorDeReglas.ItfMotorDeReglas;
+import icaro.infraestructura.entidadesBasicas.excepciones.ExcepcionEnComponente;
+import icaro.infraestructura.entidadesBasicas.procesadorCognitivo.Objetivo;
 import icaro.infraestructura.recursosOrganizacion.configuracion.ItfUsoConfiguracion;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.ItfUsoRecursoTrazas;
+import icaro.infraestructura.recursosOrganizacion.recursoTrazas.imp.componentes.InfoTraza;
 import icaro.infraestructura.recursosOrganizacion.repositorioInterfaces.ItfUsoRepositorioInterfaces;
+import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
 public abstract class Accion extends Thread {
 
-    private ItfProcesadorObjetivos itfProcObjetivos;
-    private AgenteCognitivo agente;
-    private String  identTarea;
-    private String  identAgente;
+    private ItfAutomataEFconGestAcciones itfAutomata;
+//    private AgenteCognitivo agente;
+    private String  identAccion;
+//    private String  identAgente;
     private Object[] params;
     private boolean terminada;
     public ItfUsoRecursoTrazas trazas;
     private ItfUsoRepositorioInterfaces repoInterfaces;
     private ItfUsoConfiguracion itfConfig;
-    private GestorTareas gestorTareas;
+    private ItfGestorAcciones itfGestAccions;
     private ComunicacionAgentes comunicator;
 		
 	public Accion(){
-		super("Tarea");
+		super("Accion");
 		this.setDaemon(true);
                 this.trazas = NombresPredefinidos.RECURSO_TRAZAS_OBJ;
                 this.repoInterfaces = NombresPredefinidos.REPOSITORIO_INTERFACES_OBJ;
 	}
     
-    public Accion(ItfProcesadorObjetivos envioHechos, AgenteCognitivo agente, GestorTareas gestorTareas) {
-    	super(agente.getIdentAgente()+"Tarea");
-    	this.itfProcObjetivos = envioHechos;
-    	this.agente = agente;
-    	this.gestorTareas = gestorTareas;
+    public Accion(ItfAutomataEFconGestAcciones automataItf,  ItfGestorAcciones gestorAccionsItf) {
+    	super("Accion");
+//    	this.itfProcObjetivos = envioHechos;
+//    	this.agente = agente;
+    	this.itfGestAccions = gestorAccionsItf;
         this.trazas = NombresPredefinidos.RECURSO_TRAZAS_OBJ;
-        this.identAgente = agente.getIdentAgente();
+//        this.identAgente = agente.getIdentAgente();
     	this.setDaemon(true);
     }
 
     public abstract void ejecutar(Object... params);
-    
-    public void generarInformeConCausaTerminacion (String idTarea,Objetivo contxtGoal,String idAgenteOrdenante,Object contenido, CausaTerminacionTarea causaTerminacion ){
-
-        String identGoal = null;
-        if (contxtGoal!= null) identGoal = contxtGoal.getgoalId();
-        InformeDeTarea resultadoTarea = new InformeDeTarea (idTarea,identGoal,idAgenteOrdenante,contenido, causaTerminacion );
-        itfProcObjetivos.insertarHecho(resultadoTarea);
-    //    envioHechos.insertarHecho(contenido);
+    public void generarInformeError (String idAccion,InformeError informe){
+    // definir un Informe de Error
     }
     
-    public void generarInforme (InformeDeTarea informe){
-        itfProcObjetivos.insertarHecho(informe);
+    public void generarInputAutomata (Object input){
+        itfAutomata.transita(input);
  //       envioHechos.insertarHecho(informe.getContenidoInforme());
     }
 
-    public void generarInformeOK (String idTarea,Objetivo contxtGoal,String idAgenteOrdenante, Object contenido){
-        String goalId = null ;
-        if (contxtGoal!=null){
-            goalId= contxtGoal.getgoalId();
-        }
-        InformeDeTarea resultadoTarea = new InformeDeTarea (idTarea,goalId,idAgenteOrdenante, contenido );
-        itfProcObjetivos.insertarHecho(resultadoTarea);
-    //  envioHechos.insertarHecho(contenido);
-    }
+//    public void generarInformeOK (String idTarea,Objetivo contxtGoal,String idAgenteOrdenante, Object contenido){
+//        String goalId = null ;
+//        if (contxtGoal!=null){
+//            goalId= contxtGoal.getgoalId();
+//        }
+//        InformeDeTarea resultadoTarea = new InformeDeTarea (idTarea,goalId,idAgenteOrdenante, contenido );
+//        itfProcObjetivos.insertarHecho(resultadoTarea);
+//    //  envioHechos.insertarHecho(contenido);
+//    }
     
-    public void generarInformeTemporizado (long milis,String idTarea,Objetivo contxtGoal,String idAgenteOrdenante, Object contenido){
-        String goalId = null ;
-        if (contxtGoal!=null){
-            goalId= contxtGoal.getgoalId();
-        }
-        InformeDeTarea informeTarea = new InformeDeTarea (idTarea,goalId,idAgenteOrdenante, contenido );
-        InformeTimeout informeTemporizado = new InformeTimeout ( milis, itfProcObjetivos,informeTarea );
+    public void generarInputTemporizador (long milis,String idAccion, String msgTimeout){
+//        String goalId = null ;
+//        if (contxtGoal!=null){
+//            goalId= contxtGoal.getgoalId();
+//        }
+        if(msgTimeout==null)msgTimeout = NombresPredefinidos.PREFIJO_MSG_TIMEOUT;
+        InformeTemporizacion informeTemp = new InformeTemporizacion (idAccion, msgTimeout );
+        InputTimeout informeTemporizado = new InputTimeout ( milis, itfAutomata,informeTemp );
         informeTemporizado.start();
     }
-   public ItfUsoConfiguracion getItfUsoConfiguracion() {
+    public void generarInformeTemporizadoFromConfigProperty (String identproperty,Objetivo contxtGoal,String idAgenteOrdenante, String msgTimeout){
+        try {
+            // el nombre de la propiedad es el nombre de la tarea y debe estar definido en la configuracion. El valor debe ser un entero
+           //  identproperty = NombresPredefinidos.PREFIJO_PROPIEDAD_TAREA_TIMEOUT+identproperty;
+            int valorTimeout = this.getItfUsoConfiguracion().getValorNumericoPropiedadGlobal(NombresPredefinidos.PREFIJO_PROPIEDAD_TAREA_TIMEOUT+identproperty);
+              if (valorTimeout <= 0){
+                  trazas.trazar("Accion", "Se ejecuta la accion " + this.getIdentAccion()+
+                                         " No se puede obtener el nombre de la propiedad en la configuracion. Se intenta la propiedad por defecto"
+                         + " Verifique el nombre de la propiedad en la descripcion de la organizacion :  "+ NombresPredefinidos.PREFIJO_PROPIEDAD_TAREA_TIMEOUT+identproperty, InfoTraza.NivelTraza.error);
+                  valorTimeout = this.getItfUsoConfiguracion().getValorNumericoPropiedadGlobal(NombresPredefinidos.PROPERTY_TIME_TIMEOUT_POR_DEFECTO);
+                if (valorTimeout <= 0) {
+                    trazas.trazar("Accion", "Se ejecuta la tarea " + this.getIdentAccion()+
+                                         " No se puede obtener el nombre de la propiedad en la configuracion.El valor de la propiedad por defecto NO esta definido"
+                         + " Defina el nombre de la propiedad :"+ NombresPredefinidos.PROPERTY_TIME_TIMEOUT_POR_DEFECTO +
+                            "en la descripcion de la organizacion :  ", InfoTraza.NivelTraza.error);
+                }
+              }else
+                 if(msgTimeout==null)msgTimeout = NombresPredefinidos.PREFIJO_MSG_TIMEOUT;
+                   this.generarInputTemporizador(valorTimeout, identproperty, msgTimeout);      
+                   trazas.trazar("Accion", "Se ejecuta la accion " + this.getIdentAccion()+
+                                         " Se activa un informe temporizado :  "+ msgTimeout, InfoTraza.NivelTraza.debug);                    
+              
+        } catch (ExcepcionEnComponente ex) {
+            trazas.trazar("Accion", "Se ejecuta la accion " + this.getIdentAccion()+
+                                         " No se puede obtener el nombre de la propiedad en la configuracion."
+                         + " Verifique el nombre de la propiedad en la descripcion de la organizacion :  "+ identproperty, InfoTraza.NivelTraza.error);
+            Logger.getLogger(AccionSincrona.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(AccionSincrona.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+     
+//    public ItfProcesadorObjetivos getEnvioHechos() {
+//        return itfProcObjetivos;
+//    }
+    public ItfUsoConfiguracion getItfUsoConfiguracion() {
          if (itfConfig == null ){
             try {
                 itfConfig = (ItfUsoConfiguracion)repoInterfaces.obtenerInterfaz(NombresPredefinidos.ITF_USO + NombresPredefinidos.CONFIGURACION);
             } catch (Exception ex) {
-                Logger.getLogger(TareaSincrona.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(AccionSincrona.class.getName()).log(Level.SEVERE, null, ex);
             }
          }
         return itfConfig;
-    } 
-    public ItfProcesadorObjetivos getEnvioHechos() {
-        return itfProcObjetivos;
-    }
-    public ItfConfigMotorDeReglas getItfConfigMotorDeReglas() {
-        return itfProcObjetivos.getItfConfigMotorDeReglas();
-    }
-    public ItfMotorDeReglas getItfMotorDeReglas() {
-        return itfProcObjetivos.getItfMotorDeReglas();
-    }
-    public void setEnvioHechos(ItfProcesadorObjetivos envioHechos) {
-        this.itfProcObjetivos = envioHechos;
     }
 
-    public AgenteCognitivo getAgente() {
-        return agente;
+//    public void setEnvioHechos(ItfProcesadorObjetivos envioHechos) {
+//        this.itfProcObjetivos = envioHechos;
+//    }
+     public void setItfAutomata(ItfAutomataEFconGestAcciones itfAutomata){
+         this.itfAutomata = itfAutomata;
+     }
+      public ItfAutomataEFconGestAcciones getItfAutomata(){
+         return this.itfAutomata ;
+     }
+     public void setTrazas(ItfUsoRecursoTrazas trazasItf) {
+        this.trazas = trazasItf;
     }
-
-    public void setAgente(AgenteCognitivo agente) {
-        this.agente = agente;
+//    public ItfConfigMotorDeReglas getItfConfigMotorDeReglas() {
+//        return itfProcObjetivos.getItfConfigMotorDeReglas();
+//    }
+//    public ItfMotorDeReglas getItfMotorDeReglas() {
+//        return itfProcObjetivos.getItfMotorDeReglas();
+//    }
+//    public AgenteCognitivo getAgente() {
+//        return agente;
+//    }
+//
+//    public void setAgente(AgenteCognitivo agente) {
+//        this.agente = agente;
+//    }
+//    
+//    public void setIdentAgente(String agentId) {
+//        this.identAgente = agentId;
+//    }
+//    
+//    public String getIdentAgente(){
+//       return identAgente ;
+//    }
+    
+    public void setIdentAccion(String idAccion){
+        this.identAccion = idAccion;
     }
     
-    public void setIdentAgente(String agentId) {
-        this.identAgente = agentId;
-    }
-    
-    public String getIdentAgente(){
-       return identAgente ;
-    }
-    
-    public void setIdentTarea(String idTarea){
-        this.identTarea = idTarea;
-    }
-    
-    public String getIdentTarea(){
-       return identTarea ;
+    public String getIdentAccion(){
+       return identAccion ;
     }
 	
     public Object[] getParams() {
 		return params;
 	}
 
-	public void setParams(Object... params) {
+    public void setParams(Object... params) {
 		this.params = params;
 	}
+	
+     public void setComunicator(ComunicacionAgentes comunicator) {
+        this.comunicator = comunicator;
+    }
+      public ComunicacionAgentes getComunicator() {
+        return this.comunicator ;
+    }
+    public void setGestorAccions(ItfGestorAcciones gestorAccionesItf) {
+		 this.itfGestAccions = gestorAccionesItf;
+	 }
+
+     public ItfGestorAcciones getGestorAccions() {
+		 return itfGestAccions;
+	 }
 	
     public boolean terminada() {
     	return terminada;
@@ -144,11 +195,11 @@ public abstract class Accion extends Thread {
     public void run() {
         terminada = false;
 		ejecutar(params);
-               //			this.terminar(CausaTerminacionTarea.EXITO);
+               //			this.terminar(CausaTerminacionAccion.EXITO);
     }
 
 /*
-	public void terminar(CausaTerminacionTarea causa) {
+	public void terminar(CausaTerminacionAccion causa) {
 		switch (causa) {
 		case EXITO:
 			break;
@@ -163,25 +214,9 @@ public abstract class Accion extends Thread {
 		case OTRO:
 			break;
 		}
-		gestorTareas.eliminarTareaActiva(this);
+		gestorAccions.eliminarAccionActiva(this);
 		terminada = true;
 	}
 */
     
-	 public void setGestorTareas(GestorTareas gestorTareas) {
-		 this.gestorTareas = gestorTareas;
-	 }
-
- 
-	 public GestorTareas getGestorTareas() {
-		 return gestorTareas;
-	 }
-
-    public void setComunicator(ComunicacionAgentes comunicator) {
-        this.comunicator = comunicator;
-    }
-    public ComunicacionAgentes getComunicator() {
-        return this.comunicator ;
-    }
-
 }

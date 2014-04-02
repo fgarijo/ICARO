@@ -28,7 +28,7 @@ public class TablaEstadosAutomataEFinputObjts implements Cloneable, Serializable
          * Los inputs deben ser objetos de clases conocidas, en los atributos y métodos del input se pueden pasar valores que
          * utilizan las acciones definidas en la tabla
 	 */
-	private HashMap<String,ParTipoEstadoConjEstados> infoEstados = new HashMap<String,ParTipoEstadoConjEstados>();
+	private HashMap<String,ParTipoEstadoConjInputs> infoEstados = new HashMap<String,ParTipoEstadoConjInputs>();
 
 	/**
 	 * El estado inicial
@@ -74,6 +74,10 @@ public class TablaEstadosAutomataEFinputObjts implements Cloneable, Serializable
 	public String dameEstadoInicial()
 	{
 		return NombresPredefinidos.ESTADO_INICIAL;
+	}
+        public Boolean esEstadoValido(String identEstado)
+	{
+		return infoEstados.containsKey(identEstado);
 	}
 
 	/**
@@ -125,16 +129,19 @@ public class TablaEstadosAutomataEFinputObjts implements Cloneable, Serializable
 	 *@param  identificador  Nombre del estado
 	 *@param  tipo           Tipo del estado (ver enumerados de esta clase)
 	 */
-	public void putEstado(String identificador, int tipo)
+	public void putEstado(String input, int tipoEstado)
 	{
 		// clasificar el estado
 //		infoEstados.put(identificador, new ParTipoEstadoConjEstados(tipo, identsInputsEstado));
-                if (infoEstados.containsKey(identificador) ){
+                if (infoEstados.containsKey(input) ){
                     
                 } else {
-                   Set<String> identsInputsEstado = new TreeSet();
-//                   if (identsInputsEstado.add(identificador))
-                        infoEstados.put(identificador, new ParTipoEstadoConjEstados(tipo, identsInputsEstado));
+                   identsInputsEstado = new TreeSet<>();
+//                   identsInputsEstado.add(input);
+                   if (tipoEstado<1 || tipoEstado >=3 ){
+                    tipoEstado = TIPO_DE_ESTADO_INTERMEDIO; // sacar un mensaje indicando que se ha corregido
+                   }
+                  infoEstados.put(input, new ParTipoEstadoConjInputs(tipoEstado, identsInputsEstado));
             }
 	//	inputsDeEstados.put(identificador, new Hashtable<String,String>());
 
@@ -149,49 +156,80 @@ public class TablaEstadosAutomataEFinputObjts implements Cloneable, Serializable
 	 *@param  input            Input que activa la transicin
 	 *@param  estadoSiguiente  Estado al que se pasa tras ejecutar la transicin
 	 */
-	public Boolean addTransicion(String estadoOrigen,
-                                  String input,String accion,String estadoSiguiente, String modo) {
+	public Boolean addTransicion(String estadoOrigen,Integer tipoEstado,
+                                  TransicionAutomataEF transicion) {
 
 		// incorpora una transicion al estado origen
 //            String input = transicion.getInput();
-            if (infoEstados.containsKey(estadoOrigen)){
+           if ( estadoOrigen==null ){
+                // mensaje de error el estado origen no puede ser nulo
+                return false; 
+            }
+            if ( transicion==null ){
+                // mensaje de error la transicion asociada a un input no puede ser vacia
+                return false; 
+            }
+            String input= transicion.getInput();
+            String claveTablaEstados = estadoOrigen+input;
+//            if (infoEstados.containsKey(estadoOrigen)){
+//                identsInputsEstado = infoEstados.get(estadoOrigen).getIdentsInputsEstado();
+//                
+//                if (identsInputsEstado.contains(input) )return false;// sacar un mensaje de error o de aviso 
+//                else {
+////                    TransicionAutomataEF transicion = new TransicionAutomataEF(estadoOrigen, input, estadoSiguiente, accion, modo);
+//                    tablaTransicionFromEstadoInput.put(estadoOrigen+input,new TransicionAutomataEF(estadoOrigen,input,estadoSiguiente,accion,modo));
+//                    identsInputsEstado.add(input);
+//                }
+            if (!tablaTransicionFromEstadoInput.containsKey(claveTablaEstados)){
                 identsInputsEstado = infoEstados.get(estadoOrigen).getIdentsInputsEstado();
-                
-                if (identsInputsEstado.contains(input) )return false;// sacar un mensaje de error o de aviso 
-                else {
-//                    TransicionAutomataEF transicion = new TransicionAutomataEF(estadoOrigen, input, estadoSiguiente, accion, modo);
-                    tablaTransicionFromEstadoInput.put(estadoOrigen+input,new TransicionAutomataEF(estadoOrigen,input,estadoSiguiente,accion,modo));
-                    identsInputsEstado.add(input);
-                }
-            }
-            else { // no existe el estado origen => se crea 
-                identsInputsEstado = new TreeSet<>();
                 identsInputsEstado.add(input);
-                infoEstados.put(input, new ParTipoEstadoConjEstados(TIPO_DE_ESTADO_INTERMEDIO, identsInputsEstado));
-                tablaTransicionFromEstadoInput.put(estadoOrigen+input, new TransicionAutomataEF(estadoOrigen,input,estadoSiguiente,accion,modo));
+                tablaTransicionFromEstadoInput.put(estadoOrigen+input,transicion);     
+                infoEstados.put(estadoOrigen, new ParTipoEstadoConjInputs(tipoEstado,identsInputsEstado));
             }
+            
+//            else { // no existe el estado origen => se crea 
+//                identsInputsEstado = new TreeSet<>();
+//                identsInputsEstado.add(input);
+//                infoEstados.put(input, new ParTipoEstadoConjEstados(TIPO_DE_ESTADO_INTERMEDIO, identsInputsEstado));
+//                tablaTransicionFromEstadoInput.put(estadoOrigen+input, new TransicionAutomataEF(estadoOrigen,input,estadoSiguiente,accion,modo));
+//            }
             return true;
 	}
+        public TransicionAutomataEF getTransicion (String estadoMasInput){
+            return tablaTransicionFromEstadoInput.get(estadoMasInput);
+        }
         public Boolean putTransicion(String estadoOrigen, TransicionAutomataEF transicion) {
 
 		// incorpora una transicion al estado origen
             String input = transicion.getInput();
+            Integer tipoEstado;
             if (infoEstados.containsKey(estadoOrigen)){
                 identsInputsEstado = infoEstados.get(estadoOrigen).getIdentsInputsEstado();
                 
                 if (identsInputsEstado.contains(input) )return false;// sacar un mensaje de error o de aviso 
                 else {
 //                    TransicionAutomataEF transicion = new TransicionAutomataEF(estadoOrigen, input, estadoSiguiente, accion, modo);
-                    tablaTransicionFromEstadoInput.put(estadoOrigen+input,transicion);
+//                    tablaTransicionFromEstadoInput.put(estadoOrigen+input,transicion);
                     identsInputsEstado.add(input);
+                    tipoEstado= infoEstados.get(estadoOrigen).tipoEstado;
                 }
             }
-            else { // no existe el estado origen => se crea 
+            else { // no existe el estado origen => se saca mensaje de error y se crea 
                 identsInputsEstado = new TreeSet<>();
                 identsInputsEstado.add(input);
-                infoEstados.put(input, new ParTipoEstadoConjEstados(TIPO_DE_ESTADO_INTERMEDIO, identsInputsEstado));
-                tablaTransicionFromEstadoInput.put(estadoOrigen+input, transicion);
+                tipoEstado = TIPO_DE_ESTADO_INTERMEDIO;
+//                if (tipoEstado<1 || tipoEstado >=3 ){
+//                    tipoEstado = TIPO_DE_ESTADO_INTERMEDIO; // sacar un mensaje indicando que se ha corregido
+//                }
+                
+                infoEstados.put(input, new ParTipoEstadoConjInputs(TIPO_DE_ESTADO_INTERMEDIO, identsInputsEstado));
+//                transicion.setidentEstadoOrigen(estadoOrigen);
+//              transicion.setTipoEstadoOrigen(tipoEstado);
+//                tablaTransicionFromEstadoInput.put(estadoOrigen+input, transicion);              
             }
+            transicion.setidentEstadoOrigen(estadoOrigen);
+            transicion.setTipoEstadoOrigen(tipoEstado);
+            tablaTransicionFromEstadoInput.put(estadoOrigen+input, transicion);
             return true;
 	}
 
@@ -206,6 +244,7 @@ public class TablaEstadosAutomataEFinputObjts implements Cloneable, Serializable
 	 *@param  estadoSig  estado al que llegamos tras la transicin universal
 	 */
 	public void putTransicionUniversal( TransicionAutomataEF transicion){
+            if (transicion != null){
             String input = transicion.getInput();
             for (String estadoPivote : (infoEstados.keySet())) {
                 if ( esEstadoFinal(estadoPivote)){} // no se anyade la transicion y se sigue el proceso
@@ -214,10 +253,10 @@ public class TablaEstadosAutomataEFinputObjts implements Cloneable, Serializable
                               InfoErrores+= "\n" + " Input repetido "+ input + " En el estado :"+ estadoPivote ;
                 }else{
                     transicion.setidentEstadoOrigen(estadoPivote);
-                    tablaTransicionFromEstadoInput.put(estadoPivote,transicion );
+                    tablaTransicionFromEstadoInput.put(estadoPivote+input,transicion );
                 }
             }
-
+            }
 	}
 	/**
 	 *  Expresa la tabla en texto
@@ -242,7 +281,7 @@ public class TablaEstadosAutomataEFinputObjts implements Cloneable, Serializable
 		 id = (String) claves.next();
                  transicion = tablaTransicionFromEstadoInput.get(id);
                 if (transicion!=null)
-                    dev += "\n" + id + ": Transicion : estado : " +transicion.getidentEstadoOrigen() + " accion : " + transicion.getidentAccion()+ " -> "+transicion.getidentEstadoSiguiente();
+                    dev += "\n" + id + ": Transicion : estado : " +transicion.getidentEstadoOrigen() + " accion : " + transicion.getClaseAccion()+ " -> "+transicion.getidentEstadoSiguiente();
                 else dev += "\n" + id + ": Transicion : null";
 							
 			}
@@ -259,12 +298,12 @@ public class TablaEstadosAutomataEFinputObjts implements Cloneable, Serializable
         }
         return obj;
     }
-private class  ParTipoEstadoConjEstados{
+private class  ParTipoEstadoConjInputs{
     public String identEstadoOrigen;
     public Set<String> identsInputsEstado ;
     public Integer tipoEstado = 2 ; // estado intermedio por defecto
     
-    public ParTipoEstadoConjEstados (Integer tipoEstado,Set<String> idsInputEstado){
+    public ParTipoEstadoConjInputs (Integer tipoEstado,Set<String> idsInputEstado){
         this.tipoEstado=tipoEstado;
         this.identsInputsEstado= idsInputEstado;
     }
@@ -281,5 +320,5 @@ private class  ParTipoEstadoConjEstados{
     public Integer getTipoEstado(){
         return this.tipoEstado;
     }
-}
+    }
 }

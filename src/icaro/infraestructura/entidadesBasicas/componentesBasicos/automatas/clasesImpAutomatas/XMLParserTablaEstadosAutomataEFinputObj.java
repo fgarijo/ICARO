@@ -1,5 +1,5 @@
 /*
- *  Copyright 2001 Telefnica I+D. All rights reserved
+ *  
  */
 package icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.clasesImpAutomatas;
 
@@ -17,7 +17,7 @@ import org.xml.sax.SAXException;
 
 
 /**
- *  Clase que convierte un fichero XML en una tabla de estados vlida para un
+ *  Clase que convierte un fichero XML en una tabla de estados valida para un
  *  autmata. Extrae inputs y transiciones para incorporarlos a la tabla de estados
  *
  *@author     Francisco J Garijo
@@ -31,13 +31,22 @@ public class XMLParserTablaEstadosAutomataEFinputObj {
 	 * @uml.associationEnd  
 	 */
 	Document document;
-    private Logger logger = Logger
-			.getLogger(this.getClass().getCanonicalName());
-private TablaEstadosAutomataEFinputObjts tablaEstados;
+    private Logger logger = Logger.getLogger(this.getClass().getCanonicalName());
+    private TablaEstadosAutomataEFinputObjts tablaEstados;
+    private String identFicheroDescAutomata;
+    private String rutaCarpetaAcciones;
+    private String identClaseAccionesSemanticas;
+    private String identAgtePropietarioAutomata;
+    private boolean buscadoClaseAccionesSemanticas = false;
+    private Class claseAccionesSemanticas;
 	/**
 	 *  Constructor
 	 */
 	public XMLParserTablaEstadosAutomataEFinputObj() { }
+        
+        public XMLParserTablaEstadosAutomataEFinputObj(String identAgtePropietario) {
+        identAgtePropietarioAutomata =identAgtePropietario;
+        }
 
 
 	/**
@@ -47,8 +56,10 @@ private TablaEstadosAutomataEFinputObjts tablaEstados;
 	 *@param  nombreFich  Nombre del fichero a convertir
 	 *@return             Tabla del autmata extrado de ese fichero
 	 */
-	public TablaEstadosAutomataEFinputObjts extraeTablaEstadosDesdeFicheroXML(String nombreFich){
-		 tablaEstados = new TablaEstadosAutomataEFinputObjts();
+	public TablaEstadosAutomataEFinputObjts extraeTablaEstadosDesdeFicheroXML(String nombreFich, String rutaCarpetaAccs){
+		 this.tablaEstados = new TablaEstadosAutomataEFinputObjts();
+                 this.identFicheroDescAutomata = nombreFich;
+                 this.rutaCarpetaAcciones = rutaCarpetaAccs;
 
 		// Esta parte es genrica para cualquier parsing XML
 		// parsing XML
@@ -76,19 +87,19 @@ private TablaEstadosAutomataEFinputObjts tablaEstados;
 			{
 				x = sxe.getException();
 			}
-         System.out.println("Se ha producido un error al procesar el fichero XML: "+nombreFich );
+         System.out.println(" Se ha producido un error al procesar el fichero XML: "+nombreFich );
 			x.printStackTrace();
 
 		}
 		catch (ParserConfigurationException pce)
 		{
 			// Parser with specified options can't be built
-			System.out.println("No se pudo construir un analizador XML con las opciones especificadas referido al fichero XML: "+nombreFich );
+			System.out.println(" No se pudo construir un analizador XML con las opciones especificadas referido al fichero XML: "+nombreFich );
 			pce.printStackTrace();
 		}
 		catch (IOException ioe)
 		{
-			System.out.println("Error de lectura en el fichero XML. Est usted seguro de que el fichero '"+nombreFich+"' est ah?" );
+			System.out.println("Error de lectura en el fichero XML. Esta usted seguro de que el fichero: "+nombreFich+" esta en esa ruta ? " );
 			ioe.printStackTrace();
 		}
 
@@ -153,18 +164,20 @@ private TablaEstadosAutomataEFinputObjts tablaEstados;
                 if (nlUniversal.getLength()>0)
 //                    transicion = extraerInfoTransicion(nodo);
 //                    
-//		for (int i = 0; i < nlUniversal.getLength(); i++)
-//		{
-//			nodo = nlUniversal.item(i);
-//                        
+		for (int i = 0; i < nlUniversal.getLength(); i++)
+		{
+			nodo = nlUniversal.item(i);
+                        if (nodo !=null){
 //			mapaNombreNodo = nodo.getAttributes();
-//			// extraemos los atributos
+			// extraemos los atributos
 //			String input = mapaNombreNodo.getNamedItem(NombresPredefinidos.NOMBRE_INPUT_AUTOMATA_EF).getNodeValue();
 //			String accion = mapaNombreNodo.getNamedItem(NombresPredefinidos.NOMBRE_ACCION_AUTOMATA_EF).getNodeValue();
 //                        String estadoSig = mapaNombreNodo.getNamedItem(NombresPredefinidos.NOMBRE_ESTADO_SIGUIENTE_AUTOMATA_EF).getNodeValue();
-
-         tablaEstados.putTransicionUniversal(extraerInfoTransicion(nodo));
-//		}
+                        TransicionAutomataEF transicion = extraerInfoTransicion(nodo);
+                        if (transicion!=null)
+                        tablaEstados.putTransicionUniversal(transicion);
+                        }
+		}
 
 		return tablaEstados;
 	}
@@ -200,9 +213,11 @@ private TablaEstadosAutomataEFinputObjts tablaEstados;
 		org.w3c.dom.Node nodoTransicion, nodoAux;
 		org.w3c.dom.NamedNodeMap mapaNombreNodo;
                 String input,accion,estadoSig,modo ;
-		for (int i = 0; i < listaTransiciones.getLength(); i++) {
+                Integer longLista = listaTransiciones.getLength();
+		for (int i = 1; i < listaTransiciones.getLength(); i++) {
 			nodoTransicion = listaTransiciones.item(i);
-//			if (nodoTransicion.getNodeName().equalsIgnoreCase(NombresPredefinidos.NOMBRE_TRANSICION_AUTOMATA_EF)) {
+                        String identNodo = nodoTransicion.getNodeName();
+			if (nodoTransicion.getNodeName().equalsIgnoreCase(NombresPredefinidos.NOMBRE_TRANSICION_AUTOMATA_EF)) {
 //				mapaNombreNodo = nodoTransicion.getAttributes();
 //				input = mapaNombreNodo.getNamedItem(NombresPredefinidos.NOMBRE_INPUT_AUTOMATA_EF)
 //						.getNodeValue();
@@ -216,9 +231,12 @@ private TablaEstadosAutomataEFinputObjts tablaEstados;
 //                                if (nodoAux == null) modo = NombresPredefinidos.NOMBRE_MODO_TRANSICION_AUTOMATA_EF;                           
 //                                else modo = nodoAux.getNodeValue();
 //				tablaEstados.addTransicion(idEstado, input, accion, estadoSig,modo);
-                                tablaEstados.putTransicion(idEstado, extraerInfoTransicion(nodoTransicion));
+                               TransicionAutomataEF transicion = extraerInfoTransicion(nodoTransicion);
+                               if(transicion !=null)
+                                tablaEstados.putTransicion(idEstado,transicion );
 			}
                 }
+        }
 
         
          private  TransicionAutomataEF extraerInfoTransicion(org.w3c.dom.Node nodoTransicion) {
@@ -226,24 +244,181 @@ private TablaEstadosAutomataEFinputObjts tablaEstados;
             org.w3c.dom.NamedNodeMap mapaNombreNodo;
             String identNodo,input,accion,estadoSig,modo ;
             identNodo = nodoTransicion.getNodeName();
+            Boolean hayErrores = false;
+//            Class claseAccion = null;
+            // Pocesar el encabezamiento de la transicion y el input
             if (identNodo.equalsIgnoreCase(NombresPredefinidos.NOMBRE_TRANSICION_AUTOMATA_EF)|
                (identNodo.equalsIgnoreCase(NombresPredefinidos.NOMBRE_TRANSICION_UNIVERSAL_AUTOMATA_EF))) {
                 mapaNombreNodo = nodoTransicion.getAttributes();
                 input = mapaNombreNodo.getNamedItem(NombresPredefinidos.NOMBRE_INPUT_AUTOMATA_EF)
                                 .getNodeValue();
-                // consideramos la posiblidad de que las acciones no se especificque y las definimos como vacias
+//                if( input==null){// el input no puede ser null
+//                                mensajeError(identNodo, "El input no puede ser nulo, deber ser una cadena de caracteres");
+//                                hayErrores=true;
+//                }
+            }else { // no se continua con el analisis
+                mensajeError(identNodo, "Una transicion debe comenzar por el identificador del atributo de transición");
+                return null;
+            }
+                //  Se procesan las acciones
+//                consideramos la posiblidad de que las acciones no se especificque y las definimos como vacias
                 nodoAux = mapaNombreNodo.getNamedItem(NombresPredefinidos.NOMBRE_ACCION_AUTOMATA_EF);
+                
                 if (nodoAux == null)accion=NombresPredefinidos.ACCION_VACIA_AUTOMATA_EF;
-                 else accion = mapaNombreNodo.getNamedItem(NombresPredefinidos.NOMBRE_ACCION_AUTOMATA_EF).getNodeValue();
+                else{
+                    accion = mapaNombreNodo.getNamedItem(NombresPredefinidos.NOMBRE_ACCION_AUTOMATA_EF).getNodeValue();
+//                   if (!existeClaseAccion(accion))hayErrores=true ;
+//                     claseAccion = obtenerClaseAcciones(accion);
+//                     if (claseAccion==null)hayErrores=true ;
+                }
+                // se procesa el estado siguiente
                 estadoSig = mapaNombreNodo.getNamedItem(NombresPredefinidos.NOMBRE_ESTADO_SIGUIENTE_AUTOMATA_EF).getNodeValue();
                 // consideramos la posiblidad de que la modalidad sea vacia
+//                if (estadoSig == null){
+//                    mensajeError(identNodo, "El estado siguiente no puede ser nulo, deber ser un identificador de estado");
+//                    hayErrores=true;
+//                }
                 nodoAux = mapaNombreNodo.getNamedItem(NombresPredefinidos.NOMBRE_MODO_TRANSICION_AUTOMATA_EF);
-                if (nodoAux == null) modo = NombresPredefinidos.NOMBRE_MODO_TRANSICION_AUTOMATA_EF;                           
+                if (nodoAux == null) modo = NombresPredefinidos.NOMBRE_MODO_BLOQUEANTE_AUTOMATA_EF_SIN_ACCION;
                 else modo = nodoAux.getNodeValue();
-                return new TransicionAutomataEF(null, input, accion, estadoSig,modo);
-            }else{
-            System.out.println("El nodo donde se debe extraer la informacion "+identNodo + "  es incorrecto.: "+ " revisar el fichero del automata" );
-            return null;
+                return validarInfoTransicion(identNodo, input, accion, estadoSig, modo);
+//                                           
+//                else modo = nodoAux.getNodeValue();
+//                if (hayErrores ) {
+//                    mensajeError(nodoTransicion.toString(), " No se ha generado la transicion porque hay errores");
+//                    return null;
+//                }
+//                return new TransicionAutomataEF(input, claseAccion, estadoSig,modo);   
+            
+         }
+         private void mensajeError (String identNodo, String msgError){
+             
+             System.out.println("El nodo donde se debe extraer la informacion "+identNodo + msgError+ " revisar el fichero del automata" );
+         }
+       
+         private Class obtenerClaseAcciones(String identClase) {
+//        String msgInfoUsuario;
+    //    rutaComportamiento = "/" +rutaComportamiento.replace(".", "/");
+//        String nombreEntidad = rutaComportamiento.substring(rutaComportamiento.lastIndexOf(".")+1);
+          String primerCaracter= identClase.substring(0,1);
+          identClase = identClase.replaceFirst(primerCaracter, primerCaracter.toUpperCase());
+//        String rutaAccionesSemanticas = rutaComportamiento+ "."+NombresPredefinidos.NOMBRE_ACCIONES_SEMANTICAS+nombreEntidad;
+//          String rutaAccion = "icaro.aplicaciones.agentes.agenteAplicacionAccesoReactivo.comportamientoPrueba";
+          if (this.rutaCarpetaAcciones!=null)
+            identClase = this.rutaCarpetaAcciones+"."+ identClase;
+            try {
+                Class claseAcciones = Class.forName(identClase);
+                return claseAcciones;
+            } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(FactoriaAgenteReactivoImp.class.getName()).log(Level.SEVERE, null, ex);
+//                mensajeError (identClase, " No se encuentra la clase especificada en la descripcion del automata" );
+                String msgAviso = "Se esta buscando una clase: " + identClase + " que implemente las acciones del automata en la ruta :"+
+                        this.rutaCarpetaAcciones + "  pero no se ha encontrado ";
+                System.out.println(msgAviso);
+                return null;
+//        throw new ExcepcionEnComponente ( "PatronAgenteReactivo", " No se encuentra la clase de acciones semanticas en la ruta :"+rutaComportamiento,"Factoria del Agente Reactivo","Class obtenerClaseAccionesSemanticas(DescInstanciaAgente instAgente)"  );
             }
          }
+         
+       private TransicionAutomataEF validarInfoTransicion (String idEstado, String idInput, String idAccion,String estadoSguiente, String modoAccion) {
+           Boolean hayErrores = false;
+            Class claseAccion = null;
+            String metodo= null;
+            // Pocesar el encabezamiento de la transicion y el input
+           
+                if( idInput==null){// el input no puede ser null
+                                mensajeError(idEstado, "El input no puede ser nulo, deber ser una cadena de caracteres");
+                                hayErrores=true;
+                }
+//            }else { // no se continua con el analisis
+//                mensajeError(identNodo, "Una transicion debe comenzar por el identificador del atributo de transición");
+//                return null;
+            
+                //  Se procesan las acciones
+//                consideramos la posiblidad de que las acciones no se especificque y las definimos como vacias
+//                nodoAux = mapaNombreNodo.getNamedItem(NombresPredefinidos.NOMBRE_ACCION_AUTOMATA_EF);
+                
+//                if (idAccion == null)claseAccion=NombresPredefinidos.ACCION_VACIA_AUTOMATA_EF;
+                  if ( idAccion == null || idAccion.matches(NombresPredefinidos.EXPR_REG_SIN_ACCION_EN_AUTOMATA_EF)){
+                  // no se hace nada porque la clase ya es null
+                  }else{
+                      if (!buscadoClaseAccionesSemanticas){
+                          identClaseAccionesSemanticas = NombresPredefinidos.NOMBRE_ACCIONES_SEMANTICAS+identAgtePropietarioAutomata;
+                          claseAccionesSemanticas = obtenerClaseAcciones(NombresPredefinidos.NOMBRE_ACCIONES_SEMANTICAS+identAgtePropietarioAutomata);
+                          buscadoClaseAccionesSemanticas = true;
+                      }
+                      // buscamos la clase y si no  la encontramos  suponemos que es un metodo de las acciones semanticas
+                         claseAccion = obtenerClaseAcciones(idAccion);
+                         if (claseAccion!=null ){}  // si la clase se ha encontrado no hace nada 
+                         else if (claseAccionesSemanticas ==null){ // No se encuentra la clase y no existe clase acciones semanticas  
+                                 hayErrores= true;
+                                 String msgError = "Debe existir una clase: " + idAccion + " o una clase : " + identClaseAccionesSemanticas +
+                                        " que implemente las acciones del automata en la ruta :"+this.rutaCarpetaAcciones + 
+                                        "  pero no se han encontrado. Revisar la ruta definida y el fichero del automata";
+                System.out.println(msgError);
+//                                 mensajeError(idEstado, " No se encuentra la clase : "+ idAccion);                        
+                               }else {  // Existe la clase AS deberiamos validar que el identAcciones es un metodo de la clase
+                                // pero lo dejamos para la ejecución
+                                    claseAccion= this.claseAccionesSemanticas;
+                                    metodo= idAccion;                  
+                                   }
+                      }
+                // se procesa el estado siguiente
+//                estadoSig = mapaNombreNodo.getNamedItem(NombresPredefinidos.NOMBRE_ESTADO_SIGUIENTE_AUTOMATA_EF).getNodeValue();
+                // consideramos la posiblidad de que la modalidad sea vacia
+                if (estadoSguiente == null){
+                    mensajeError(idEstado, "El estado siguiente no puede ser nulo, deber ser un identificador de estado");
+                    hayErrores=true;
+                }
+////                nodoAux = mapaNombreNodo.getNamedItem(NombresPredefinidos.NOMBRE_MODO_TRANSICION_AUTOMATA_EF);                                 
+//                else modo = nodoAux.getNodeValue();
+                if (hayErrores ) {
+                    return null;
+                }
+                if (modoAccion == null) modoAccion = NombresPredefinidos.NOMBRE_MODO_BLOQUEANTE_AUTOMATA_EF_SIN_ACCION;
+                TransicionAutomataEF transicion= new TransicionAutomataEF(idInput, claseAccion, estadoSguiente, modoAccion);
+                if (metodo!=null)transicion.setIdentMetodoAccion(metodo);
+                return transicion;
+       
+    }
+ 
+    private String obtenerRutaValidaAutomata (String rutaComportamiento){
+    // La ruta del comportamiento no incluye la clase
+    // Obtenemos la clase de AS en l aruta
+    //   rutaComportamiento =File.separator+rutaComportamiento.replace(".", File.separator);
+   //   String rutaBusqueda = NombresPredefinidos.RUTA_SRC+rutaComportamiento;
+        String msgInfoUsuario;
+        rutaComportamiento = "/" +rutaComportamiento.replace(".", "/");
+         String rutaAutomata = rutaComportamiento +"/"+ NombresPredefinidos.FICHERO_AUTOMATA;
+		InputStream input = this.getClass().getResourceAsStream(rutaAutomata);
+//		logger.debug(rutaAutomata+"?"+ ((input != null) ? "  OK" : "  null"));
+		if  (input != null) return rutaAutomata;
+                else {
+                    // intentamos otra politica de nombrado
+                    String nombreEntidad = rutaComportamiento.substring(rutaComportamiento.lastIndexOf("/")+1);
+                    String primerCaracter= nombreEntidad.substring(0,1);
+                    nombreEntidad = nombreEntidad.replaceFirst(primerCaracter, primerCaracter.toUpperCase());
+                    rutaAutomata = rutaComportamiento +"/automata"+nombreEntidad+".xml";
+                    input = this.getClass().getResourceAsStream(rutaAutomata);
+                    if  (input != null) return rutaAutomata;
+                    else {
+                    // la entidad no se encuentra o no esta definida 
+                    msgInfoUsuario = " Error no se encuentra el fichero especificado  \n"+
+                            "Para el comportamiento: " + rutaComportamiento + 
+                            "En la ruta: " + rutaAutomata + "\n" +
+                            "Verifique la existencia del fichero en el directorio src  \n";
+//                    logger.fatal(msgInfoUsuario);
+      //              throw new ExcepcionEnComponente ( "PatronAgenteReactivo", "No se encuentra el fichero del automata  en la ruta :"+rutaAutomata,"Factoria del Agente Reactivo",this.getClass().getName()  );
+                    return null;
+                    }
+                }
+    }
+         
+        public static void main(String args[]) {
+         XMLParserTablaEstadosAutomataEFinputObj prueba1 =   new XMLParserTablaEstadosAutomataEFinputObj("Iniciador");
+//         prueba1.extraeTablaEstadosDesdeFicheroXML("/icaro/infraestructura/entidadesBasicas/componentesBasicos/automatas/clasesImpAutomatas/automataPrueba.xml", null);
+//         String rutaFichero = prueba1.obtenerRutaValidaAutomata (NombresPredefinidos.COMPORTAMIENTO_PORDEFECTO_INICIADOR);
+//         prueba1.extraeTablaEstadosDesdeFicheroXML("/icaro/gestores/iniciador/automataPrueba.xml", null);
+         prueba1.extraeTablaEstadosDesdeFicheroXML("/icaro/pruebas/automataPruebas.xml", null);
+        }
 }

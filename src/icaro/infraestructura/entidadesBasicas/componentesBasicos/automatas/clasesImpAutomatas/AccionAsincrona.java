@@ -4,17 +4,14 @@
  */
 package icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.clasesImpAutomatas;
 
-import icaro.infraestructura.entidadesBasicas.procesadorCognitivo.*;
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
-import icaro.infraestructura.patronAgenteCognitivo.factoriaEInterfacesPatCogn.AgenteCognitivo;
-import icaro.infraestructura.patronAgenteCognitivo.procesadorObjetivos.factoriaEInterfacesPrObj.ItfProcesadorObjetivos;
 
 /**
  *
  * @author FGarijo
  */
 
-public abstract class AccionAsincrona extends TareaSincrona implements Runnable {
+public abstract class AccionAsincrona extends AccionSincrona implements Runnable {
     Thread tareaActiva;
 		
     public AccionAsincrona(){	
@@ -23,14 +20,14 @@ public abstract class AccionAsincrona extends TareaSincrona implements Runnable 
                
 	}
     
-    public AccionAsincrona(ItfProcesadorObjetivos envioHechos, AgenteCognitivo agente) {
-    
-    	this.itfProcObjetivos = envioHechos;
-    	this.agente = agente;
-        this.trazas = NombresPredefinidos.RECURSO_TRAZAS_OBJ;
-        this.identAgente = agente.getIdentAgente();
-        this.repoInterfaces = NombresPredefinidos.REPOSITORIO_INTERFACES_OBJ;
-    }
+////    public AccionAsincrona(ItfProcesadorObjetivos envioInputs, AgenteCognitivo agente) {
+////    
+////    	this.itfProcObjetivos = envioHechos;
+////    	this.agente = agente;
+////        this.trazas = NombresPredefinidos.RECURSO_TRAZAS_OBJ;
+////        this.identAgente = agente.getIdentAgente();
+////        this.repoInterfaces = NombresPredefinidos.REPOSITORIO_INTERFACES_OBJ;
+////    }
 	
     public boolean terminada() {
     	return terminada;
@@ -38,7 +35,7 @@ public abstract class AccionAsincrona extends TareaSincrona implements Runnable 
     public void comenzar() {
         tareaActiva = new Thread (this);
         tareaActiva.setDaemon(true);
-        tareaActiva.setName(identTarea);
+        tareaActiva.setName(identAccion);
     	tareaActiva.start();
     }
     
