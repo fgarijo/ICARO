@@ -40,7 +40,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /*
- * Implementaci�n por defecto de las acciones que se ejecutar�n por parte del gestor de agentes.
+ * Implementacion por defecto de las acciones que se ejecutar�n por parte del gestor de agentes.
  * @author     Felipe Polo
  */
 public class AccionesSemanticasGestorAgentes extends AccionesSemanticasAgenteReactivo {
