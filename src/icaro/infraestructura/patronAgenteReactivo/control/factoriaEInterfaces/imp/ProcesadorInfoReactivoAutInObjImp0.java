@@ -5,6 +5,7 @@
 
 package icaro.infraestructura.patronAgenteReactivo.control.factoriaEInterfaces.imp;
 
+import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFconGesAcciones.InterpreteAutomataEFconGestAcciones;
 import icaro.infraestructura.entidadesBasicas.comunicacion.InfoContEvtMsgAgteReactivo;
 import icaro.infraestructura.entidadesBasicas.interfaces.InterfazGestion;
 import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.imp.AutomataEFEImp;
@@ -21,7 +22,7 @@ import java.rmi.RemoteException;
  *
  * @author Francisco J Garijo
  */
-public class ProcesadorInfoReactivoImp extends ProcesadorEventosAbstracto implements Serializable{
+public class ProcesadorInfoReactivoAutInObjImp0 extends ProcesadorEventosAbstracto implements Serializable{
 
 	/**
 	 * @uml.property  name="dEBUG"
@@ -32,7 +33,7 @@ public class ProcesadorInfoReactivoImp extends ProcesadorEventosAbstracto implem
 	 * @uml.property  name="automataControl"
 	 * @uml.associationEnd  multiplicity="(1 1)"
 	 */
-	private AutomataEFEImp automataControl;
+	private InterpreteAutomataEFconGestAcciones automataControl;
 
     private AccionesSemanticasAgenteReactivo accionesSemanticasAgenteCreado;
 	/**
@@ -68,12 +69,12 @@ public class ProcesadorInfoReactivoImp extends ProcesadorEventosAbstracto implem
 	 *@param  percProductor     Interfaz de produccin de la percepcin
 	 *@param  nombreDelControl  Nombre que tomar en componente control
 	 */
-	public ProcesadorInfoReactivoImp( AutomataEFEImp automata,AccionesSemanticasAgenteReactivo accionesSemanticasEspecificas,
+	public ProcesadorInfoReactivoAutInObjImp0( InterpreteAutomataEFconGestAcciones interpAutom,
 			 AgenteReactivoAbstracto implItfsagente) throws RemoteException
 	{
 		super("Agente reactivo "+implItfsagente.getIdentAgente());
-                automataControl = automata;
-                accionesSemanticasAgenteCreado = accionesSemanticasEspecificas;
+                automataControl = interpAutom;
+//                accionesSemanticasAgenteCreado = accionesSemanticasEspecificas;
              //   percepcionConsumidor = percConsumidor;
 		//percepcionProductor = percProductor;
 		agente = implItfsagente;
@@ -226,12 +227,12 @@ public class ProcesadorInfoReactivoImp extends ProcesadorEventosAbstracto implem
     */
   public synchronized void procesarInfoControlAgteReactivo (InfoContEvtMsgAgteReactivo infoParaProcesar  ) {
 // Ponemos la operacion para evitar errores pero no se usa con este procesador
-      automataControl.procesaInput(infoParaProcesar.getInput(),infoParaProcesar.getvaloresParametrosAccion());
+      automataControl.ejecutarTransicion(infoParaProcesar.getInput(),infoParaProcesar.getvaloresParametrosAccion());
 
   }
 public synchronized String getEstadoControlAgenteReactivo ( ){
 
-        return automataControl.getEstadoControlAgenteReactivo();
+        return automataControl.estadoActual();
 }
     public void setDebug(boolean d) {
         this.DEBUG = d;

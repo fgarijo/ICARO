@@ -234,7 +234,9 @@ public class XMLParserTablaEstados {
                 String input,accion,estadoSig,modo ;
 		for (int i = 0; i < listaTransiciones.getLength(); i++) {
 			nodo = listaTransiciones.item(i);
-			if (nodo.getNodeName().equalsIgnoreCase("transicion")) {
+                        String idNodo = nodo.getNodeName();
+//			if (nodo.getNodeName().equalsIgnoreCase("transicion")) {
+                        if (idNodo.equalsIgnoreCase("transicion")) {
 				mapaNombreNodo = nodo.getAttributes();
 				 input = mapaNombreNodo.getNamedItem("input")
 						.getNodeValue();

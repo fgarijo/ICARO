@@ -118,7 +118,7 @@ public class NombresPredefinidos {
   public static final String IDENT_NODO_INICIAL_AUTOMATA_EF = "idInicial";
   public static final String IDENT_NODO_INTERMEDIO_AUTOMATA_EF = "idIntermedio";
   public static final String IDENT_NODO_FINAL_AUTOMATA_EF = "idFinal";
-  public static final String ACCION_VACIA_AUTOMATA_EF = "vacia";
+  public static final String ACCION_VACIA_AUTOMATA_EF = "vacio";
   public static final String EXPR_REG_SIN_ACCION_EN_AUTOMATA_EF = "(null|vacia|vacio|nada|sinAccion)";
  // public final static String FICHERO_AUTOMATA_CICLO_VIDA_COMPONENTE = "/icaro/infraestructura/patronRecursoSimple/TablaEstadosCicloVidaRecursos.xml";
 //  public final static String FICHERO_AUTOMATA_CICLO_VIDA_COMPONENTE = "./schemas/TablaEstadosCicloVidaRecursos.xml";
@@ -142,5 +142,6 @@ public class NombresPredefinidos {
   public final static String DROOLS_Debugging_AFTER_RuleFired = "AFTER_ActivationFired";
   public final static String PROPERTY_TIME_TIMEOUT_POR_DEFECTO = "timeTimeoutPorDefecto"; 
   // añadir los nombres de cada aplicacion en concreto
+  public final static String RUTA_PRUEBAS = "icaro.pruebas";
   public static String RUTA_Carpeta_CodigoFuente_ICARO = "src/";  //cambiar el valor a "src/main/java" si pone el icaro en un proyecto maven
 }

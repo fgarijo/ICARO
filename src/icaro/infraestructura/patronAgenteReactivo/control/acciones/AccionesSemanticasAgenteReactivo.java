@@ -1,6 +1,7 @@
 package icaro.infraestructura.patronAgenteReactivo.control.acciones;
 
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
+import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.clasesImpAutomatas.AccionSincrona;
 import icaro.infraestructura.entidadesBasicas.comunicacion.ComunicacionAgentes;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.ItfUsoAgenteReactivo;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.ItfUsoRecursoTrazas;
@@ -211,5 +212,9 @@ public String getNombreAgente() {
  public ComunicacionAgentes getComunicator (){
      if (comunicator==null) comunicator = new ComunicacionAgentes(nombreAgente);
      return comunicator;
+ }
+ 
+ public  void ejecutar(Object... params){
+     // no implementada
  }
 }
