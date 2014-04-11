@@ -7,6 +7,7 @@ import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.ItfUsoAgen
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.ItfUsoRecursoTrazas;
 import icaro.infraestructura.recursosOrganizacion.repositorioInterfaces.ItfUsoRepositorioInterfaces;
 import icaro.infraestructura.entidadesBasicas.comunicacion.EventoRecAgte;
+import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.ItfUsoAutomata;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.AgenteReactivoAbstracto;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.imp.componentes.InfoTraza;
 import java.util.Hashtable;
@@ -35,6 +36,8 @@ public abstract class AccionesSemanticasAgenteReactivo {
  * @uml.associationEnd  
  */
 public ItfUsoAgenteReactivo itfUsoGestorAReportar;
+public ItfUsoAutomata itfAutomataControl;
+
   /**
  * @uml.property  name="nombreAgente"
  */
@@ -145,9 +148,19 @@ public void setLogger(Logger logger){
 
    }
 
- public void setControlAgenteReactivo (){
+ public void setItfAutomata (ItfUsoAutomata automataItf){
+     itfAutomataControl = automataItf;
 
-
+ }
+ public void procesarInput (Object input,Object[] infoComplementaria ){
+     if ( itfAutomataControl == null){
+         trazas.trazar(nombreAgente, " El interfaz del automata que implementa el control no esta definido "
+                 + " El input:  " + input + " No sera procesado ", InfoTraza.NivelTraza.error);
+     }else 
+     {
+         if (input.getClass().getSimpleName().equals("String")) itfAutomataControl.procesaInput((String) input,infoComplementaria );
+         else itfAutomataControl.procesaInputObj( input,infoComplementaria );
+     }
  }
 
   /**

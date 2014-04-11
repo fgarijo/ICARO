@@ -248,7 +248,11 @@ public class AutomataEFEImp implements ItfUsoAutomata {
 		}
 
 	}
-
+public void procesaInputObj(Object input, Object[] parametros) {
+    trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
+					"ERROR: Operacion no soportada por este modelo de Automata- esta operacion  requiere otro tipo de automata de E.F. ",
+					InfoTraza.NivelTraza.error));
+}
         public synchronized void transita(String input)
 	{
 		String siguiente;

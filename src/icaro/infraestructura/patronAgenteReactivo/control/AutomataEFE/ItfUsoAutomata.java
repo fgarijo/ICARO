@@ -26,6 +26,7 @@ public interface ItfUsoAutomata {
 	 *@param  input  Input a procesar
 	 */
 	public  void procesaInput(String input, Object[] parametros);
+        public  void procesaInputObj(Object input, Object[] parametros);
 
 
 	/**

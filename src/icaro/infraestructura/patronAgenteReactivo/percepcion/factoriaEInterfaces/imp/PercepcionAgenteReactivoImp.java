@@ -98,6 +98,7 @@ public class PercepcionAgenteReactivoImp extends PercepcionAbstracto {
 			termina = false;
 		}
 
+                @Override
 		public void run() {
 			while (!termina) {
 				Object item = null;
