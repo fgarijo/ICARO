@@ -1,13 +1,14 @@
 package icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFconGesAcciones;
 
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFsinAcciones.*;
+import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.ItfUsoAutomata;
 
 /**
  * Interfaz de uso de un autmata de ciclo de vida de un Recurso
  *@author     lvaro Rodrguez
  *@created    1 de Febrero de 2007
  */
-public interface ItfAutomataEFconGestAcciones {
+public interface ItfAutomataEFconGestAcciones extends ItfUsoAutomata{
 	/**
 	 *  Dice si el automata se encuentra en un estado final o no
 	 *
@@ -22,7 +23,7 @@ public interface ItfAutomataEFconGestAcciones {
 	 *  Devuelve falso si no ha podido hacer la transición o true si la ha efectuado correctamente
 	 *@param  input  Input a procesar
 	 */
-	public boolean transita(Object input);
+//	public boolean transita(Object input);
 
 	/**
 	 * 	Dice si el recurso est en estado activo, es decir, que puede
@@ -47,5 +48,6 @@ public interface ItfAutomataEFconGestAcciones {
 	/**
 	 *  Devuelve el autmata a su estado inicial
 	 */
+        @Override
 	public void volverAEstadoInicial();
 }

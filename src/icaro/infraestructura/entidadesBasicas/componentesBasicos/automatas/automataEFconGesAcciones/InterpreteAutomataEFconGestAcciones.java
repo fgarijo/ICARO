@@ -10,9 +10,12 @@ import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.clasesImpAutomatas.TablaEstadosAutomataEFinputObjts;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.clasesImpAutomatas.TransicionAutomataEF;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.gestorAcciones.ItfGestorAcciones;
+import icaro.infraestructura.patronAgenteReactivo.control.acciones.AccionesSemanticasAgenteReactivo;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.ItfUsoRecursoTrazas;
+import icaro.infraestructura.recursosOrganizacion.recursoTrazas.imp.ClaseGeneradoraRecursoTrazas;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.imp.componentes.InfoTraza;
 import java.io.Serializable;
+import java.rmi.RemoteException;
 import java.util.logging.Level;
 
 import org.apache.log4j.Logger;
@@ -86,7 +89,7 @@ public abstract class InterpreteAutomataEFconGestAcciones implements ItfAutomata
 	 * @uml.property  name="trazas"
 	 * @uml.associationEnd  readOnly="true"
 	 */
-	protected ItfUsoRecursoTrazas trazas;
+	public ItfUsoRecursoTrazas trazas;
         protected ItfGestorAcciones itfGestAcciones;
 	
 
@@ -108,6 +111,14 @@ public abstract class InterpreteAutomataEFconGestAcciones implements ItfAutomata
 		// colocamos el autmata en el estado inicial
 		this.tablaEstadosAutomata =intpTablaEstados;
                 estadoActual = tablaEstadosAutomata.dameEstadoInicial();
+                if (NombresPredefinidos.RECURSO_TRAZAS_OBJ==null){
+                    try {
+                        trazas = ClaseGeneradoraRecursoTrazas.instance();
+                        NombresPredefinidos.RECURSO_TRAZAS_OBJ = trazas;
+                    } catch (RemoteException ex) {
+                        java.util.logging.Logger.getLogger(InterpreteAutomataEFconGestAcciones.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }else trazas = NombresPredefinidos.RECURSO_TRAZAS_OBJ;
 //                itfGestAcciones = gestAccionesitf;
 
 		// actualizamos el DEBUG para las trazas
@@ -129,7 +140,6 @@ public abstract class InterpreteAutomataEFconGestAcciones implements ItfAutomata
 	    }*/
 	}
 
-
 	/**
 	 *  Dice si el automata se encuentra en un estado final o no
 	 *
@@ -146,6 +156,7 @@ public abstract class InterpreteAutomataEFconGestAcciones implements ItfAutomata
 	 *
 	 *@param  input  Input a procesar
 	 */
+        @Override
 	public boolean ejecutarTransicion(Object input, Object... params){
             
             String inputAutomata = input.getClass().getSimpleName();
@@ -182,54 +193,67 @@ public abstract class InterpreteAutomataEFconGestAcciones implements ItfAutomata
                this.trazas.trazar (this.getClass().getSimpleName()," El input : " + inputAutomata + " No coincide con los inputs definidos en el automata "+
                        " en el estado  :" + estadoActual ,InfoTraza.NivelTraza.error );
                return false;
-           }else {
-               TransicionAutomataEF transicion = tablaEstadosAutomata.getTransicion(estadoActual()+inputAutomata);
-               if (transicion == null){
+           }
+           TransicionAutomataEF transicion = tablaEstadosAutomata.getTransicion(estadoActual()+inputAutomata);
+           if (transicion == null){
                    // mensaje de error el inputno es valido en el estado actual
                     this.trazas.trazar (this.getClass().getSimpleName()," No existe transicion asociada al input : " + inputAutomata +
                        " en el estado  :" + estadoActual ,InfoTraza.NivelTraza.error );
                     return false;
-               }else {
-                   // obtenemos el tipo de transción ************* Revisar
-                  Integer tipoTransicion = transicion.getTipoTransicion();
-                    if (tipoTransicion== NombresPredefinidos.TRANSICION_AUTOMATA_EF_SIN_ACCION){
-                         this.estadoActual =transicion.getidentEstadoSiguiente();
-                         return true;
-                     }else {    
-                            if (tipoTransicion== NombresPredefinidos.TRANSICION_AUTOMATA_EF_ACCION_BLOQ)
-                            try {
-                                this.itfGestAcciones.ejecutarAccion(transicion.getClaseAccion(), input);
-                                this.estadoActual =transicion.getidentEstadoSiguiente();
-                                return true; 
-                            } catch (Exception ex) {
-                                java.util.logging.Logger.getLogger(InterpreteAutomataEFconGestAcciones.class.getName()).log(Level.SEVERE, null, ex);
-                                return false;
-                            }else
-                                return false;
-                    }
             }
-           }
+                   // obtenemos el tipo de transción ************* Revisar
+             Integer tipoTransicion = transicion.getTipoTransicion();
+             if (tipoTransicion== NombresPredefinidos.TRANSICION_AUTOMATA_EF_SIN_ACCION){
+                 this.estadoActual =transicion.getidentEstadoSiguiente();
+                 return true;
+              }  
+              Class claseAEjecutar =  transicion.getClaseAccion();
+               if (claseAEjecutar.getSimpleName().startsWith(NombresPredefinidos.NOMBRE_ACCIONES_SEMANTICAS) ){
+                    if (tipoTransicion== NombresPredefinidos.TRANSICION_AUTOMATA_EF_ACCION_BLOQ)
+                       try {
+                            this.itfGestAcciones.ejecutarMetodo(claseAEjecutar, transicion.getIdentMetodoAccion(), (Object)null);
+                            this.estadoActual =transicion.getidentEstadoSiguiente();
+                            return true; 
+                        } catch (Exception ex) {
+                           java.util.logging.Logger.getLogger(InterpreteAutomataEFconGestAcciones.class.getName()).log(Level.SEVERE, null, ex);
+                           return false;
+                           }
+                                else{// ejecutar el metodo como thread 
+                                 return false; // por no estar implementado
+                                }
+                 }
+                          
+                 try {
+                       this.itfGestAcciones.ejecutarAccion(transicion.getClaseAccion(), input);
+                       this.estadoActual =transicion.getidentEstadoSiguiente();
+                       return true; 
+                     } catch (Exception ex) {
+                        java.util.logging.Logger.getLogger(InterpreteAutomataEFconGestAcciones.class.getName()).log(Level.SEVERE, null, ex);
+                        return false;
+                            }
         }
         
-        public String transita(String input)
-	{
-		String siguiente;
-		// comprobar que es un input reconocido por el estado actual
-		if (tablaEstadosAutomata.esInputValidoDeEstado(estadoActual, input))
-		{
-			siguiente = tablaEstadosAutomata.dameEstadoSiguiente(estadoActual, input);
-			// cambiar al siguiente estado
-//			logger.info("Transicion en el ciclo de vida usando input:" + input + "  :" + estadoActual + " -> " + siguiente);
-			cambiarEstado(siguiente);
-//                        return siguiente;
-		}
-		
-		
-			logger.info("AVISO: Input de ciclo de vida ignorado.El input: " + input + " no pertenece a los inputs vlidos para el estado actual: " + estadoActual);
+        @Override
+        public void transita(String input){
+                ejecutarTransicion(input);
+//	{
+//		String siguiente;
+//		// comprobar que es un input reconocido por el estado actual
+//		if (tablaEstadosAutomata.esInputValidoDeEstado(estadoActual, input))
+//		{
+//			estadoActual = tablaEstadosAutomata.dameEstadoSiguiente(estadoActual, input);
+//			// cambiar al siguiente estado
+////			logger.info("Transicion en el ciclo de vida usando input:" + input + "  :" + estadoActual + " -> " + siguiente);
+//			cambiarEstado(estadoActual);
+////                        return siguiente;
+//		}
+//		
+//		
+//			logger.info("AVISO: Input de ciclo de vida ignorado.El input: " + input + " no pertenece a los inputs vlidos para el estado actual: " + estadoActual);
 			/*trazas.aceptaNuevaTraza(new InfoTraza("AutomataCicloVidaRecurso",
 					"AVISO: Input de ciclo de vida ignorado.El input: " + input + " no pertenece a los inputs vlidos para el estado actual: " + estadoActual,
 					InfoTraza.NivelTraza.info));*/
-		return estadoActual; // si el input no es valido no cambia de estado
+//		return estadoActual; // si el input no es valido no cambia de estado
 
 	}
 
@@ -238,7 +262,7 @@ public void interpretarTransicion(TransicionAutomataEF transicion){
     Integer tipoTransicion = transicion.getTipoTransicion();
     String input = transicion.getInput();
     if (tipoTransicion== NombresPredefinidos.TRANSICION_AUTOMATA_EF_SIN_ACCION){
-        this.estadoActual = transita(input);
+         transita(input);
     }else {    // ****** revisar 
 //           if (transicion.getTipoTransicion()== NombresPredefinidos.TRANSICION_AUTOMATA_EF_ACCION_BLOQ)
 //           this.itfGestAcciones.
@@ -250,6 +274,23 @@ public void interpretarTransicion(TransicionAutomataEF transicion){
 	 *
 	 *@return    Cadena con la informacin
 	 */
+        @Override
+     public boolean procesaInput(Object input){
+          return ejecutarTransicion( input, (Object[]) null);
+      }
+        @Override
+     public  boolean procesaInput(String input, Object[] parametros){
+         return ejecutarTransicion( input, parametros);
+     }
+  
+     
+       
+       
+        @Override
+  public  boolean procesaInputObj(Object input, Object[] parametros){
+      return ejecutarTransicion( input, (Object[]) parametros);
+  }
+        @Override
 	public String toString()
 	{
 		String dev = tablaEstadosAutomata.toString();
@@ -275,17 +316,19 @@ public void interpretarTransicion(TransicionAutomataEF transicion){
 	 */
 	public void cambiarEstado(String nuevoEstado)
 	{
-	if (tablaEstadosAutomata.esEstadoValido(nuevoEstado))	
-            estadoActual = nuevoEstado;
-        else {
-            trazas = NombresPredefinidos.RECURSO_TRAZAS_OBJ;
-            if (trazas!= null)
-            trazas.trazar(this.getClass().getSimpleName(), "El estado al que se debe transitar : "+nuevoEstado
+        if (!estadoActual.equals(nuevoEstado)){ 
+            if (tablaEstadosAutomata.esEstadoValido(nuevoEstado))	
+                estadoActual = nuevoEstado;
+            else {
+                trazas = NombresPredefinidos.RECURSO_TRAZAS_OBJ;
+                if (trazas!= null)
+                trazas.trazar(this.getClass().getSimpleName(), "El estado al que se debe transitar : "+nuevoEstado
                     +"  No es un estado valido del Automata. Revisar la tabla de estado y/o el identificador del estado ",
                     InfoTraza.NivelTraza.error);
-            else 
-                System.out.println(this.getClass().getSimpleName()+ "  El estado al que se debe transitar : "+nuevoEstado
+                else 
+                    System.out.println(this.getClass().getSimpleName()+ "  El estado al que se debe transitar : "+nuevoEstado
                     +"  No es un estado valido del Automata. Revisar la tabla de estado y/o el identificador del estado ");
+        }
         }
 	}
 

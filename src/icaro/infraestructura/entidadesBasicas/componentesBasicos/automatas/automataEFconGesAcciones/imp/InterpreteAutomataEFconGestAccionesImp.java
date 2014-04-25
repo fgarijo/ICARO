@@ -12,6 +12,7 @@ import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.clase
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.gestorAcciones.ItfGestorAcciones;
 import icaro.infraestructura.patronAgenteReactivo.control.acciones.AccionesSemanticasAgenteReactivo;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.ItfUsoRecursoTrazas;
+import icaro.infraestructura.recursosOrganizacion.recursoTrazas.imp.componentes.InfoTraza;
 import java.io.Serializable;
 import java.util.logging.Level;
 
@@ -84,7 +85,7 @@ public class InterpreteAutomataEFconGestAccionesImp extends InterpreteAutomataEF
 	 * @uml.property  name="trazas"
 	 * @uml.associationEnd  readOnly="true"
 	 */
-	protected ItfUsoRecursoTrazas trazas;
+//	protected ItfUsoRecursoTrazas trazas;
 	
 
 	/**
@@ -136,14 +137,17 @@ public class InterpreteAutomataEFconGestAccionesImp extends InterpreteAutomataEF
                 inputAutomata = (String)input;
             }
 //           if( tablaEstadosAutomata.esInputValidoDeEstado(estadoActual, inputAutomata)){
+            String estado = estadoActual();
                TransicionAutomataEF transicion = this.tablaEstadosAutomata.getTransicion(estadoActual()+inputAutomata);
                if (transicion == null){
                    // mensaje de error el input no es valido en el estado actual 
+                    this.trazas.trazar (this.getClass().getSimpleName()," No existe transicion asociada al input : " + inputAutomata + 
+                       " en el estado  :" + estadoActual ,InfoTraza.NivelTraza.error );
                    return false;
            }
+            this.cambiaEstado(transicion.getidentEstadoSiguiente());
             Class accion = transicion.getClaseAccion();
             if (accion == null){
-            this.cambiaEstado(transicion.getidentEstadoSiguiente());
             return true;
             } 
             if (accion.getSuperclass().getSimpleName().equalsIgnoreCase(accionesSemAgteReactivoSimpleName)){
@@ -167,9 +171,12 @@ public class InterpreteAutomataEFconGestAccionesImp extends InterpreteAutomataEF
                         }
 }
         @Override
-  public boolean transita(Object input){
-      return ejecutarTransicion( input, (Object[]) null);
-  }
+ 
+       
+//        @Override
+//        public String toString(){
+//            return null;
+//        }
 	/**
 	 *  Dice si el automata se encuentra en un estado final o no
 	 *
@@ -181,6 +188,9 @@ public class InterpreteAutomataEFconGestAccionesImp extends InterpreteAutomataEF
 //		return (interpTablaEstados.esEstadoFinal(identEstado));
 //	}
 
+        public String getEstadoAutomata(){
+            return estadoActual;
+        }
         @Override
         public boolean estasEnEstadoFinal()
 	{
@@ -244,7 +254,8 @@ public class InterpreteAutomataEFconGestAccionesImp extends InterpreteAutomataEF
 	 *
 	 *@param  estado  Estado del automata al que cambiamos
 	 */
-	private void cambiaEstado(String estado)
+        @Override
+	public void cambiaEstado(String estado)
 	{
 		estadoActual = estado;
 	}
@@ -330,6 +341,7 @@ public class InterpreteAutomataEFconGestAccionesImp extends InterpreteAutomataEF
 	 * @uml.property  name="logger"
 	 */
       
+        @Override
 	public void setLogger(Logger logger){
 		this.logger = logger;
 	}
@@ -338,6 +350,7 @@ public class InterpreteAutomataEFconGestAccionesImp extends InterpreteAutomataEF
 	 * @uml.property  name="logger"
 	 */
 
+        @Override
 	public Logger getLogger(){
 		return logger;
 	}

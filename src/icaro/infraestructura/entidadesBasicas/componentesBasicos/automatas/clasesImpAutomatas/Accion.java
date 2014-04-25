@@ -53,7 +53,7 @@ public abstract class Accion extends Thread {
     }
     
     public void generarInputAutomata (Object input){
-        itfAutomata.transita(input);
+        itfAutomata.procesaInput(input);
  //       envioHechos.insertarHecho(informe.getContenidoInforme());
     }
 

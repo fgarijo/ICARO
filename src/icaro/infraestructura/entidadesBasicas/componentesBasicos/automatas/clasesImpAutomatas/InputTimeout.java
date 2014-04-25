@@ -138,7 +138,7 @@ public class InputTimeout extends Thread {
         } catch (InterruptedException ex) {}
 
         // Genera un nuevo evento de input
-        this.itfAutomata.transita(informeAGenerar); 
+        this.itfAutomata.procesaInput(informeAGenerar); 
 
       }    
       

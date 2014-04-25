@@ -23,6 +23,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.apache.log4j.Logger;
 
@@ -43,7 +44,7 @@ public class GestorAccionesImp implements ItfGestorAcciones{
     private String accionSincSimpleName;
     private AccionesSemanticasAgenteReactivo accionesSemAgteReactivo ;
     private String accionesSemAgteReactivoSimpleName;
-    private Map<String, AccionSincrona> accionesCreadas;
+    private Map<String, Object> accionesCreadas;
     private Logger log = Logger.getLogger(GestorAccionesImp.class);
     
 //    public GestorAccionesImp(AgenteCognitivo agente,ItfProcesadorObjetivos envioHechos){
@@ -52,9 +53,10 @@ public class GestorAccionesImp implements ItfGestorAcciones{
 //        this.envioInputs = itfautomata;
         accionAsincSimpleName = AccionAsincrona.class.getSimpleName();
         accionSincSimpleName = AccionSincrona.class.getSimpleName();
+        accionesSemAgteReactivoSimpleName = AccionesSemanticasAgenteReactivo.class.getSimpleName();
         this.trazas= NombresPredefinidos.RECURSO_TRAZAS_OBJ;
         comunicator = new ComunicacionAgentes (propietarioId);
-        accionesCreadas = new HashMap <String, AccionSincrona>();
+        accionesCreadas = new HashMap <String, Object>();
     }
     public void setItfAutomataEFconGestAcciones(ItfAutomataEFconGestAcciones itfautomata){
         envioInputs = itfautomata;
@@ -78,7 +80,7 @@ public class GestorAccionesImp implements ItfGestorAcciones{
     @Override
     public AccionSincrona crearAccionSincrona(Class clase) throws Exception {
         String identAccion = clase.getSimpleName();
-        if (accionesCreadas.containsKey(identAccion)) return accionesCreadas.get(identAccion);
+        if (accionesCreadas.containsKey(identAccion)) return (AccionSincrona) accionesCreadas.get(identAccion);
         AccionSincrona accion = (AccionSincrona)clase.newInstance(); 
         accion.setItfAutomata(envioInputs);
 //        accion.setAgente(agente);
@@ -96,7 +98,7 @@ public class GestorAccionesImp implements ItfGestorAcciones{
     @Override
     public AccionSincrona crearAccionAsincrona(Class clase) throws Exception {
         String identAccion = clase.getSimpleName();
-        if (accionesCreadas.containsKey(identAccion)) return accionesCreadas.get(identAccion);
+        if (accionesCreadas.containsKey(identAccion)) return (AccionSincrona) accionesCreadas.get(identAccion);
         AccionSincrona accion = (AccionAsincrona)clase.newInstance(); 
 //        accion.setEnvioHechos(envioHechos);
 //        accion.setAgente(agente);
@@ -111,6 +113,36 @@ public class GestorAccionesImp implements ItfGestorAcciones{
         accion.setTrazas(NombresPredefinidos.RECURSO_TRAZAS_OBJ);	
         return accion;
     }
+    public AccionesSemanticasAgenteReactivo getInstanceASagteReactivo(Class accionClass){
+        
+        if (accionesSemAgteReactivo ==null)
+//        String identAccion = accionClass.getSimpleName();
+//        if (accionesCreadas.containsKey(identAccion)) return (AccionesSemanticasAgenteReactivo) accionesCreadas.get(identAccion);
+//        AccionesSemanticasAgenteReactivo accion; 
+        try {
+            accionesSemAgteReactivo = (AccionesSemanticasAgenteReactivo)accionClass.newInstance();
+            accionesSemAgteReactivo.itfAutomataControl = this.envioInputs;
+            accionesCreadas.put(identAccion, accionesSemAgteReactivo);
+            accionesSemAgteReactivo.trazas = NombresPredefinidos.RECURSO_TRAZAS_OBJ;	
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(GestorAccionesImp.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(GestorAccionesImp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+//        accion.setEnvioHechos(envioHechos);
+//        accion.setAgente(agente);
+//        accion.setIdentAgente (agente.getIdentAgente());
+//        accion.setComunicator(comunicator);
+//        String identAccionLong = accion.getClass().getName();
+//        identAccion = identAccionLong.substring(identAccionLong.lastIndexOf(".")+1);
+//        String identAccion = accion.getClass().getSimpleName();
+        
+//        accion.setIdentAccion(identAccion);
+//        log.debug("Accion creada:"+clase.getName());
+        
+        return accionesSemAgteReactivo;
+    }
+            
     public void inicializarAccion(AccionSincrona accion) throws Exception {
     //    AccionSincrona accion = (AccionSincrona)clase.newInstance(); 
         accion.setItfAutomata(envioInputs);
@@ -143,7 +175,7 @@ public class GestorAccionesImp implements ItfGestorAcciones{
            paramsEjecucion[i]= paramsEjecucion[i+1];
         }
             paramsEjecucion[numparam]=null;
-        if (superclase.equals(accionSincSimpleName) ) {
+        if (superclase.equals(accionSincSimpleName)|| superclase.equals(accionesSemAgteReactivoSimpleName) ) {
             accionSinc = crearAccionSincrona(claseAccionEjecutar);
             accionSinc.ejecutar(paramsEjecucion);
         }
@@ -164,6 +196,9 @@ public class GestorAccionesImp implements ItfGestorAcciones{
        // Extraccion de parametros y verificacion de la clase
         String superclase = claseAccionEjecutar.getSuperclass().getSimpleName();
 //        int numparam = paramsEjecucion.length ;
+        if (superclase.equals(accionesSemAgteReactivoSimpleName) ) {
+           accionesSemAgteReactivo = getInstanceASagteReactivo(claseAccionEjecutar);
+        }
         if (superclase.equals(accionSincSimpleName) ) {
             accionSinc = crearAccionSincrona(claseAccionEjecutar);
             accionSinc.ejecutar(paramsEjecucion);
@@ -180,9 +215,14 @@ public class GestorAccionesImp implements ItfGestorAcciones{
         }
     }       
     @Override
-    public synchronized void ejecutarMetodo(Class accion,String identMetodo, Object... paramsEjecucion) throws Exception {
+    public synchronized void ejecutarMetodo(Class claseAccionEjecutar,String identMetodo, Object... paramsEjecucion) throws Exception {
 //        protected synchronized void ejecutarAccionBloqueante(String nombre, Object[] parametros) throws ExcepcionEjecucionAcciones {
-		
+	String superclase = claseAccionEjecutar.getSuperclass().getSimpleName();
+//        String accionId = accionesSemAgteReactivo.getClass().getName();
+        if (superclase.equals(accionesSemAgteReactivoSimpleName) ){
+            accionesSemAgteReactivo = getInstanceASagteReactivo(claseAccionEjecutar);
+            
+        }// habria que lanzar una excepcion pq debe ser instancia 
 		Class params[] = {};
 		Object paramsObj[] = {};
 		
@@ -207,36 +247,36 @@ public class GestorAccionesImp implements ItfGestorAcciones{
 //                    Class thisClass = accionesSemanticas.getClass();
 //			Object iClass = accionesSemanticas;
 //			Class thisClass = this.crearAccionSincrona(accion).getClass();
-			Object accionesSemanticas = this.crearAccionSincrona(accion);
-			Method thisMethod = accion.getMethod(identMetodo, params);
-			thisMethod.invoke(accionesSemanticas, paramsObj);
+//			Object accionesSemanticas = this.crearAccionSincrona(accion);
+			Method thisMethod = claseAccionEjecutar.getMethod(identMetodo, params);
+			thisMethod.invoke(accionesSemAgteReactivo, paramsObj);
 		}
 		catch (IllegalAccessException iae) {
-			System.out.println("ERROR en los privilegios de acceso (no es publico) para en metodo: " + identMetodo + " de la clase: " + accion.getClass().getName());
+			System.out.println("ERROR en los privilegios de acceso (no es publico) para en metodo: " + identMetodo + " de la clase: " +accionesSemAgteReactivo.getClass().getName() );
 			iae.printStackTrace();
-            throw new ExcepcionEjecucionAcciones( "AccionesSemanticasImp", "error al ejecutar un metodo"+ identMetodo + " de la clase: " + accion.getClass().getName(),
+            throw new ExcepcionEjecucionAcciones( "AccionesSemanticasImp", "error al ejecutar un metodo"+ identMetodo + " de la clase: " + accionesSemAgteReactivo.getClass().getName(),
                                                           "se ha producido un IlegalAccessIAE");
 		}
 		catch (NoSuchMethodError nsme) {
-			System.out.println("ERROR (NO EXISTE) al invocar el metodo: " + identMetodo + " en la clase: " + accion.getClass().getName());
+			System.out.println("ERROR (NO EXISTE) al invocar el metodo: " + identMetodo + " en la clase: " + accionesSemAgteReactivo.getClass().getName());
 			nsme.printStackTrace();
-            throw new ExcepcionEjecucionAcciones( "AccionesSemanticasImp", "error al ejecutar un metodo"+ identMetodo + " de la clase: " + accion.getClass().getName(),
+            throw new ExcepcionEjecucionAcciones( "AccionesSemanticasImp", "error al ejecutar un metodo"+ identMetodo + " de la clase: " + accionesSemAgteReactivo.getClass().getName(),
                                                           "El metodo a invocar no existe. Se ha producido una excepcion NoSuchMethodError");
 		}
 		catch (NoSuchMethodException nsmee) {
-			System.out.println("ERROR (NO EXISTE) al invocar el metodo: " + identMetodo + " en la clase: " + accion.getClass().getName());
+			System.out.println("ERROR (NO EXISTE) al invocar el metodo: " + identMetodo + " en la clase: " + accionesSemAgteReactivo.getClass().getName());
 			nsmee.printStackTrace();
 			System.out.println("Invocando metodo con parametros de sus superclases correspondientes");
-			throw new ExcepcionEjecucionAcciones( "AccionesSemanticasImp", "error al ejecutar un metodo"+ identMetodo + " de la clase: " + accion.getClass().getName(),
+			throw new ExcepcionEjecucionAcciones( "AccionesSemanticasImp", "error al ejecutar un metodo"+ identMetodo + " de la clase: " + accionesSemAgteReactivo.getClass().getName(),
                                                           "El metodo a invocar no existe. Se ha producido una excepcion NoSuchMethodError");
             //ejecutarAccionBloqueantePolimorfica(nombre, parametros, 1);
 		}
 		catch (InvocationTargetException ite) {
-			System.out.println("ERROR en la ejecucion del metodo: " + identMetodo + " en la clase: " + accion.getClass().getName());
+			System.out.println("ERROR en la ejecucion del metodo: " + identMetodo + " en la clase: " + accionesSemAgteReactivo.getClass().getName());
 			ite.printStackTrace();
 			System.out.println("Excepcion producida en el metodo: ");
 			ite.getTargetException().printStackTrace();
-		throw new ExcepcionEjecucionAcciones( "AccionesSemanticasImp", "error al ejecutar un metodo"+ identMetodo + " de la clase: " + accion.getClass().getName(),
+		throw new ExcepcionEjecucionAcciones( "AccionesSemanticasImp", "error al ejecutar un metodo"+ identMetodo + " de la clase: " + accionesSemAgteReactivo.getClass().getName(),
                                                           "El metodo a invocar no existe. Se ha producido una excepcion InvocationTargetException");
         }
 	}

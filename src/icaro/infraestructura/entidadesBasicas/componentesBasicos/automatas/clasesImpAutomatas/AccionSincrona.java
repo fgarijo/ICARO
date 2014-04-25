@@ -66,7 +66,7 @@ public abstract class AccionSincrona {
     }
     
     public void generarInputAutomata (Object input){
-        itfAutomata.transita(input);
+        itfAutomata.procesaInput(input);
  //       envioHechos.insertarHecho(informe.getContenidoInforme());
     }
 
