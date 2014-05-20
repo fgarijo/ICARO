@@ -17,7 +17,7 @@ import java.util.logging.Level;
 import org.apache.log4j.Logger;
 
 /**
- * Implementation for Cognitive Agent Perception
+ * Implementation for Reactive Agent Perception
  */
 public class PercepcionAgenteReactivoImp extends PercepcionAbstracto {
 

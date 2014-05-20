@@ -130,9 +130,14 @@ public class ProcesadorItemsPercepReactivo {
 
 	public void procesarItem(Object item) throws RemoteException {
             this.item = item;
-            InfoContEvtMsgAgteReactivo infoExtraida = extraerInfoControl();
+//            InfoContEvtMsgAgteReactivo infoExtraida = extraerInfoControl();
+            Object infoExtraida = null;
+             if (item instanceof EventoSimple)
+                 infoExtraida = ((EventoSimple)item).getContenido();		
+             else if (item instanceof MensajeSimple)
+                 infoExtraida = ((MensajeSimple)item).getContenido();
 		if (infoExtraida != null)
-			itfControlReactivo.procesarInfoControlAgteReactivo(infoExtraida);
+			itfControlReactivo.procesarInfoControlAgteReactivo(infoExtraida);           
 		else{
 			log.error("No se ha podido extraer informacion valida del  " + item + " no reconocido");
 			trazas.aceptaNuevaTraza(new InfoTraza (this.agente.getIdentAgente(),"Percepcion: Item "+ item + " no se ha podido extraer informacion valida",InfoTraza.NivelTraza.debug));
