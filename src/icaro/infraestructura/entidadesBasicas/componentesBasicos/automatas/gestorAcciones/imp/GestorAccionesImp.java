@@ -15,6 +15,7 @@ import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.gesto
 import icaro.infraestructura.entidadesBasicas.comunicacion.ComunicacionAgentes;
 import icaro.infraestructura.patronAgenteCognitivo.factoriaEInterfacesPatCogn.AgenteCognitivo;
 import icaro.infraestructura.patronAgenteCognitivo.procesadorObjetivos.factoriaEInterfacesPrObj.ItfProcesadorObjetivos;
+import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.ItfUsoAutomataEFE;
 import icaro.infraestructura.patronAgenteReactivo.control.acciones.AccionesSemanticasAgenteReactivo;
 import icaro.infraestructura.patronAgenteReactivo.control.acciones.ExcepcionEjecucionAcciones;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.ItfUsoRecursoTrazas;
@@ -34,7 +35,7 @@ import org.apache.log4j.Logger;
 public class GestorAccionesImp implements ItfGestorAcciones{
 //    private AgenteCognitivo agente;
     private String identPropietario;
-    private ItfAutomataEFconGestAcciones envioInputs;
+    private ItfUsoAutomataEFE envioInputs;
     private ItfUsoRecursoTrazas trazas;
     private String identAccion;
     private ComunicacionAgentes comunicator;
@@ -58,7 +59,7 @@ public class GestorAccionesImp implements ItfGestorAcciones{
         comunicator = new ComunicacionAgentes (propietarioId);
         accionesCreadas = new HashMap <String, Object>();
     }
-    public void setItfAutomataEFconGestAcciones(ItfAutomataEFconGestAcciones itfautomata){
+    public void setItfAutomataEFconGestAcciones(ItfUsoAutomataEFE itfautomata){
         envioInputs = itfautomata;
     }
 
@@ -194,13 +195,17 @@ public class GestorAccionesImp implements ItfGestorAcciones{
     public void ejecutarAccion(Class claseAccionEjecutar, Object... paramsEjecucion) throws Exception {
 //        Class claseAccionEjecutar = (Class)paramsEjecucion[0];
        // Extraccion de parametros y verificacion de la clase
+         String identAccion = claseAccionEjecutar.getSimpleName();
+        Object accionCreada = accionesCreadas.get(identAccion);
         String superclase = claseAccionEjecutar.getSuperclass().getSimpleName();
 //        int numparam = paramsEjecucion.length ;
-        if (superclase.equals(accionesSemAgteReactivoSimpleName) ) {
-           accionesSemAgteReactivo = getInstanceASagteReactivo(claseAccionEjecutar);
-        }
+//        if (superclase.equals(accionesSemAgteReactivoSimpleName) ) {
+//           accionesSemAgteReactivo = getInstanceASagteReactivo(claseAccionEjecutar);
+//        }
         if (superclase.equals(accionSincSimpleName) ) {
-            accionSinc = crearAccionSincrona(claseAccionEjecutar);
+//            accionSinc = (AccionAsincrona)accionesCreadas.get(identAccion);
+            if(accionCreada!=null)accionSinc = (AccionAsincrona)accionCreada;
+            else accionSinc = crearAccionSincrona(claseAccionEjecutar);
             accionSinc.ejecutar(paramsEjecucion);
         }
         else if (superclase.equals(accionAsincSimpleName)){
@@ -213,14 +218,15 @@ public class GestorAccionesImp implements ItfGestorAcciones{
             this.trazas.trazar ( this.getClass().getSimpleName(), "Error en  la ejecucion de la accion: "+ claseAccionEjecutar.getSimpleName() +
                     " debe extender a AccionSincrona o a AccionAsincrona ", InfoTraza.NivelTraza.error );
         }
-    }       
+    }   
+    
     @Override
     public synchronized void ejecutarMetodo(Class claseAccionEjecutar,String identMetodo, Object... paramsEjecucion) throws Exception {
 //        protected synchronized void ejecutarAccionBloqueante(String nombre, Object[] parametros) throws ExcepcionEjecucionAcciones {
 	String superclase = claseAccionEjecutar.getSuperclass().getSimpleName();
 //        String accionId = accionesSemAgteReactivo.getClass().getName();
         if (superclase.equals(accionesSemAgteReactivoSimpleName) ){
-            accionesSemAgteReactivo = getInstanceASagteReactivo(claseAccionEjecutar);
+            if(accionesSemAgteReactivo==null) accionesSemAgteReactivo = getInstanceASagteReactivo(claseAccionEjecutar);
             
         }// habria que lanzar una excepcion pq debe ser instancia 
 		Class params[] = {};
@@ -280,5 +286,8 @@ public class GestorAccionesImp implements ItfGestorAcciones{
                                                           "El metodo a invocar no existe. Se ha producido una excepcion InvocationTargetException");
         }
 	}
-        
+         public synchronized void ejecutarMetodoThread(Class claseAccionEjecutar,String identMetodo, Object... paramsEjecucion) throws Exception { 
+             throw new ExcepcionEjecucionAcciones( "GestorAccionesImp", "error al ejecutar un metodo"+ identMetodo + " de la clase: " + accionesSemAgteReactivo.getClass().getName(),
+                                                          "El metodo no esta iplementado. Se ha producido una excepcion InvocationTargetException"); 
+         }  
  }

@@ -8,6 +8,7 @@ import icaro.infraestructura.entidadesBasicas.procesadorCognitivo.*;
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFconGesAcciones.ItfAutomataEFconGestAcciones;
 import icaro.infraestructura.patronAgenteCognitivo.procesadorObjetivos.factoriaEInterfacesPrObj.ItfProcesadorObjetivos;
+import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.ItfUsoAutomataEFE;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.ItfUsoRecursoTrazas;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.imp.componentes.InfoTraza;
 import icaro.infraestructura.recursosOrganizacion.repositorioInterfaces.imp.ClaseGeneradoraRepositorioInterfaces;
@@ -33,7 +34,7 @@ public class InputTimeout extends Thread {
 	 * @uml.property  name="agente"
 	 * @uml.associationEnd  multiplicity="(1 1)"
 	 */
-     protected ItfAutomataEFconGestAcciones itfAutomata;
+     protected ItfUsoAutomataEFE itfAutomata;
 
      /**
 	 * Evento a producir
@@ -43,7 +44,7 @@ public class InputTimeout extends Thread {
      protected  ItfUsoRecursoTrazas trazas;
 
     
-     public InputTimeout(long milis, ItfAutomataEFconGestAcciones automataItf, Informe informeAGenerar) {
+     public InputTimeout(long milis, ItfUsoAutomataEFE automataItf, Informe informeAGenerar) {
       super("Timeout "+informeAGenerar.getidentEntidadEmisora());
       this.milis= milis;
       this.finalizar= false;
@@ -51,7 +52,7 @@ public class InputTimeout extends Thread {
       this.setDaemon(true);
       this.informeAGenerar = informeAGenerar;
     }
-     public InputTimeout(long milis, ItfAutomataEFconGestAcciones automataItf, Informe informeAGenerar,boolean traza) {
+     public InputTimeout(long milis, ItfUsoAutomataEFE automataItf, Informe informeAGenerar,boolean traza) {
       super("Timeout "+informeAGenerar.getidentEntidadEmisora());
       this.milis= milis;
       this.finalizar= false;

@@ -6,8 +6,10 @@ package icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.clas
 import icaro.infraestructura.entidadesBasicas.procesadorCognitivo.*;
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFconGesAcciones.ItfAutomataEFconGestAcciones;
+import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.gestorAcciones.ItfGestorAcciones;
 import icaro.infraestructura.entidadesBasicas.comunicacion.ComunicacionAgentes;
 import icaro.infraestructura.entidadesBasicas.excepciones.ExcepcionEnComponente;
+import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.ItfUsoAutomataEFE;
 import icaro.infraestructura.recursosOrganizacion.configuracion.ItfUsoConfiguracion;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.ItfUsoRecursoTrazas;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.imp.componentes.InfoTraza.NivelTraza;
@@ -23,7 +25,7 @@ import java.util.logging.Logger;
 
 public abstract class AccionSincrona {
 
-    protected ItfAutomataEFconGestAcciones itfAutomata;
+    protected ItfUsoAutomataEFE itfAutomata;
 //    protected AgenteCognitivo agente;
     protected String  identAccion;
 //    protected String  identAgente;
@@ -32,7 +34,7 @@ public abstract class AccionSincrona {
     protected ItfUsoRecursoTrazas trazas;
     protected ItfUsoRepositorioInterfaces repoInterfaces;
     protected ItfUsoConfiguracion itfConfig;
-    protected ItfAutomataEFconGestAcciones gestorAcciones;
+    protected ItfGestorAcciones gestorAcciones;
     protected ComunicacionAgentes comunicator;
 		
     public AccionSincrona(){
@@ -139,10 +141,10 @@ public abstract class AccionSincrona {
 //    public void setEnvioHechos(ItfProcesadorObjetivos envioHechos) {
 //        this.itfProcObjetivos = envioHechos;
 //    }
-     public void setItfAutomata(ItfAutomataEFconGestAcciones itfAutomata){
+     public void setItfAutomata(ItfUsoAutomataEFE itfAutomata){
          this.itfAutomata = itfAutomata;
      }
-      public ItfAutomataEFconGestAcciones getItfAutomata(){
+      public ItfUsoAutomataEFE getItfAutomata(){
          return this.itfAutomata ;
      }
      public void setTrazas(ItfUsoRecursoTrazas trazasItf) {

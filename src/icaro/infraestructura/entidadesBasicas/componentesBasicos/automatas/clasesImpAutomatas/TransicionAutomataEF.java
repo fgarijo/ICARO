@@ -36,10 +36,10 @@ public class TransicionAutomataEF {
        this.identClaseAccion = idAccionClass;
        this.identEstadoSiguiente=idEstadoSiguiente;
        if (identClaseAccion == null )
-           this.tipoTransicion =NombresPredefinidos.TRANSICION_AUTOMATA_EF_SIN_ACCION;
+           this.tipoTransicion =NombresPredefinidos.AUTOMATA_EF_TIPO_TRANSICION_SIN_ACCION;
        else if (modalidadAccion.equals(NombresPredefinidos.NOMBRE_MODO_CONCURRENTE_AUTOMATA_EF_SIN_ACCION))
-                this.tipoTransicion =NombresPredefinidos.TRANSICION_AUTOMATA_EF_ACCION_CONCUR;
-            else this.tipoTransicion =NombresPredefinidos.TRANSICION_AUTOMATA_EF_ACCION_BLOQ;
+                this.tipoTransicion =NombresPredefinidos.AUTOMATA_EF_TIPO_TRANSICION_ACCION_THREAD;
+            else this.tipoTransicion =NombresPredefinidos.AUTOMATA_EF_TIPO_TRANSICION_ACCION_BLOQ;
 }
     public  TransicionAutomataEF (String input,
            Class idAccion,String idMetodoClase,String idEstadoSiguiente, String modalidadAccion){
@@ -50,10 +50,10 @@ public class TransicionAutomataEF {
        this.identMetodoAccion = idMetodoClase;
        this.identEstadoSiguiente=idEstadoSiguiente;
        if (idAccion == null )
-           this.tipoTransicion =NombresPredefinidos.TRANSICION_AUTOMATA_EF_SIN_ACCION;
-       else if (modalidadAccion.equals(NombresPredefinidos.NOMBRE_MODO_CONCURRENTE_AUTOMATA_EF_SIN_ACCION))
-                this.tipoTransicion =NombresPredefinidos.TRANSICION_AUTOMATA_EF_ACCION_CONCUR;
-            else this.tipoTransicion =NombresPredefinidos.TRANSICION_AUTOMATA_EF_ACCION_BLOQ;
+           this.tipoTransicion =NombresPredefinidos.AUTOMATA_EF_TIPO_TRANSICION_SIN_ACCION;
+       else if (modalidadAccion.equals(NombresPredefinidos.AUTOMATA_EF_NOMBRE_MODO_CONCURRENTE))
+                this.tipoTransicion =NombresPredefinidos.AUTOMATA_EF_TIPO_TRANSICION_METODO_AS_CONCURR;
+            else this.tipoTransicion =NombresPredefinidos.AUTOMATA_EF_TIPO_TRANSICION_METODO_AS_BLOQ;
 }
    
     

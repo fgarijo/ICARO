@@ -4,6 +4,7 @@
  */
 package icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFconGesAcciones.imp;
 
+import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFconGesAcciones.InterpreteAutomataEFconGestAcciones;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFconGesAcciones.ItfAutomataEFconGestAcciones;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFsinAcciones.imp.*;
@@ -128,34 +129,40 @@ public class InterpreteAutomataEFconGestAccionesImp extends InterpreteAutomataEF
 	    }*/
 	}
 
-        @Override
-        public boolean ejecutarTransicion(Object input, Object... params){
+      public boolean ejecutarTransicion(String input,Object... params){
             
-            String inputAutomata = input.getClass().getSimpleName();
-           
-            if( inputAutomata.equals("String")){ // Si el input es de tipo String Tomamos como input la cadena que representa el input
-                inputAutomata = (String)input;
-            }
+//            String inputAutomata = input.getClass().getSimpleName();
+//           
+//            if( inputAutomata.equals("String")){ // Si el input es de tipo String Tomamos como input la cadena que representa el input
+//                inputAutomata = (String)input;
+//            }
 //           if( tablaEstadosAutomata.esInputValidoDeEstado(estadoActual, inputAutomata)){
             String estado = estadoActual();
-               TransicionAutomataEF transicion = this.tablaEstadosAutomata.getTransicion(estadoActual()+inputAutomata);
+               TransicionAutomataEF transicion = this.tablaEstadosAutomata.getTransicion(estadoActual()+input);
                if (transicion == null){
                    // mensaje de error el input no es valido en el estado actual 
-                    this.trazas.trazar (this.getClass().getSimpleName()," No existe transicion asociada al input : " + inputAutomata + 
+                    this.trazas.trazar (this.getClass().getSimpleName()," No existe transicion asociada al input : " + input + 
                        " en el estado  :" + estadoActual ,InfoTraza.NivelTraza.error );
                    return false;
            }
             this.cambiaEstado(transicion.getidentEstadoSiguiente());
-            Class accion = transicion.getClaseAccion();
-            if (accion == null){
+            Integer tipoTransicion = transicion.getTipoTransicion();
+            if (tipoTransicion == NombresPredefinidos.AUTOMATA_EF_TIPO_TRANSICION_SIN_ACCION){
             return true;
             } 
-            if (accion.getSuperclass().getSimpleName().equalsIgnoreCase(accionesSemAgteReactivoSimpleName)){
+            Class accion = transicion.getClaseAccion();
+            if (tipoTransicion == NombresPredefinidos.AUTOMATA_EF_TIPO_TRANSICION_METODO_AS_BLOQ ||
+                    tipoTransicion == NombresPredefinidos.AUTOMATA_EF_TIPO_TRANSICION_METODO_AS_CONCURR){
                 String metodoId = transicion.getIdentMetodoAccion();
                 if (metodoId!=null )
                     try {
                     // se trata de una claseAcciones semanticas, ejecutamos el metodo de la clase
+                        if (tipoTransicion == NombresPredefinidos.AUTOMATA_EF_TIPO_TRANSICION_METODO_AS_BLOQ ){
                         this.itfGestAcciones.ejecutarMetodo(accion,metodoId, params);
+                        }
+                        else {
+                            this.itfGestAcciones.ejecutarMetodoThread(accion,metodoId, params);
+                        }
                         return true;
                     } catch (Exception ex) {
                         java.util.logging.Logger.getLogger(InterpreteAutomataEFconGestAccionesImp.class.getName()).log(Level.SEVERE, null, ex);
@@ -279,6 +286,15 @@ public class InterpreteAutomataEFconGestAccionesImp extends InterpreteAutomataEF
 	public String estadoActual(){
 		return this.estadoActual;
 	}
+
+    @Override
+    public boolean ejecutarTransicion(Object input, Object... params) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      String inputAutomata ;
+            if( input instanceof String )inputAutomata = (String) input;
+            else inputAutomata = input.getClass().getSimpleName();
+            return ejecutarTransicion(inputAutomata,params);
+    }
 	/**
 	 *  Programa de pruebas del componente
 	 *

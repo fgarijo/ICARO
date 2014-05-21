@@ -1,14 +1,14 @@
 package icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFconGesAcciones;
 
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFsinAcciones.*;
-import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.ItfUsoAutomata;
+import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.ItfUsoAutomataEFE;
 
 /**
- * Interfaz de uso de un autmata de ciclo de vida de un Recurso
- *@author     lvaro Rodrguez
+ * Interfaz de uso de un autmata de Estados finitos con Gestor de acciones
+ *@author     
  *@created    1 de Febrero de 2007
  */
-public interface ItfAutomataEFconGestAcciones extends ItfUsoAutomata{
+public interface ItfAutomataEFconGestAcciones extends ItfUsoAutomataEFE{
 	/**
 	 *  Dice si el automata se encuentra en un estado final o no
 	 *

@@ -119,7 +119,7 @@ public class XMLParserTablaEstadosAutomataEFinputObj {
 		mapaNombreNodo = nodo.getAttributes();
 		// este es el identificador del nodo inicial
 		idNodo = mapaNombreNodo.getNamedItem(NombresPredefinidos.IDENT_NODO_INICIAL_AUTOMATA_EF).getNodeValue();
-		tablaEstados.putEstado(idNodo, NombresPredefinidos.TIPO_ESTADO_INICIAL_AUTOMATA_EF);
+		tablaEstados.putEstado(idNodo, NombresPredefinidos.AUTOMATA_EF_TIPO_ESTADO_INICIAL);
 		// ahora obtenemos las transiciones desde el estado inicial
 		// SE QUE TIENE AL MENOS UNA TRANSICION y que todos los hijos seran transiciones
 		listaInfoTransiciones = nodo.getChildNodes();
@@ -135,7 +135,7 @@ public class XMLParserTablaEstadosAutomataEFinputObj {
 			mapaNombreNodo = nodo.getAttributes();
 			// este es el identificador del nodo inicial
 			idNodo = mapaNombreNodo.getNamedItem(NombresPredefinidos.IDENT_NODO_INTERMEDIO_AUTOMATA_EF).getNodeValue();
-			tablaEstados.putEstado(idNodo, NombresPredefinidos.TIPO_ESTADO_INTERMEDIO_AUTOMATA_EF);
+			tablaEstados.putEstado(idNodo, NombresPredefinidos.AUTOMATA_EF_TIPO_ESTADO_INTERMEDIO);
 
 			// SE QUE TIENE AL MENOS UNA TRANSICION y que todos los hijos seran transiciones
 			listaInfoTransiciones = nodo.getChildNodes();
@@ -321,9 +321,10 @@ public class XMLParserTablaEstadosAutomataEFinputObj {
          }
          
        private TransicionAutomataEF validarInfoTransicion (String idEstado, String idInput, String idAccion,String estadoSguiente, String modoAccion) {
-           Boolean hayErrores = false;
+           boolean hayErrores = false;
             Class claseAccion = null;
             String metodo= null;
+            boolean tipoTransicionEjecutarMetodoAS = false;
             // Pocesar el encabezamiento de la transicion y el input
            
                 if( idInput==null){// el input no puede ser null
@@ -339,6 +340,10 @@ public class XMLParserTablaEstadosAutomataEFinputObj {
 //                nodoAux = mapaNombreNodo.getNamedItem(NombresPredefinidos.NOMBRE_ACCION_AUTOMATA_EF);
                 
 //                if (idAccion == null)claseAccion=NombresPredefinidos.ACCION_VACIA_AUTOMATA_EF;
+                if (estadoSguiente == null){
+                    mensajeError(idEstado, "El estado siguiente no puede ser nulo, deber ser un identificador de estado");
+                    hayErrores=true;
+                }
                   if ( idAccion == null || idAccion.matches(NombresPredefinidos.EXPR_REG_SIN_ACCION_EN_AUTOMATA_EF)){
                   // no se hace nada porque la clase ya es null
                   }else{
@@ -360,25 +365,25 @@ public class XMLParserTablaEstadosAutomataEFinputObj {
                                }else {  // Existe la clase AS deberiamos validar que el identAcciones es un metodo de la clase
                                 // pero lo dejamos para la ejecución
                                     claseAccion= this.claseAccionesSemanticas;
-                                    metodo= idAccion;                  
+                                    metodo= idAccion;
+                                    tipoTransicionEjecutarMetodoAS=true;
+//                                    if (modoAccion == null) modoAccion = NombresPredefinidos.AUTOMATA_EF_NOMBRE_MODO_BLOQUEANTE;
+                                    
                                    }
                       }
                 // se procesa el estado siguiente
 //                estadoSig = mapaNombreNodo.getNamedItem(NombresPredefinidos.NOMBRE_ESTADO_SIGUIENTE_AUTOMATA_EF).getNodeValue();
                 // consideramos la posiblidad de que la modalidad sea vacia
-                if (estadoSguiente == null){
-                    mensajeError(idEstado, "El estado siguiente no puede ser nulo, deber ser un identificador de estado");
-                    hayErrores=true;
-                }
+                
 ////                nodoAux = mapaNombreNodo.getNamedItem(NombresPredefinidos.NOMBRE_MODO_TRANSICION_AUTOMATA_EF);                                 
 //                else modo = nodoAux.getNodeValue();
                 if (hayErrores ) {
                     return null;
                 }
-                if (modoAccion == null) modoAccion = NombresPredefinidos.NOMBRE_MODO_BLOQUEANTE_AUTOMATA_EF_SIN_ACCION;
-                TransicionAutomataEF transicion= new TransicionAutomataEF(idInput, claseAccion, estadoSguiente, modoAccion);
-                if (metodo!=null)transicion.setIdentMetodoAccion(metodo);
-                return transicion;
+                if (modoAccion == null) modoAccion = NombresPredefinidos.AUTOMATA_EF_NOMBRE_MODO_BLOQUEANTE;
+                if (tipoTransicionEjecutarMetodoAS) return new  TransicionAutomataEF(idInput, claseAccion,metodo, estadoSguiente, modoAccion);
+                else return new TransicionAutomataEF(idInput, claseAccion, estadoSguiente, modoAccion);
+                
        
     }
  

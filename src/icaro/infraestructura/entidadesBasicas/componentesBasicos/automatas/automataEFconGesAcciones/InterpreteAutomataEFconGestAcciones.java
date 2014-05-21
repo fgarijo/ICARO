@@ -1,5 +1,5 @@
 /*
-    Copyright 2001 Telefnica I+D. All rights reserved
+    
   */
 package icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFconGesAcciones;
 
@@ -10,6 +10,7 @@ import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.clasesImpAutomatas.TablaEstadosAutomataEFinputObjts;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.clasesImpAutomatas.TransicionAutomataEF;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.gestorAcciones.ItfGestorAcciones;
+import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.ItfUsoAutomataEFE;
 import icaro.infraestructura.patronAgenteReactivo.control.acciones.AccionesSemanticasAgenteReactivo;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.ItfUsoRecursoTrazas;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.imp.ClaseGeneradoraRecursoTrazas;
@@ -22,14 +23,15 @@ import org.apache.log4j.Logger;
 
 
 /**
- *  Clase que define autmatas de estados finitos, sin acciones semanticas a ejecutar en las transiciones, 
+ *  Clase que define automatas de estados finitos, sin acciones semanticas a ejecutar en las transiciones, 
  *  escritos en XML
  *
  *@author     Francisco J Garijo 
  *@modified  02 de Marzo de 2014
  */
 
-public abstract class InterpreteAutomataEFconGestAcciones implements ItfAutomataEFconGestAcciones,Serializable{
+//public abstract class InterpreteAutomataEFconGestAcciones implements ItfAutomataEFconGestAcciones,Serializable{
+public abstract class InterpreteAutomataEFconGestAcciones implements ItfUsoAutomataEFE,Serializable{
 	
 	
 //	public static final String ESTADO_CREADO = "creado";
@@ -156,35 +158,34 @@ public abstract class InterpreteAutomataEFconGestAcciones implements ItfAutomata
 	 *
 	 *@param  input  Input a procesar
 	 */
-        @Override
-	public boolean ejecutarTransicion(Object input, Object... params){
-            
-            String inputAutomata = input.getClass().getSimpleName();
-           
-            if( inputAutomata.equals("String")){ // Si el input es de tipo String Tomamos como input la cadena que representa el input
-                inputAutomata = (String)input;
-            }else {// tomamos como input el nombre de la clase del input
+       
+//        @Override
+	public abstract boolean ejecutarTransicion(Object input, Object... params);
+//            
+          // Si el input es de tipo String Tomamos como input la cadena que representa el input
                 
-            }
-//           if( tablaEstadosAutomata.esInputValidoDeEstado(estadoActual, inputAutomata)){
-               TransicionAutomataEF transicion = tablaEstadosAutomata.getTransicion(estadoActual()+inputAutomata);
-               if (transicion == null){
-                   // mensaje de error el inputno es valido en el estado actual 
-           }else {
-                   // obtenemos el tipo de transción ************* Revisar
-//                    if (tipoTransicion== NombresPredefinidos.TRANSICION_AUTOMATA_EF_SIN_ACCION){
-//                        this.estadoActual = transita(input);
-//                     }else {    
-//                            if (transicion.getTipoTransicion()== NombresPredefinidos.TRANSICION_AUTOMATA_EF_ACCION_BLOQ)
-//                            this.itfGestAcciones.crearAccionAsincrona(null)
-            }
-         return true;      
-        }
+//            }else {// tomamos como input el nombre de la clase del input
+//                
+//            }
+////           if( tablaEstadosAutomata.esInputValidoDeEstado(estadoActual, inputAutomata)){
+//               TransicionAutomataEF transicion = tablaEstadosAutomata.getTransicion(estadoActual()+inputAutomata);
+//               if (transicion == null){
+//                   // mensaje de error el inputno es valido en el estado actual 
+//           }else {
+//                   // obtenemos el tipo de transción ************* Revisar
+////                    if (tipoTransicion== NombresPredefinidos.TRANSICION_AUTOMATA_EF_SIN_ACCION){
+////                        this.estadoActual = transita(input);
+////                     }else {    
+////                            if (transicion.getTipoTransicion()== NombresPredefinidos.TRANSICION_AUTOMATA_EF_ACCION_BLOQ)
+////                            this.itfGestAcciones.crearAccionAsincrona(null)
+//            }
+//         return true;      
+//        }
         public boolean ejecutarTransicion(Object input){
             
-            String inputAutomata = input.getClass().getSimpleName();
+            String inputAutomata ;
            
-            if( inputAutomata.equals("String")){ // Si el input es de tipo String Tomamos como input la cadena que representa el input
+            if( input instanceof String ){ // Si el input es de tipo String Tomamos como input la cadena que representa el input
                 inputAutomata = (String)input;
             }else {// tomamos como input el nombre de la clase del input
                 inputAutomata = input.getClass().getSimpleName();
@@ -203,13 +204,13 @@ public abstract class InterpreteAutomataEFconGestAcciones implements ItfAutomata
             }
                    // obtenemos el tipo de transción ************* Revisar
              Integer tipoTransicion = transicion.getTipoTransicion();
-             if (tipoTransicion== NombresPredefinidos.TRANSICION_AUTOMATA_EF_SIN_ACCION){
+             if (tipoTransicion== NombresPredefinidos.AUTOMATA_EF_TIPO_TRANSICION_SIN_ACCION){
                  this.estadoActual =transicion.getidentEstadoSiguiente();
                  return true;
               }  
               Class claseAEjecutar =  transicion.getClaseAccion();
-               if (claseAEjecutar.getSimpleName().startsWith(NombresPredefinidos.NOMBRE_ACCIONES_SEMANTICAS) ){
-                    if (tipoTransicion== NombresPredefinidos.TRANSICION_AUTOMATA_EF_ACCION_BLOQ)
+//               if (claseAEjecutar.getSimpleName().startsWith(NombresPredefinidos.NOMBRE_ACCIONES_SEMANTICAS) ){
+                    if (tipoTransicion== NombresPredefinidos.AUTOMATA_EF_TIPO_TRANSICION_METODO_AS_BLOQ)
                        try {
                             this.itfGestAcciones.ejecutarMetodo(claseAEjecutar, transicion.getIdentMetodoAccion(), (Object)null);
                             this.estadoActual =transicion.getidentEstadoSiguiente();
@@ -218,19 +219,18 @@ public abstract class InterpreteAutomataEFconGestAcciones implements ItfAutomata
                            java.util.logging.Logger.getLogger(InterpreteAutomataEFconGestAcciones.class.getName()).log(Level.SEVERE, null, ex);
                            return false;
                            }
-                                else{// ejecutar el metodo como thread 
+                    else if (tipoTransicion== NombresPredefinidos.AUTOMATA_EF_TIPO_TRANSICION_METODO_AS_CONCURR){// ejecutar el metodo como thread 
                                  return false; // por no estar implementado
                                 }
-                 }
-                          
-                 try {
-                       this.itfGestAcciones.ejecutarAccion(transicion.getClaseAccion(), input);
-                       this.estadoActual =transicion.getidentEstadoSiguiente();
-                       return true; 
-                     } catch (Exception ex) {
-                        java.util.logging.Logger.getLogger(InterpreteAutomataEFconGestAcciones.class.getName()).log(Level.SEVERE, null, ex);
-                        return false;
-                            }
+//                        else if (tipoTransicion== NombresPredefinidos.AUTOMATA_EF_TIPO_TRANSICION_METODO_AS_BLOQ)                        
+                    else try {
+                               this.itfGestAcciones.ejecutarAccion(claseAEjecutar, input);
+                               this.estadoActual =transicion.getidentEstadoSiguiente();
+                               return true; 
+                             } catch (Exception ex) {
+                                java.util.logging.Logger.getLogger(InterpreteAutomataEFconGestAcciones.class.getName()).log(Level.SEVERE, null, ex);
+                                return false;
+                                    }
         }
         
         @Override
@@ -261,7 +261,7 @@ public void interpretarTransicion(TransicionAutomataEF transicion){
     // le manda la accion  al ejecutor de acciones para que ejecute y transita al estado que indica la transicion
     Integer tipoTransicion = transicion.getTipoTransicion();
     String input = transicion.getInput();
-    if (tipoTransicion== NombresPredefinidos.TRANSICION_AUTOMATA_EF_SIN_ACCION){
+    if (tipoTransicion== NombresPredefinidos.AUTOMATA_EF_TIPO_TRANSICION_SIN_ACCION){
          transita(input);
     }else {    // ****** revisar 
 //           if (transicion.getTipoTransicion()== NombresPredefinidos.TRANSICION_AUTOMATA_EF_ACCION_BLOQ)
@@ -276,16 +276,23 @@ public void interpretarTransicion(TransicionAutomataEF transicion){
 	 */
         @Override
      public boolean procesaInput(Object input){
-          return ejecutarTransicion( input, (Object[]) null);
+           String inputAutomata ;
+           Object[] params = null;
+           
+            if( input instanceof String){ // Si el input es de tipo String Tomamos como input la cadena que representa el input
+                inputAutomata= (String)input;
+            }else {// tomamos como input el nombre de la clase del input y añadimos el objeto como primer parametro
+                inputAutomata = input.getClass().getSimpleName();
+                params[0]= input;
+            } 
+          return ejecutarTransicion( inputAutomata);
       }
         @Override
      public  boolean procesaInput(String input, Object[] parametros){
          return ejecutarTransicion( input, parametros);
      }
   
-     
-       
-       
+           
         @Override
   public  boolean procesaInputObj(Object input, Object[] parametros){
       return ejecutarTransicion( input, (Object[]) parametros);
@@ -338,7 +345,7 @@ public void interpretarTransicion(TransicionAutomataEF transicion){
 	 * 
 	 * @return est en estado activo o no
 	 */
-        @Override
+//        @Override
 	public boolean estadoActivo(){
 		return this.estadoActual.equals("activo");
 	}
@@ -347,7 +354,7 @@ public void interpretarTransicion(TransicionAutomataEF transicion){
 	 * Dice el estado del autmata en el que se encuentra el recurso
 	 * @return el estado en que se encuentra
 	 */
-        @Override
+//        @Override
 	public String estadoActual(){
 		return this.estadoActual;
 	}
@@ -359,63 +366,7 @@ public void interpretarTransicion(TransicionAutomataEF transicion){
             this.itfGestAcciones = gestAccItf;
             
         }
-	/**
-	 *  Programa de pruebas del componente
-	 *
-	 *@param  args  The command line arguments
-	 */
-	/*
-	public static void main(String[] args)
-	{
-		// ejemplo de uso del automata de control
-
-		// 1. Creo las acciones semnticas
-		tid.tecHabla.agentes.componentes.infraestructura.automata.AutomataControl.funciones fun = new tid.tecHabla.agentes.componentes.infraestructura.automata.AutomataControl.funciones();
-		// 1.5 Creo objeto de acciones semnticas
-		AccionesSemanticas as = new AccionesSemanticas(fun);
-
-		// 2. Creo el autmata
-		AutomataControl automata = new AutomataControl("TablaEstadosPruebaDeTablaEstados.xml", as, tid.tecHabla.agentes.componentes.infraestructura.automata.AutomataControl.NIVEL_TRAZA_TODO);
-
-		// 3. Tengo el autmata disponible para usar
-
-		automata.toString();
-		automata.procesaInput("inicia");
-		automata.procesaInput("inputU");
-
-		automata.toString();
-	}
-	*/
-
-	/**
-	 *  Clase de pruebas para el componente, slo para pruebas de funcionamiento
-	 *  bsicas
-	 *
-	 *@author     Jorge Gonzlez
-	 *@created    26 de septiembre de 2001
-	 */
-	public static class funciones {
-		/**
-		 */
-		public void accionU()
-		{
-			System.out.println(">> Comienzo a ejecutar mtodo accionU()");
-		}
-
-
-		/**
-		 *  Mtodo del usuario del componente
-		 */
-		public void inicial()
-		{
-			System.out.println(">> Comienzo a ejecutar metodo inicial()");
-			boolean repite = true;
-			while (repite)
-			{
-			}
-		}
-
-	}
+	
 	/**
 	 * @param logger
 	 * @uml.property  name="logger"
