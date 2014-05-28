@@ -23,8 +23,6 @@ import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.ItfGestion
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.ItfUsoAgenteReactivo;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.imp.HebraMonitorizacion;
 import icaro.infraestructura.patronRecursoSimple.FactoriaRecursoSimple;
-import icaro.infraestructura.patronRecursoSimple.ItfUsoRecursoSimple;
-import icaro.infraestructura.recursosOrganizacion.comunicacionesOrganizacion.imp.RMI.ControlRMI;
 import icaro.infraestructura.recursosOrganizacion.configuracion.ItfUsoConfiguracion;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.imp.componentes.InfoTraza;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.imp.componentes.InfoTraza.NivelTraza;
@@ -45,7 +43,7 @@ import java.util.logging.Logger;
  */
 public class AccionesSemanticasGestorNodo extends
 		AccionesSemanticasAgenteReactivo implements Serializable{
-	// Tiempo que fijaremos para las monitorizaciones c�clicas
+	// Tiempo que fijaremos para las monitorizaciones ciclicas
 	/**
 	 * @uml.property  name="tiempoParaNuevaMonitorizacion"
 	 */
@@ -127,31 +125,12 @@ public class AccionesSemanticasGestorNodo extends
 			 * En esta accion semantica se configura todo aquello que sea
 			 * necesario a partir del archivo xml
 			 */
-//
-//			 config = (ItfUsoConfiguracion) ClaseGeneradoraRepositorioInterfaces
-//					.instance().obtenerInterfaz(
-//							NombresPredefinidos.ITF_USO
-//									+ NombresPredefinidos.CONFIGURACION);
-
 			tiempoParaNuevaMonitorizacion = Integer.parseInt(config.getValorPropiedadGlobal(NombresPredefinidos.INTERVALO_MONITORIZACION_ATR_PROPERTY));
                         nombreAgente = this.getNombreAgente();
                         DescInstanciaGestor descGestor = config.getDescInstanciaGestor(nombreAgente);
                         esteNodo = InetAddress.getLocalHost().getHostName();
                         infoComunicacionAgtes = new ComunicacionAgentes(nombreAgente);
 
-//                        try { /* Saco mi configuracion */
-//            ItfUsoConfiguracion config = (ItfUsoConfiguracion) ClaseGeneradoraRepositorioInterfaces.instance().obtenerInterfaz(
-//                    NombresPredefinidos.ITF_USO + NombresPredefinidos.CONFIGURACION);
-//            trazarDebug ("Busco puerto RMI");
-
-//            puertoRMI = Integer.parseInt(config.getValorPropiedadGlobal("puertoRMI"));
-//            puertoRMI = 1099;
-//            trazarDebug ("Configuracion extraida: RMI puerto " + puertoRMI);
-//        } catch (Exception ex) {
-//           Logger.getLogger(AccionesSemanticasGestorNodo.class.getName()).log(Level.SEVERE, null, ex);
-//           trazarError ("No puedo comenzar, termino");
-//            aceptarInput (terminar);
-//        }
         /* Arranco RMI */
         AdaptadorRegRMI.inicializar();
         if ( AdaptadorRegRMI.addElement2LocalRegRMI(nombreAgente, itfUsoPropiadeEsteAgente)){
@@ -438,7 +417,7 @@ public class AccionesSemanticasGestorNodo extends
 					}
 				}
 			}
-			logger.debug("GestorOrganizaci�n: Gestor de recursos creado.");
+			logger.debug("GestorOrganizacion: Gestor de recursos creado.");
 			trazas.aceptaNuevaTraza(new InfoTraza("GestorOrganizacion",
 					"Gestor de recursos creado.",
 					InfoTraza.NivelTraza.debug));
@@ -996,7 +975,7 @@ public void crearUnRecursoEnNodoLocalyPublicIntfEnRMIO(String  identInstRecurso)
 			int intentos = 0;
 			boolean ok = false;
              // Se crea el recurso en el mismo nodo
-			FactoriaRecursoSimple.instance().crearRecursoSimple(descRecurso);
+			FactoriaRecursoSimple.instance().crearRecursoSimple(descRecurso);                
                         this.informaraMiAutomata("recursoCreadoyRegistrado",null);
 			logger.debug("GestorRecursos: Recurso " + descRecurso.getId() + " creado.");
 			trazas.aceptaNuevaTraza(new InfoTraza("GestorRecursos",

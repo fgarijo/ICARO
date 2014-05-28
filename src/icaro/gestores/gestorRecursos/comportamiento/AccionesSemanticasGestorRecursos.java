@@ -10,18 +10,14 @@ import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.DescInst
 import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.DescInstanciaGestor;
 import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.DescInstanciaRecursoAplicacion;
 import icaro.infraestructura.entidadesBasicas.interfaces.InterfazGestion;
-import icaro.infraestructura.entidadesBasicas.interfaces.InterfazUsoAgente;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.ItfUsoAgenteReactivo;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.imp.HebraMonitorizacion;
 import icaro.infraestructura.patronRecursoSimple.FactoriaRecursoSimple;
 import icaro.infraestructura.patronRecursoSimple.ItfGestionRecursoSimple;
-import icaro.infraestructura.patronRecursoSimple.ItfUsoRecursoSimple;
 import icaro.infraestructura.recursosOrganizacion.configuracion.ItfUsoConfiguracion;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.imp.componentes.InfoTraza;
 import icaro.infraestructura.recursosOrganizacion.repositorioInterfaces.imp.ClaseGeneradoraRepositorioInterfaces;
 import java.rmi.Remote;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -232,6 +228,7 @@ public class AccionesSemanticasGestorRecursos extends
 			if (nodoDestino.equals(esteNodo)) {
              // Se crea el recurso en el mismo nodo
 				FactoriaRecursoSimple.instance().crearRecursoSimple(recurso);
+                              
             // Si la organizacion esta desplegada en varios nodos entonces hay que registrarlo en el RMI local
             
                                 if (! this.config.despliegueOrgEnUnSoloNodo())
