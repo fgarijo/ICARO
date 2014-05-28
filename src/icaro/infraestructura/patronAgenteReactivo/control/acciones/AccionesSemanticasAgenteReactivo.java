@@ -7,7 +7,7 @@ import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.ItfUsoAgen
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.ItfUsoRecursoTrazas;
 import icaro.infraestructura.recursosOrganizacion.repositorioInterfaces.ItfUsoRepositorioInterfaces;
 import icaro.infraestructura.entidadesBasicas.comunicacion.EventoRecAgte;
-import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.ItfUsoAutomata;
+import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.ItfUsoAutomataEFE;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.AgenteReactivoAbstracto;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.imp.componentes.InfoTraza;
 import java.util.Hashtable;
@@ -36,7 +36,7 @@ public abstract class AccionesSemanticasAgenteReactivo {
  * @uml.associationEnd  
  */
 public ItfUsoAgenteReactivo itfUsoGestorAReportar;
-public ItfUsoAutomata itfAutomataControl;
+public ItfUsoAutomataEFE itfAutomataControl;
 
   /**
  * @uml.property  name="nombreAgente"
@@ -136,19 +136,19 @@ public void setLogger(Logger logger){
                eventoaEnviar = new EventoRecAgte(input,infoComplementaria, nombreAgente, nombreAgente);
                    }
         try {
-
-			itfUsoPropiadeEsteAgente.aceptaEvento(eventoaEnviar);
-
+            if (itfUsoPropiadeEsteAgente==null){
+                itfAutomataControl.procesaInput(input,infoComplementaria);
+            }else  itfUsoPropiadeEsteAgente.aceptaEvento(eventoaEnviar);	
 		}
 		catch (Exception ex) {
-			logger.error("Ha habido un problema enviar un  input a este agente " +nombreAgente);
+			logger.error("Ha habido un problema al enviar un  input a este agente " +nombreAgente);
 			trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
                     "Ha habido un problema enviar el evento con informacion "+ input + "a  a si mismo", InfoTraza.NivelTraza.error));
 			}
 
    }
 
- public void setItfAutomata (ItfUsoAutomata automataItf){
+ public void setItfAutomata (ItfUsoAutomataEFE automataItf){
      itfAutomataControl = automataItf;
 
  }
@@ -158,8 +158,8 @@ public void setLogger(Logger logger){
                  + " El input:  " + input + " No sera procesado ", InfoTraza.NivelTraza.error);
      }else 
      {
-         if (input.getClass().getSimpleName().equals("String")) itfAutomataControl.procesaInput((String) input,infoComplementaria );
-         else itfAutomataControl.procesaInputObj( input,infoComplementaria );
+          itfAutomataControl.procesaInput( input,infoComplementaria );
+         
      }
  }
 

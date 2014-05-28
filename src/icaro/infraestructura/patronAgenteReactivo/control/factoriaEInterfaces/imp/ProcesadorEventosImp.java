@@ -14,7 +14,7 @@ import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.ItfUsoAgen
 import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.imp.AutomataEFEImp;
 import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.ConversionDeEventosyMsgsSimplesEnInputs;
 import icaro.infraestructura.entidadesBasicas.interfaces.InterfazGestion;
-import icaro.infraestructura.patronAgenteReactivo.control.factoriaEInterfaces.ProcesadorEventosAbstracto;
+import icaro.infraestructura.patronAgenteReactivo.control.factoriaEInterfaces.ProcesadorInfoReactivoAbstracto;
 import icaro.infraestructura.patronAgenteReactivo.percepcion.factoriaEInterfaces.ItfConsumidorPercepcion;
 import icaro.infraestructura.patronAgenteReactivo.percepcion.factoriaEInterfaces.ItfProductorPercepcion;
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ import java.util.ArrayList;
  *@created    30 de noviembre de 2007
  */
 
-public class ProcesadorEventosImp extends ProcesadorEventosAbstracto{
+public class ProcesadorEventosImp extends ProcesadorInfoReactivoAbstracto{
 
 	/**
 	 * @uml.property  name="dEBUG"
@@ -240,16 +240,18 @@ public class ProcesadorEventosImp extends ProcesadorEventosAbstracto{
 	/**
 	 *  Elimina los recursos internos usados por el control
 	 */
+        @Override
 	public void termina()
 	{
 		if (DEBUG)
 		{
 			System.out.println(nombre + ":terminando ...");
 		}
-		estado = InterfazGestion.ESTADO_TERMINANDO;
+		estado = InterfazGestion.ESTADO_TERMINADO;
 		// vamos a terminar usando la percepcin para salir de los posibles consume()
-		percepcionProductor.produceParaConsumirInmediatamente(new ItemControl(ItemControl.OPERACION_TERMINAR));
-                automataControl.transita("termina");
+//		percepcionProductor.produceParaConsumirInmediatamente(new ItemControl(ItemControl.OPERACION_TERMINAR));
+//                automataControl.transita("termina");
+                
 	}
 
 
@@ -290,12 +292,13 @@ public class ProcesadorEventosImp extends ProcesadorEventosAbstracto{
     // El control vuelve si la ejecucion de las acciones termina. Si la accion es no bloqueante siempre vuelve
                 InfoContEvtMsgAgteReactivo infoControl = (InfoContEvtMsgAgteReactivo)ei.getContenido();
                 String inputExtraido = infoControl.getInput().trim();
-                automataControl.procesaInput(inputExtraido, infoControl.getvaloresParametrosAccion());
+              if ( estado == InterfazGestion.ESTADO_ACTIVO) 
+                  automataControl.procesaInput(inputExtraido, infoControl.getvaloresParametrosAccion());
 
-		if (automataControl.esEstadoFinal())
-		{
-			this.termina();
-		}
+//		if (automataControl.estasEnEstadoFinal())
+//		{
+//			this.termina();
+//		}
             } 
 
         private void tratarMensajeSimple(MensajeSimple msg)
@@ -313,15 +316,20 @@ public class ProcesadorEventosImp extends ProcesadorEventosAbstracto{
 //                contenidoMsg.remove(0);
 //            }
 //            automataControl.procesaInput(inputExtraido,contenidoMsg.toArray());
-              automataControl.procesaInput(inputExtraido,contMsg.getvaloresParametrosAccion());
-		if (automataControl.esEstadoFinal())
-		{
-			this.termina();
-		}
+             if ( estado == InterfazGestion.ESTADO_ACTIVO) 
+                 automataControl.procesaInput(inputExtraido,contMsg.getvaloresParametrosAccion());
+//		if (automataControl.estasEnEstadoFinal())
+//		{
+//			this.termina();
+//		}
             }
   public void procesarInputyParams (InfoContEvtMsgAgteReactivo infoParaProcesar  ) {
 // Ponemos la operacion para evitar errores pero no se usa con este procesador
   }
+//  public void procesarInputyParams (Object input,Object[] params  ) {
+//      if ( estado == InterfazGestion.ESTADO_ACTIVO)
+//          automataControl.procesaInput (input,params);
+//  }
 
     public void setDebug(boolean d) {
         this.DEBUG = d;
@@ -361,13 +369,21 @@ public  void setGestorAReportar(ItfUsoAgenteReactivo itfUsoGestorAReportar) {
     public String toString() {
         return nombre;
     }
-public String getEstadoControlAgenteReactivo ( ){
+    @Override
+        public String getEstadoControlAgenteReactivo ( ){
     return "OP No implementada";
 }
-public synchronized void procesarInfoControlAgteReactivo (InfoContEvtMsgAgteReactivo infoParaProcesar  ) {
-// Ponemos la operacion para evitar errores pero no se usa con este procesador
-      automataControl.procesaInput(infoParaProcesar.getInput(),infoParaProcesar.getvaloresParametrosAccion());
-
+@Override
+        public synchronized void procesarInfoControlAgteReactivo (Object infoParaProcesar  ) {
+      if(this.estado == InterfazGestion.ESTADO_ACTIVO)
+          if( infoParaProcesar instanceof InfoContEvtMsgAgteReactivo){
+             InfoContEvtMsgAgteReactivo infoParaAutomata = (InfoContEvtMsgAgteReactivo) infoParaProcesar;
+            automataControl.procesaInput(infoParaAutomata.getInput(),infoParaAutomata.getvaloresParametrosAccion());
+          }else{
+              System.out.println(nombre + ": El input debe ser de  clase InfoContEvtMsgAgteReactivo  y el objeto es clase" + infoParaProcesar.getClass()
+                      + " Cambiar el contenido del evento");
+//              automataControl.procesaInput(infoParaProcesar);
+          }
   }
 
     //@Override

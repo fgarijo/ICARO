@@ -221,7 +221,7 @@ public class GestorAccionesImp implements ItfGestorAcciones{
     }   
     
     @Override
-    public synchronized void ejecutarMetodo(Class claseAccionEjecutar,String identMetodo, Object... paramsEjecucion) throws Exception {
+    public synchronized void ejecutarMetodo(Class claseAccionEjecutar,String identMetodo, Object[] paramsEjecucion) throws Exception {
 //        protected synchronized void ejecutarAccionBloqueante(String nombre, Object[] parametros) throws ExcepcionEjecucionAcciones {
 	String superclase = claseAccionEjecutar.getSuperclass().getSimpleName();
 //        String accionId = accionesSemAgteReactivo.getClass().getName();
@@ -239,7 +239,7 @@ public class GestorAccionesImp implements ItfGestorAcciones{
                 else {
 			params = new Class[paramsEjecucion.length];
 			paramsObj = new Object[paramsEjecucion.length];
-			for (int i=0; (i<paramsEjecucion.length &&params[i]!=null); i++) {	
+			for (int i=0; (i<paramsEjecucion.length ); i++) {
                                 params[i] = paramsEjecucion[i].getClass();
 				paramsObj[i] = paramsEjecucion[i];
                         }

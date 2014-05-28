@@ -31,7 +31,7 @@ public interface ItfAutomataEFconGestAcciones extends ItfUsoAutomataEFE{
 	 * 
 	 * @return est en estado activo o no
 	 */
-        public boolean ejecutarTransicion(Object input, Object... params);
+//        public boolean ejecutarTransicion(Object input, Object... params);
 	public boolean estadoActivo();
 	
 	/**

@@ -12,6 +12,8 @@ import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.clase
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.gestorAcciones.ItfGestorAcciones;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.gestorAcciones.imp.GestorAccionesImp;
 import icaro.infraestructura.entidadesBasicas.factorias.FactoriaComponenteIcaro;
+import icaro.pruebas.InformeArranqueGestor;
+import icaro.gestores.informacionComun.VocabularioGestores;
 
 /**
  *
@@ -36,7 +38,7 @@ public class FactoriaAutomatas extends FactoriaComponenteIcaro{
          TablaEstadosAutomataEFinputObjts tablaEF =  prueba1.extraeTablaEstadosDesdeFicheroXML(rutaFicheroAutomata, rutaCarpetaAcciones);
          // crear el ejecutor de acciones
          GestorAccionesImp gestAccionesItf = new GestorAccionesImp(identPropietario);
-         InterpreteAutomataEFconGestAcciones interpreteAutomata = new InterpreteAutomataEFconGestAccionesImp(tablaEF,trazar);
+         InterpreteAutomataEFconGestAcciones interpreteAutomata = new InterpreteAutomataEFconGestAcciones(tablaEF,trazar);
          gestAccionesItf.setItfAutomataEFconGestAcciones(interpreteAutomata);
          interpreteAutomata.setItfGestorAcciones(gestAccionesItf);
          return interpreteAutomata;
@@ -61,8 +63,11 @@ public class FactoriaAutomatas extends FactoriaComponenteIcaro{
              esEstadoFinal = interpretePrueba.esEstadoFinal(estadoActual); // debe dar falso
              interpretePrueba.cambiarEstado("creandoRecursosNucleoOrganizacion");
              estadoActual = interpretePrueba.estadoActual();
-             interpretePrueba.cambiarEstado("creandoRecursosNucleoOrganizacio"); // deben salir las trazas
-             interpretePrueba.ejecutarTransicion("existenEntidadesDescripcion", (Object) null);
+             interpretePrueba.cambiarEstado("arrancandoGestorInicial"); // deben salir las trazas
+//             interpretePrueba.ejecutarTransicion("existenEntidadesDescripcion");
+//              interpretePrueba.procesaInput("existenEntidadesDescripcion", "a", "b");
+             InformeArranqueGestor informePrueba = new InformeArranqueGestor ("Prueba Factoria", VocabularioGestores.ResultadoArranqueGestorOK);
+              interpretePrueba.procesaInput(informePrueba, "a", "b");
         }
 
 }

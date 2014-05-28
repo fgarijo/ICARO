@@ -42,8 +42,19 @@ public class NombresPredefinidos {
   public static final String EXPR_REG_NOMBRE_GESTOR = "(GestorOrganizacion|GestorAgentes|GestorRecursos)([0-9a-zA-Z])*";
   public static  enum TipoEntidad {Cognitivo,ADO,DirigidoPorObjetivos,Reactivo,Recurso, noDefinido};
   public static final Integer TIPO_ESTADO_FINAL_AUTOMATA_EF = 3;
-  public static final Integer TIPO_ESTADO_INTERMEDIO_AUTOMATA_EF = 2;
-  public static final Integer TIPO_ESTADO_INICIAL_AUTOMATA_EF = 1;
+  public static final Integer AUTOMATA_EF_TIPO_ESTADO_FINAL_ = 3;
+  public static final Integer AUTOMATA_EF_TIPO_ESTADO_INTERMEDIO = 2;
+  public static final Integer AUTOMATA_EF_TIPO_ESTADO_INICIAL = 1;
+  public static final Integer AUTOMATA_EF_TIPO_TRANSICION_SIN_ACCION = 0;
+  public static final Integer AUTOMATA_EF_TIPO_TRANSICION_ACCION_BLOQ = 1;
+  public static final Integer AUTOMATA_EF_TIPO_TRANSICION_ACCION_THREAD= 2;
+  public static final Integer AUTOMATA_EF_TIPO_TRANSICION_METODO_AS_BLOQ = 3;
+  public static final Integer AUTOMATA_EF_TIPO_TRANSICION_METODO_AS_CONCURR = 4;
+  public static final String AUTOMATA_EF_NOMBRE_MODO_BLOQUEANTE ="bloqueante";
+  public static final String AUTOMATA_EF_NOMBRE_MODO_CONCURRENTE ="paralelo";
+//  public static final Integer TRANSICION_AUTOMATA_EF_SIN_ACCION = 0;
+//  public static final Integer TRANSICION_AUTOMATA_EF_ACCION_BLOQ = 1;
+//  public static final Integer TRANSICION_AUTOMATA_EF_ACCION_CONCUR = 2;
   public static final String ITF_GESTION = "Itf_Ges_";
   public static final String ITF_USO = "Itf_Uso_";
 
@@ -104,9 +115,7 @@ public class NombresPredefinidos {
   public static final String INPUT_ACTIVAR = "activar";
   public static final String INPUT_TERMINAR = "terminar";
   public static final String NOMBRE_TRANSICION_AUTOMATA_EF = "transicion";
-  public static final Integer TRANSICION_AUTOMATA_EF_SIN_ACCION = 0;
-  public static final Integer TRANSICION_AUTOMATA_EF_ACCION_BLOQ = 1;
-  public static final Integer TRANSICION_AUTOMATA_EF_ACCION_CONCUR = 2;
+  
   public static final String NOMBRE_MODO_BLOQUEANTE_AUTOMATA_EF_SIN_ACCION ="bloqueante";
   public static final String NOMBRE_MODO_CONCURRENTE_AUTOMATA_EF_SIN_ACCION ="paralelo";
   public static final String NOMBRE_TRANSICION_UNIVERSAL_AUTOMATA_EF ="transicionUniversal";
@@ -123,7 +132,7 @@ public class NombresPredefinidos {
  // public final static String FICHERO_AUTOMATA_CICLO_VIDA_COMPONENTE = "/icaro/infraestructura/patronRecursoSimple/TablaEstadosCicloVidaRecursos.xml";
 //  public final static String FICHERO_AUTOMATA_CICLO_VIDA_COMPONENTE = "./schemas/TablaEstadosCicloVidaRecursos.xml";
   public final static String FICHERO_AUTOMATA_CICLO_VIDA_COMPONENTE = "/icaro/infraestructura/entidadesBasicas/componentesBasicos/automatas/automataEFsinAcciones/TablaEstadosCicloVidaEntidades.xml";
-  public static  String DESCRIPCION_XML_POR_DEFECTO = "descripcionAcceso.xml";
+  public static  String DESCRIPCION_XML_POR_DEFECTO = "descripcionAplicacionAccesoSimple";
   public  static  ItfUsoRecursoTrazas RECURSO_TRAZAS_OBJ = null;
   public  static ItfUsoRepositorioInterfaces REPOSITORIO_INTERFACES_OBJ = null;
 

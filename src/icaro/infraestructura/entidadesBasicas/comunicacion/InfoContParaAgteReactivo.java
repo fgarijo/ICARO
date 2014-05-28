@@ -2,31 +2,25 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package icaro.infraestructura.entidadesBasicas.comunicacion;
 
 import java.io.Serializable;
 
 /**
  *
- * @author Francisco J Garijo
- * Esta clase sirve para definir la información que va en el contenido de un mensaje que se envia a un agente reactico
- * Hay que tener en cuenta que un reactivo solo puede recibir inputs y lista de objetos con los valores  para ejecutar las
- * accioones semánticas correspondientes a la transicion
+ * @author FGarijo
  */
-public class InfoContEvtMsgAgteReactivo implements Serializable {
-
-
-  private  String msg = null;
+public class InfoContParaAgteReactivo implements Serializable{
+     private  Object msg = null;
 //    Object valorParametroAccion;
   private  Object[] valoresParametrosAccion = {};
 
- public InfoContEvtMsgAgteReactivo(String msg){
+ public InfoContParaAgteReactivo(Object msg){
         this.msg= msg;
         this.valoresParametrosAccion = null;
     }
 
-public  InfoContEvtMsgAgteReactivo(String msg,Object valorParametroAccion){
+public  InfoContParaAgteReactivo(String msg,Object valorParametroAccion){
         this.msg= msg;
 //        this.valorParametroAccion = valorParametroAccion;
         if (valorParametroAccion == null)
@@ -37,26 +31,34 @@ public  InfoContEvtMsgAgteReactivo(String msg,Object valorParametroAccion){
             }
     }
 
-public  InfoContEvtMsgAgteReactivo(String input,Object[] valoresParametrosAccion){
+public  InfoContParaAgteReactivo(String input,Object[] valoresParametrosAccion){
         this.msg= input;
         this.valoresParametrosAccion = valoresParametrosAccion;
     }
+public  InfoContParaAgteReactivo(Object input,Object... valoresParamAccion){
+        this.msg= input;
+        int i=0;
+        valoresParametrosAccion= new Object[(valoresParamAccion).length];
+        for (Object param: valoresParamAccion){           
+                valoresParametrosAccion[i]=param;
+                i++;
+        }
+    }
 
-
-    public InfoContEvtMsgAgteReactivo() {
+    public InfoContParaAgteReactivo() {
 
     }
 
-    public String getInput() {
+    public Object getInput() {
         return this.msg;
     }
-    public void  setInput(String input) {
+    public void  setInput(Object input) {
         this.msg = input;
     }
-    public String getmsg() {
+    public Object getmsg() {
         return this.msg;
     }
-    public void  setmsg(String input) {
+    public void  setmsg(Object input) {
         this.msg = input;
     }
     public Object[] getvaloresParametrosAccion() {
@@ -87,10 +89,4 @@ public  InfoContEvtMsgAgteReactivo(String input,Object[] valoresParametrosAccion
         
             return msgParametros;
     }
-//     public Object getvalorParametroAccion() {
-//        return this.valorParametroAccion;
-//    }
-//    public void  setvalorParametroAccion(Object valorParametrosAccion) {
-//        this.valorParametroAccion= valorParametrosAccion;
-//    }
 }

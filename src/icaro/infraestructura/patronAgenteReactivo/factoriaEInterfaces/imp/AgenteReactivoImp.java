@@ -12,7 +12,7 @@ import icaro.infraestructura.entidadesBasicas.interfaces.InterfazGestion;
 import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.imp.EjecutorDeAccionesImp;
 import icaro.infraestructura.patronAgenteReactivo.control.acciones.AccionesSemanticasAgenteReactivo;
 import icaro.infraestructura.patronAgenteReactivo.control.factoriaEInterfaces.ItfControlAgteReactivo;
-import icaro.infraestructura.patronAgenteReactivo.control.factoriaEInterfaces.ProcesadorEventosAbstracto;
+import icaro.infraestructura.patronAgenteReactivo.control.factoriaEInterfaces.ProcesadorInfoReactivoAbstracto;
 import icaro.infraestructura.patronAgenteReactivo.control.factoriaEInterfaces.FactoriaControlAgteReactivo;
 import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.ItemControl;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.AgenteReactivoAbstracto;
@@ -194,7 +194,7 @@ public class AgenteReactivoImp extends AgenteReactivoAbstracto {
          //  control = FactoriaControlAgteReactivo.instancia().crearControl(itfConsumidorPercepcion, ac,
          //       itfProductorPercepcion, nombreDelAgente);
             
-           ProcesadorEventosAbstracto control = FactoriaControlAgteReactivo.instancia().crearControlAgteReactivo( accionesSemanticasEspecificas, nombreFicheroTablaEstados, nombreDelAgente, itfConsumidorPercepcion, itfProductorPercepcion);
+           ProcesadorInfoReactivoAbstracto control = FactoriaControlAgteReactivo.instancia().crearControlAgteReactivo( accionesSemanticasEspecificas, nombreFicheroTablaEstados, nombreDelAgente, itfConsumidorPercepcion, itfProductorPercepcion);
            itfControlAgteReactivo = (ItfControlAgteReactivo) control ;
      //     itfGesControl = (InterfazGestion) control.getProcesadorEventos();
 

@@ -35,8 +35,8 @@ public abstract class FactoriaControlAgteReactivo {
     
 //public abstract ProcesadorEventosAbstracto crearControl(ItfConsumidorPercepcion percConsumidor, AutomataEFEAbstracto automata,
 //												  ItfProductorPercepcion percProductor, String nombreDelControl);
-public abstract  ProcesadorEventosAbstracto crearControlAgteReactivo(AccionesSemanticasAgenteReactivo accionesSemanticasEspecificas, String nombreFicheroTablaEstados, String nombreDelAgente,ItfConsumidorPercepcion percConsumidor,
+public abstract  ProcesadorInfoReactivoAbstracto crearControlAgteReactivo(AccionesSemanticasAgenteReactivo accionesSemanticasEspecificas, String nombreFicheroTablaEstados, String nombreDelAgente,ItfConsumidorPercepcion percConsumidor,
 		ItfProductorPercepcion percProductor)throws ExcepcionEnComponente;
-public abstract  ProcesadorEventosAbstracto crearControlAgteReactivo(AccionesSemanticasAgenteReactivo accionesSemanticasEspecificas, String nombreFicheroTablaEstados, AgenteReactivoAbstracto agente
+public abstract  ProcesadorInfoReactivoAbstracto crearControlAgteReactivo(AccionesSemanticasAgenteReactivo accionesSemanticasEspecificas, String nombreFicheroTablaEstados, AgenteReactivoAbstracto agente
 	)throws ExcepcionEnComponente;
 }

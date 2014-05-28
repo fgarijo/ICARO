@@ -9,7 +9,7 @@ import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.TablaEstad
 import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.XMLParserTablaEstados;
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.EjecutorDeAccionesAbstracto;
-import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.ItfUsoAutomata;
+import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.ItfUsoAutomataEFE;
 import icaro.infraestructura.patronAgenteReactivo.control.acciones.ExcepcionEjecucionAcciones;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.ItfUsoRecursoTrazas;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.imp.componentes.InfoTraza;
@@ -30,7 +30,7 @@ import org.apache.log4j.Logger;
  * @modified 26 de Junio de 2006
  */
 
-public class AutomataEFEImp implements ItfUsoAutomata {
+public class AutomataEFEImp implements ItfUsoAutomataEFE {
 
 	/**
 	 * Indica si se deben mostrar mensajes de depuracin o no
@@ -171,11 +171,13 @@ public class AutomataEFEImp implements ItfUsoAutomata {
 	 * 
 	 * @return est en estado final o no
 	 */
-	public boolean esEstadoFinal() {
+        @Override
+	public boolean estasEnEstadoFinal() {
 		return (theTablaEstadosControl.esEstadoFinal(estadoActual));
 	}
 
-        public String getEstadoControlAgenteReactivo() {
+        @Override
+        public String getEstadoAutomata() {
 		return estadoActual;
 	}
 	/**
@@ -185,7 +187,8 @@ public class AutomataEFEImp implements ItfUsoAutomata {
 	 * @param input
 	 *            Input a procesar
 	 */
-	public synchronized void procesaInput(String input, Object[] parametros) {
+        @Override
+	public synchronized boolean procesaInput(String input, Object[] parametros) {
 		// String accion;
 		// String siguiente;
 		Operacion op;
@@ -211,7 +214,7 @@ public class AutomataEFEImp implements ItfUsoAutomata {
 						"Transicion usando input '" + input + "'. ESTADO ACTUAL: "
 						+ estadoAntesdeTransitar + " -> " + "ESTADO SIGUIENTE: "+op.estadoSiguiente,
 						InfoTraza.NivelTraza.info));
-				
+			return true;	
                 }
                 catch (ExcepcionEjecucionAcciones ex) {
                     java.util.logging.Logger.getLogger(AutomataEFEImp.class.getName()).log(Level.SEVERE, null, ex);
@@ -246,13 +249,33 @@ public class AutomataEFEImp implements ItfUsoAutomata {
 					InfoTraza.NivelTraza.error));
 			logger.error(conjuntoInputs);
 		}
-
+             return false;
 	}
-public void procesaInputObj(Object input, Object[] parametros) {
-    trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
+        @Override
+        public boolean procesaInput(Object input, Object ... parametros) {
+    
+            Object[] valoresParametrosAccion = {};
+             int i=0;
+            valoresParametrosAccion= new Object[(parametros).length];
+            for (Object param: parametros){           
+                valoresParametrosAccion[i]=param;
+                i++;
+            }
+          if ( this.procesaInput(input, valoresParametrosAccion))
+              return true;
+//            trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
+//					"ERROR: Operacion no soportada por este modelo de Automata- esta operacion  requiere otro tipo de automata de E.F. ",
+//					InfoTraza.NivelTraza.error));
+            return false;
+        }
+        @Override
+        public  boolean procesaInput(Object input){
+            trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
 					"ERROR: Operacion no soportada por este modelo de Automata- esta operacion  requiere otro tipo de automata de E.F. ",
 					InfoTraza.NivelTraza.error));
-}
+    return false;
+        }
+        @Override
         public synchronized void transita(String input)
 	{
 		String siguiente;

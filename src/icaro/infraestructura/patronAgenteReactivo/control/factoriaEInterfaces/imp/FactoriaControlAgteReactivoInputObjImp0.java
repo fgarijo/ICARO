@@ -9,7 +9,7 @@ import icaro.infraestructura.patronAgenteReactivo.control.factoriaEInterfaces.It
 import icaro.infraestructura.patronAgenteReactivo.control.factoriaEInterfaces.FactoriaControlAgteReactivo;
 import icaro.infraestructura.patronAgenteReactivo.percepcion.factoriaEInterfaces.ItfConsumidorPercepcion;
 import icaro.infraestructura.patronAgenteReactivo.percepcion.factoriaEInterfaces.ItfProductorPercepcion;
-import icaro.infraestructura.patronAgenteReactivo.control.factoriaEInterfaces.ProcesadorEventosAbstracto;
+import icaro.infraestructura.patronAgenteReactivo.control.factoriaEInterfaces.ProcesadorInfoReactivoAbstracto;
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.FactoriaAutomatas;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFconGesAcciones.InterpreteAutomataEFconGestAcciones;
@@ -45,7 +45,7 @@ private static final long serialVersionUID = 1L;
 	 * @uml.property  name="control"
 	 * @uml.associationEnd
 	 */
-    protected ProcesadorEventosAbstracto procesadorEventos;
+    protected ProcesadorInfoReactivoAbstracto procesadorEventos;
     /**
 	 * @uml.property  name="itfGesControl"
 	 * @uml.associationEnd
@@ -194,7 +194,7 @@ private static final long serialVersionUID = 1L;
 			ItfProductorPercepcion percProductor)throws ExcepcionEnComponente {
         return null;
     }
-public   ProcesadorEventosAbstracto crearControlAgteReactivo(AccionesSemanticasAgenteReactivo accionesSemanticasEspecificas, String nombreFicheroTablaEstados, AgenteReactivoAbstracto agente
+public   ProcesadorInfoReactivoAbstracto crearControlAgteReactivo(AccionesSemanticasAgenteReactivo accionesSemanticasEspecificas, String nombreFicheroTablaEstados, AgenteReactivoAbstracto agente
 	)throws ExcepcionEnComponente {
 return null;
 }

@@ -20,6 +20,7 @@ import icaro.infraestructura.entidadesBasicas.interfaces.InterfazGestion;
 public interface ItfControlAgteReactivo extends InterfazGestion {
 
 public void setGestorAReportar(ItfUsoAgenteReactivo itfUsoGestorAReportar);
-public void procesarInfoControlAgteReactivo (InfoContEvtMsgAgteReactivo infoParaProcesar  );
+//public void procesarInfoControlAgteReactivo (InfoContEvtMsgAgteReactivo infoParaProcesar  );
+public void procesarInfoControlAgteReactivo (Object infoParaProcesar  );
 public String getEstadoControlAgenteReactivo ( );
 }

@@ -30,7 +30,9 @@ public abstract class AgenteReactivoAbstracto extends UnicastRemoteObject implem
         public abstract ItfControlAgteReactivo getItfControl();
 	public abstract void setEstado(int e);
         public abstract void setComponentesInternos(String nombreAgente, ItfUsoAutomataEFsinAcciones itfAutomata,ItfControlAgteReactivo itfControlAgte, ItfProductorPercepcion itfProdPercepcion,InterfazGestionPercepcion itfgestionPercepcion);
+        @Override
         public abstract  String getIdentAgente()throws java.rmi.RemoteException;
+        @Override
         public abstract void aceptaMensaje(MensajeSimple mensaje);
 	/**
 	 * @uml.property  name="control"

@@ -10,7 +10,7 @@ import icaro.infraestructura.entidadesBasicas.comunicacion.InfoContEvtMsgAgteRea
 import icaro.infraestructura.entidadesBasicas.interfaces.InterfazGestion;
 import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.imp.AutomataEFEImp;
 import icaro.infraestructura.patronAgenteReactivo.control.acciones.AccionesSemanticasAgenteReactivo;
-import icaro.infraestructura.patronAgenteReactivo.control.factoriaEInterfaces.ProcesadorEventosAbstracto;
+import icaro.infraestructura.patronAgenteReactivo.control.factoriaEInterfaces.ProcesadorInfoReactivoAbstracto;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.AgenteReactivoAbstracto;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.ItfUsoAgenteReactivo;
 import icaro.infraestructura.patronAgenteReactivo.percepcion.factoriaEInterfaces.ItfConsumidorPercepcion;
@@ -22,53 +22,34 @@ import java.rmi.RemoteException;
  *
  * @author Francisco J Garijo
  */
-public class ProcesadorInfoReactivoAutInObjImp0 extends ProcesadorEventosAbstracto implements Serializable{
+public class ProcesadorInfoReactivoAutInObjImp0 extends ProcesadorInfoReactivoAbstracto implements Serializable{
 
 	/**
 	 * @uml.property  name="dEBUG"
 	 */
-	private boolean DEBUG = false;
+//	private boolean DEBUG = false;
 	/**
 	 * autmata que describe el control
 	 * @uml.property  name="automataControl"
 	 * @uml.associationEnd  multiplicity="(1 1)"
 	 */
 	private InterpreteAutomataEFconGestAcciones automataControl;
-
-    private AccionesSemanticasAgenteReactivo accionesSemanticasAgenteCreado;
+//
+//    private AccionesSemanticasAgenteReactivo accionesSemanticasAgenteCreado;
 	/**
 	 * estado interno del componente control
 	 * @uml.property  name="estado"
 	 */
-	private int estado = InterfazGestion.ESTADO_CREADO;
+//	private int estado = InterfazGestion.ESTADO_CREADO;
 
 
 	/**
 	 * Nombre del componente a efectos de traza
 	 * @uml.property  name="nombre"
 	 */
-	private String nombre;
-        private  AgenteReactivoAbstracto agente;
-	/**
-	 * @uml.property  name="percepcionConsumidor"
-	 * @uml.associationEnd  multiplicity="(1 1)"
-	 */
-	private ItfConsumidorPercepcion percepcionConsumidor;
-	/**
-	 * @uml.property  name="percepcionProductor"
-	 * @uml.associationEnd  multiplicity="(1 1)"
-	 */
-	private ItfProductorPercepcion percepcionProductor;
-
-
-	/**
-	 *  Constructor
-	 *
-	 *@param  automata          Autmata con los estados que rigen el control
-	 *@param  percConsumidor    Interfaz de consumo de la percepcin
-	 *@param  percProductor     Interfaz de produccin de la percepcin
-	 *@param  nombreDelControl  Nombre que tomar en componente control
-	 */
+//	private String nombre;
+//        private  AgenteReactivoAbstracto agente;
+	
 	public ProcesadorInfoReactivoAutInObjImp0( InterpreteAutomataEFconGestAcciones interpAutom,
 			 AgenteReactivoAbstracto implItfsagente) throws RemoteException
 	{
@@ -78,19 +59,20 @@ public class ProcesadorInfoReactivoAutInObjImp0 extends ProcesadorEventosAbstrac
              //   percepcionConsumidor = percConsumidor;
 		//percepcionProductor = percProductor;
 		agente = implItfsagente;
+                this.arranca();
 	}
 
 
 	/**
 	 *  Inicia los recursos internos
 	 */
-	public void arranca()
-	{
-		if (DEBUG)
-			System.out.println(nombre + ": arranca()");
-		estado = InterfazGestion.ESTADO_ARRANCANDO;
-		
-	}
+//	public void arranca()
+//	{
+//		if (DEBUG)
+//			System.out.println(nombre + ": arranca()");
+//		estado = InterfazGestion.ESTADO_ACTIVO;
+//		
+//	}
 	/*
 	public void arrancaConEvento()
 	{
@@ -128,10 +110,10 @@ public class ProcesadorInfoReactivoAutInObjImp0 extends ProcesadorEventosAbstrac
 	/**
 	 *  Descripcin del mtodo
 	 */
-	public void continua()
-	{
-		throw new java.lang.UnsupportedOperationException("El metodo continua() an no est implementado.");
-	}
+//	public void continua()
+//	{
+//		throw new java.lang.UnsupportedOperationException("El metodo continua() an no est implementado.");
+//	}
 
 
 
@@ -140,42 +122,43 @@ public class ProcesadorInfoReactivoAutInObjImp0 extends ProcesadorEventosAbstrac
 	 *
 	 *@return    estado del control
 	 */
-	public int obtenerEstado()
-	{
-		if (DEBUG)
-			System.out.println(nombre + ": obtenerEstado()");
-		return estado;
-	}
+//	public int obtenerEstado()
+//	{
+//		if (DEBUG)
+//			System.out.println(nombre + ": obtenerEstado()");
+//		return estado;
+//	}
 
 
 	/**
 	 *  Description of the Method
 	 */
-	public void para()
-	{
-		throw new java.lang.UnsupportedOperationException("El metodo para() an no est implementado.");
-	}
-
-
-	/**
-	 *  Mira si el buzon tiene algun evento, lo trata y vuelve a dormir
-	 */
-
-
-	/**
-	 *  Elimina los recursos internos usados por el control
-	 */
-	public synchronized void termina()
-	{
-		if (DEBUG)
-		{
-			System.out.println(nombre + ":terminando ...");
-		}
-		estado = InterfazGestion.ESTADO_TERMINANDO;
-		// vamos a terminar usando la percepcin para salir de los posibles consume()
-	//	percepcionProductor.produceParaConsumirInmediatamente(new ItemControl(ItemControl.OPERACION_TERMINAR));
-                automataControl.transita("terminar");
-	}
+//	public void para()
+//	{
+//		throw new java.lang.UnsupportedOperationException("El metodo para() an no est implementado.");
+//	}
+//
+//
+//	/**
+//	 *  Mira si el buzon tiene algun evento, lo trata y vuelve a dormir
+//	 */
+//
+//
+//	/**
+//	 *  Elimina los recursos internos usados por el control
+//	 */
+//        @Override
+//	public synchronized void termina()
+//	{
+//		if (DEBUG)
+//		{
+//			System.out.println(nombre + ":terminando ...");
+//		}
+//		estado = InterfazGestion.ESTADO_TERMINANDO;
+//		// vamos a terminar usando la percepcin para salir de los posibles consume()
+//	//	percepcionProductor.produceParaConsumirInmediatamente(new ItemControl(ItemControl.OPERACION_TERMINAR));
+////                automataControl.transita("terminar");
+//	}
 
 
 	/**
@@ -225,12 +208,20 @@ public class ProcesadorInfoReactivoAutInObjImp0 extends ProcesadorEventosAbstrac
 		}
             }
     */
-  public synchronized void procesarInfoControlAgteReactivo (InfoContEvtMsgAgteReactivo infoParaProcesar  ) {
-// Ponemos la operacion para evitar errores pero no se usa con este procesador
-      automataControl.ejecutarTransicion(infoParaProcesar.getInput(),infoParaProcesar.getvaloresParametrosAccion());
-
-  }
-public synchronized String getEstadoControlAgenteReactivo ( ){
+@Override
+        public synchronized void procesarInfoControlAgteReactivo (Object infoParaProcesar  ) {
+      if(this.estado == InterfazGestion.ESTADO_ACTIVO)
+          if( infoParaProcesar instanceof InfoContEvtMsgAgteReactivo){
+             InfoContEvtMsgAgteReactivo infoParaAutomata = (InfoContEvtMsgAgteReactivo) infoParaProcesar;
+            automataControl.procesaInput(infoParaAutomata.getInput(),infoParaAutomata.getvaloresParametrosAccion());
+          }else{
+//              System.out.println(nombre + ": El input debe ser de  clase InfoContEvtMsgAgteReactivo  y el objeto es clase" + infoParaProcesar.getClass()
+//                      + " Cambiar el contenido del evento");
+              automataControl.procesaInput(infoParaProcesar);
+          }
+}
+        @Override
+        public synchronized String getEstadoControlAgenteReactivo ( ){
 
         return automataControl.estadoActual();
 }
@@ -260,7 +251,8 @@ public synchronized String getEstadoControlAgenteReactivo ( ){
 	 * @return
 	 * @uml.property  name="control"
 	 */
-public synchronized  void setGestorAReportar(ItfUsoAgenteReactivo itfUsoGestorAReportar) {
+        @Override
+        public synchronized  void setGestorAReportar(ItfUsoAgenteReactivo itfUsoGestorAReportar) {
 
        accionesSemanticasAgenteCreado.setItfUsoGestorAReportar(itfUsoGestorAReportar);
 

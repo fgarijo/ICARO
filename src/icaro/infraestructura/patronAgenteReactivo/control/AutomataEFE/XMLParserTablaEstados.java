@@ -157,6 +157,7 @@ public class XMLParserTablaEstados {
 		org.w3c.dom.NodeList nlUniversal = document
 				.getElementsByTagName("transicionUniversal");
 		// bucle que recorre transiciones universales
+                 if (nlUniversal.getLength()>0)
 		for (int i = 0; i < nlUniversal.getLength(); i++) {
 			nodo = nlUniversal.item(i);
 			mapaNombreNodo = nodo.getAttributes();

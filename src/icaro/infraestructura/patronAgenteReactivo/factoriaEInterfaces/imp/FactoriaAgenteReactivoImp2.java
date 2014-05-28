@@ -16,7 +16,7 @@ import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.ItfUsoAgen
 import icaro.infraestructura.patronAgenteReactivo.percepcion.factoriaEInterfaces.FactoriaPercepcion;
 import icaro.infraestructura.patronAgenteReactivo.percepcion.factoriaEInterfaces.ItfProductorPercepcion;
 import icaro.infraestructura.patronAgenteReactivo.percepcion.factoriaEInterfaces.PercepcionAbstracto;
-import icaro.infraestructura.patronAgenteReactivo.control.factoriaEInterfaces.ProcesadorEventosAbstracto;
+import icaro.infraestructura.patronAgenteReactivo.control.factoriaEInterfaces.ProcesadorInfoReactivoAbstracto;
 import icaro.infraestructura.patronAgenteReactivo.control.factoriaEInterfaces.FactoriaControlAgteReactivo;
 import icaro.infraestructura.patronAgenteReactivo.control.factoriaEInterfaces.ItfControlAgteReactivo;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.ItfUsoRecursoTrazas;
@@ -145,7 +145,7 @@ public class FactoriaAgenteReactivoImp2 extends FactoriaAgenteReactivo {
             this.agente = (AgenteReactivoAbstracto)new AgenteReactivoImp2(nombreInstanciaAgente);
 // Se crea el control del agente por medio de su factoria
 		//	ProcesadorEventosAbstracto control = FactoriaControlAgteReactivo.instancia().crearControlAgteReactivo( accionesSemanticasEspecificas,rutaTabla , nombreInstanciaAgente, itfConsumidorPercepcion, itfProductorPercepcion);
-                ProcesadorEventosAbstracto control = FactoriaControlAgteReactivo.instancia().crearControlAgteReactivo( accionesSemanticasEspecificas,rutaTabla , agente);
+                ProcesadorInfoReactivoAbstracto control = FactoriaControlAgteReactivo.instancia().crearControlAgteReactivo( accionesSemanticasEspecificas,rutaTabla , agente);
                 itfControlAgteReactivo = (ItfControlAgteReactivo) control ;
 // Se crea la percepcion y se le pasa la interfaz del control
             PercepcionAbstracto percepcion = FactoriaPercepcion.instancia().crearPercepcion(agente,itfControlAgteReactivo);
@@ -221,7 +221,7 @@ public void crearAgenteReactivo(String nombreInstanciaAgente, String rutaComport
     this.agente = (AgenteReactivoAbstracto)new AgenteReactivoImp2(nombreInstanciaAgente);
 // Se crea el control del agente por medio de su factoria
 		//	ProcesadorEventosAbstracto control = FactoriaControlAgteReactivo.instancia().crearControlAgteReactivo( accionesSemanticasEspecificas,rutaTabla , nombreInstanciaAgente, itfConsumidorPercepcion, itfProductorPercepcion);
-                ProcesadorEventosAbstracto control = FactoriaControlAgteReactivo.instancia().crearControlAgteReactivo( accionesSemanticasEspecificas,rutaAutomata , agente);
+                ProcesadorInfoReactivoAbstracto control = FactoriaControlAgteReactivo.instancia().crearControlAgteReactivo( accionesSemanticasEspecificas,rutaAutomata , agente);
                         itfControlAgteReactivo = (ItfControlAgteReactivo) control ;
 // Se crea la percepcion y se le pasa la interfaz del control
 

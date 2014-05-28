@@ -175,6 +175,7 @@ public class AgenteReactivoImp2 extends AgenteReactivoAbstracto implements Seria
             if (estadoControl != itfControlAgteReactivo.ESTADO_ERRONEO_IRRECUPERABLE) {
                 itfAutomataCicloVida.transita(NombresPredefinidos.INPUT_OK);
                 estadoAgente = itfAutomataCicloVida.estadoActual();
+                itfControlAgteReactivo.arranca();
                 aceptaEvento(new EventoRecAgte("comenzar", nombre, nombre));
             } else {
                 itfAutomataCicloVida.transita(NombresPredefinidos.INPUT_ERROR);

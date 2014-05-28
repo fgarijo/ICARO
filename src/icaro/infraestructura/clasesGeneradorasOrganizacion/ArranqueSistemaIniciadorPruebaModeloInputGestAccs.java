@@ -98,9 +98,12 @@ public class ArranqueSistemaIniciadorPruebaModeloInputGestAccs {
                      crearAgenteReactivo(rutaFicheroAutomata,rutaCarpetaAcciones,identPropietario);
              itfPrueba.arranca();
              EventoRecAgte eventoPrueba = new EventoRecAgte("comenzar", origen,destino);
+             estadoActual =itfPrueba.getItfControl().getEstadoControlAgenteReactivo();
+             recursoTrazas.trazar(identPropietario, "Antes de enviar el evento Estoy en el estado : "+ estadoActual, NivelTraza.debug);
          
              itfPrueba.aceptaEvento(eventoPrueba);
-           
+            estadoActual =itfPrueba.getItfControl().getEstadoControlAgenteReactivo();
+             recursoTrazas.trazar(identPropietario, "Despues de enviar el evento Estoy en el estado : "+ estadoActual, NivelTraza.debug);
               }
                catch (ExcepcionEnComponente e) {
                     msgUsuario = "Error. No se ha podido crear el gestor de organizacion con nombre " + NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION;

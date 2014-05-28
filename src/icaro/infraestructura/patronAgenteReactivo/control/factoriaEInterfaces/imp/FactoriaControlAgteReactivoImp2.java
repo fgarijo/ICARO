@@ -9,7 +9,7 @@ import icaro.infraestructura.patronAgenteReactivo.control.factoriaEInterfaces.It
 import icaro.infraestructura.patronAgenteReactivo.control.factoriaEInterfaces.FactoriaControlAgteReactivo;
 import icaro.infraestructura.patronAgenteReactivo.percepcion.factoriaEInterfaces.ItfConsumidorPercepcion;
 import icaro.infraestructura.patronAgenteReactivo.percepcion.factoriaEInterfaces.ItfProductorPercepcion;
-import icaro.infraestructura.patronAgenteReactivo.control.factoriaEInterfaces.ProcesadorEventosAbstracto;
+import icaro.infraestructura.patronAgenteReactivo.control.factoriaEInterfaces.ProcesadorInfoReactivoAbstracto;
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.ExcepcionNoSePudoCrearAutomataEFE;
 import icaro.infraestructura.patronAgenteReactivo.control.acciones.AccionesSemanticasAgenteReactivo;
@@ -41,7 +41,7 @@ private static final long serialVersionUID = 1L;
 	 * @uml.property  name="control"
 	 * @uml.associationEnd
 	 */
-    protected ProcesadorEventosAbstracto procesadorEventos;
+    protected ProcesadorInfoReactivoAbstracto procesadorEventos;
     /**
 	 * @uml.property  name="itfGesControl"
 	 * @uml.associationEnd

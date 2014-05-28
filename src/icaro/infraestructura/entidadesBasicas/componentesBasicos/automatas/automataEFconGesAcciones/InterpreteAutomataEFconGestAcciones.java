@@ -31,7 +31,7 @@ import org.apache.log4j.Logger;
  */
 
 //public abstract class InterpreteAutomataEFconGestAcciones implements ItfAutomataEFconGestAcciones,Serializable{
-public abstract class InterpreteAutomataEFconGestAcciones implements ItfUsoAutomataEFE,Serializable{
+public  class InterpreteAutomataEFconGestAcciones implements ItfUsoAutomataEFE,Serializable{
 	
 	
 //	public static final String ESTADO_CREADO = "creado";
@@ -160,7 +160,7 @@ public abstract class InterpreteAutomataEFconGestAcciones implements ItfUsoAutom
 	 */
        
 //        @Override
-	public abstract boolean ejecutarTransicion(Object input, Object... params);
+//	public abstract boolean ejecutarTransicion(Object input, Object[] params);
 //            
           // Si el input es de tipo String Tomamos como input la cadena que representa el input
                 
@@ -181,24 +181,24 @@ public abstract class InterpreteAutomataEFconGestAcciones implements ItfUsoAutom
 //            }
 //         return true;      
 //        }
-        public boolean ejecutarTransicion(Object input){
+        public boolean ejecutarTransicion(String input){
             
-            String inputAutomata ;
-           
-            if( input instanceof String ){ // Si el input es de tipo String Tomamos como input la cadena que representa el input
-                inputAutomata = (String)input;
-            }else {// tomamos como input el nombre de la clase del input
-                inputAutomata = input.getClass().getSimpleName();
-            }
-           if( !tablaEstadosAutomata.esInputValidoDeEstado(estadoActual, inputAutomata)){
-               this.trazas.trazar (this.getClass().getSimpleName()," El input : " + inputAutomata + " No coincide con los inputs definidos en el automata "+
+//            String inputAutomata ;
+//           
+//            if( input instanceof String ){ // Si el input es de tipo String Tomamos como input la cadena que representa el input
+//                inputAutomata = (String)input;
+//            }else {// tomamos como input el nombre de la clase del input
+//                inputAutomata = input.getClass().getSimpleName();
+//            }
+           if( !tablaEstadosAutomata.esInputValidoDeEstado(estadoActual, input)){
+               this.trazas.trazar (this.getClass().getSimpleName()," El input : " + input + " No coincide con los inputs definidos en el automata "+
                        " en el estado  :" + estadoActual ,InfoTraza.NivelTraza.error );
                return false;
            }
-           TransicionAutomataEF transicion = tablaEstadosAutomata.getTransicion(estadoActual()+inputAutomata);
+           TransicionAutomataEF transicion = tablaEstadosAutomata.getTransicion(estadoActual()+input);
            if (transicion == null){
                    // mensaje de error el inputno es valido en el estado actual
-                    this.trazas.trazar (this.getClass().getSimpleName()," No existe transicion asociada al input : " + inputAutomata +
+                    this.trazas.trazar (this.getClass().getSimpleName()," No existe transicion asociada al input : " + input +
                        " en el estado  :" + estadoActual ,InfoTraza.NivelTraza.error );
                     return false;
             }
@@ -235,7 +235,7 @@ public abstract class InterpreteAutomataEFconGestAcciones implements ItfUsoAutom
         
         @Override
         public void transita(String input){
-                ejecutarTransicion(input);
+                ejecutarTransicion(input, null);
 //	{
 //		String siguiente;
 //		// comprobar que es un input reconocido por el estado actual
@@ -256,7 +256,65 @@ public abstract class InterpreteAutomataEFconGestAcciones implements ItfUsoAutom
 //		return estadoActual; // si el input no es valido no cambia de estado
 
 	}
-
+//        public boolean ejecutarTransicion(String input,Object... params){
+//            
+////            String inputAutomata = input.getClass().getSimpleName();
+////           
+////            if( inputAutomata.equals("String")){ // Si el input es de tipo String Tomamos como input la cadena que representa el input
+////                inputAutomata = (String)input;
+////            }
+////           if( tablaEstadosAutomata.esInputValidoDeEstado(estadoActual, inputAutomata)){
+//            if (params == null) params = (Object[])params;
+//            String estado = estadoActual();
+//               TransicionAutomataEF transicion = this.tablaEstadosAutomata.getTransicion(estadoActual()+input);
+//               if (transicion == null){
+//                   // mensaje de error el input no es valido en el estado actual 
+//                    this.trazas.trazar (this.getClass().getSimpleName()," No existe transicion asociada al input : " + input + 
+//                       " en el estado  :" + estadoActual ,InfoTraza.NivelTraza.error );
+//                   return false;
+//           }
+//            this.cambiaEstado(transicion.getidentEstadoSiguiente());
+//            Integer tipoTransicion = transicion.getTipoTransicion();
+//            if (tipoTransicion == NombresPredefinidos.AUTOMATA_EF_TIPO_TRANSICION_SIN_ACCION){
+//            return true;
+//            } 
+//            Class accion = transicion.getClaseAccion();
+//            if (tipoTransicion == NombresPredefinidos.AUTOMATA_EF_TIPO_TRANSICION_METODO_AS_BLOQ ||
+//                    tipoTransicion == NombresPredefinidos.AUTOMATA_EF_TIPO_TRANSICION_METODO_AS_CONCURR){
+//                String metodoId = transicion.getIdentMetodoAccion();
+//                if (metodoId!=null )
+//                    try {
+//                    // se trata de una claseAcciones semanticas, ejecutamos el metodo de la clase
+//                        if (tipoTransicion == NombresPredefinidos.AUTOMATA_EF_TIPO_TRANSICION_METODO_AS_BLOQ ){
+//                        this.itfGestAcciones.ejecutarMetodo(accion,metodoId, params);
+//                        }
+//                        else {
+//                            this.itfGestAcciones.ejecutarMetodoThread(accion,metodoId, params);
+//                        }
+//                        return true;
+//                    } catch (Exception ex) {
+//                        java.util.logging.Logger.getLogger(InterpreteAutomataEFconGestAcciones.class.getName()).log(Level.SEVERE, null, ex);
+//                        return false;
+//                        }
+//                    }
+//            try { // se trata de una claseAcciones semanticas donde no se ha especificado el metodo, o de una accion sincrona o asincron
+//                   this.itfGestAcciones.ejecutarAccion(accion, params);
+//                    return true;
+//                } catch (Exception ex) {
+//                            java.util.logging.Logger.getLogger(InterpreteAutomataEFconGestAcciones.class.getName()).log(Level.SEVERE, null, ex);
+//                            return false;
+//                        }
+//}
+        @Override
+        public void cambiaEstado(String estado)
+	{
+		estadoActual = estado;
+	}
+ @Override
+        public String getEstadoAutomata(){
+            return estadoActual;
+        }
+        
 public void interpretarTransicion(TransicionAutomataEF transicion){
     // le manda la accion  al ejecutor de acciones para que ejecute y transita al estado que indica la transicion
     Integer tipoTransicion = transicion.getTipoTransicion();
@@ -277,26 +335,124 @@ public void interpretarTransicion(TransicionAutomataEF transicion){
         @Override
      public boolean procesaInput(Object input){
            String inputAutomata ;
-           Object[] params = null;
+           Object[] parametroAccion = new Object[1];
            
             if( input instanceof String){ // Si el input es de tipo String Tomamos como input la cadena que representa el input
                 inputAutomata= (String)input;
-            }else {// tomamos como input el nombre de la clase del input y añadimos el objeto como primer parametro
+                parametroAccion[0]= null;
+//                return ejecutarTransicion( inputAutomata,null);
+            }else {// tomamos como input el nombre de la clase del input y le pasamos el objeto como primer parametro
                 inputAutomata = input.getClass().getSimpleName();
-                params[0]= input;
+//                Object[] parametroAccion = new Object [0];
+                parametroAccion[0]= input;
+                
+//               params= Object[0]
             } 
-          return ejecutarTransicion( inputAutomata);
+          return ejecutarTransicion( inputAutomata,parametroAccion);
       }
         @Override
      public  boolean procesaInput(String input, Object[] parametros){
          return ejecutarTransicion( input, parametros);
      }
-  
            
+//      public  boolean procesaInputObj(Object input, Object[] parametros){
+//       if(parametros==null) return procesaInput(input);
+//        return ejecutarTransicion( input,  parametros);
+//  }
         @Override
-  public  boolean procesaInputObj(Object input, Object[] parametros){
-      return ejecutarTransicion( input, (Object[]) parametros);
-  }
+        public boolean procesaInput(Object input, Object ... parametros) {
+    
+//             if(parametros==null) return procesaInput(input);
+            String inputAutomata ;
+            Object paramPosicion0 = null;;
+            int posparametros =0;
+//           Object[] parametroAccion = new Object[1];
+           if (input==null) {
+               trazas.aceptaNuevaTraza(new InfoTraza(this.getClass().getSimpleName(),
+					"ERROR: El input a procesar no puede ser null ", InfoTraza.NivelTraza.error));
+               return false;
+           }
+            if(!(input instanceof String)){
+                inputAutomata = input.getClass().getSimpleName();          
+                paramPosicion0= input;
+                posparametros++;
+            }else 
+                inputAutomata = (String)input;
+//                valoresParametrosAccion [0]= null;
+           if ( parametros == null){
+               Object[] valoresParametrosAccion = new Object[1];
+               valoresParametrosAccion [0]= paramPosicion0;
+                return ejecutarTransicion(inputAutomata, valoresParametrosAccion); 
+//               numParametros = 1;
+            }
+//            if(!(input instanceof String)){ // Si el input es de tipo String Tomamos como input la cadena que representa el input
+//                input = (String)input.getClass().getSimpleName();
+//                numParametros = (parametros).length+1;
+//                
+//            }
+            
+//             int i=0;
+            Object[] valoresParametrosAccion= new Object[(parametros).length+posparametros];
+            if(posparametros==1)valoresParametrosAccion[0]=paramPosicion0;
+            for (Object param: parametros){
+                valoresParametrosAccion[posparametros]=param;
+                posparametros++;
+            }
+               return(  this.ejecutarTransicion(inputAutomata, valoresParametrosAccion)); 
+//              return true;
+//            trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
+//					"ERROR: Operacion no soportada por este modelo de Automata- esta operacion  requiere otro tipo de automata de E.F. ",
+//					InfoTraza.NivelTraza.error));
+//            return false;
+        }
+        private  boolean ejecutarTransicion(String input,Object[] params){
+            
+//            String inputAutomata = input.getClass().getSimpleName();
+//           
+//            if( inputAutomata.equals("String")){ // Si el input es de tipo String Tomamos como input la cadena que representa el input
+//                inputAutomata = (String)input;
+//            }
+//           if( tablaEstadosAutomata.esInputValidoDeEstado(estadoActual, inputAutomata)){
+            String estado = estadoActual();
+               TransicionAutomataEF transicion = this.tablaEstadosAutomata.getTransicion(estadoActual()+input);
+               if (transicion == null){
+                   // mensaje de error el input no es valido en el estado actual 
+                    this.trazas.trazar (this.getClass().getSimpleName()," No existe transicion asociada al input : " + input + 
+                       " en el estado  :" + estadoActual ,InfoTraza.NivelTraza.error );
+                   return false;
+           }
+            this.cambiaEstado(transicion.getidentEstadoSiguiente());
+            Integer tipoTransicion = transicion.getTipoTransicion();
+            if (tipoTransicion == NombresPredefinidos.AUTOMATA_EF_TIPO_TRANSICION_SIN_ACCION){
+            return true;
+            } 
+            Class accion = transicion.getClaseAccion();
+            if (tipoTransicion == NombresPredefinidos.AUTOMATA_EF_TIPO_TRANSICION_METODO_AS_BLOQ ||
+                    tipoTransicion == NombresPredefinidos.AUTOMATA_EF_TIPO_TRANSICION_METODO_AS_CONCURR){
+                String metodoId = transicion.getIdentMetodoAccion();
+                if (metodoId!=null )
+                    try {
+                    // se trata de una claseAcciones semanticas, ejecutamos el metodo de la clase
+                        if (tipoTransicion == NombresPredefinidos.AUTOMATA_EF_TIPO_TRANSICION_METODO_AS_BLOQ ){
+                        this.itfGestAcciones.ejecutarMetodo(accion,metodoId, params);
+                        }
+                        else {
+                            this.itfGestAcciones.ejecutarMetodoThread(accion,metodoId, params);
+                        }
+                        return true;
+                    } catch (Exception ex) {
+                        java.util.logging.Logger.getLogger(InterpreteAutomataEFconGestAcciones.class.getName()).log(Level.SEVERE, null, ex);
+                        return false;
+                        }
+                    }
+            try { // se trata de una claseAcciones semanticas donde no se ha especificado el metodo, o de una accion sincrona o asincron
+                   this.itfGestAcciones.ejecutarAccion(accion, params);
+                    return true;
+                } catch (Exception ex) {
+                            java.util.logging.Logger.getLogger(InterpreteAutomataEFconGestAcciones.class.getName()).log(Level.SEVERE, null, ex);
+                            return false;
+                        }
+}
         @Override
 	public String toString()
 	{
@@ -314,7 +470,11 @@ public void interpretarTransicion(TransicionAutomataEF transicion){
 	{
 		this.cambiarEstado(this.tablaEstadosAutomata.dameEstadoInicial());
 	}
-
+@Override
+        public boolean estasEnEstadoFinal()
+	{
+		return (tablaEstadosAutomata.esEstadoFinal(estadoActual));
+	}
 
 	/**
 	 *  Cambia el estado interno del autmata

@@ -4,19 +4,19 @@ import org.apache.log4j.Logger;
 
 /**
  * Interfaz de uso de un autmata
- * @author      Felipe Polo
- * @created     3 de Diciembre de 2007
+ * @author      F Garijo
+ * @created     3 de Mayo de 2014
  */
 
-public interface ItfUsoAutomata {
+public interface ItfUsoAutomataEFE {
 	/**
 	 *  Dice si el automata se encuentra en un estado final o no
 	 *
 	 *@return    est en estado final o no
 	 */
-	public boolean esEstadoFinal();
+	public boolean estasEnEstadoFinal();
 
-        public String getEstadoControlAgenteReactivo();
+        public String getEstadoAutomata();
 
 
 	/**
@@ -25,9 +25,10 @@ public interface ItfUsoAutomata {
 	 *
 	 *@param  input  Input a procesar
 	 */
-	public  void procesaInput(String input, Object[] parametros);
-        public  void procesaInputObj(Object input, Object[] parametros);
-
+	public  boolean procesaInput(String input, Object[] parametros);
+        public  boolean procesaInput(Object input);
+//        public  boolean procesaInputObj(Object input, Object[] parametros);
+        public  boolean procesaInput(Object input, Object... parametros);
 
 	/**
 	 *  Imprime la tabla de estados y el estado actual del autmata
