@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.clasesImpAutomatas;
+package icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.accionesAutomataEF;
 
 import icaro.infraestructura.entidadesBasicas.procesadorCognitivo.*;
 
@@ -11,15 +11,15 @@ import icaro.infraestructura.entidadesBasicas.procesadorCognitivo.*;
  *
  * @author Francisco J Garijo
  */
-public class InformeTemporizacion extends Informe{
+public class InformeError extends Informe{
 	
 
-    public InformeTemporizacion (String  identEmisor,String msgTimeout){
-        super (identEmisor,msgTimeout);
+    public InformeError (String  identEmisor,String msgError){
+        super (identEmisor,msgError);
         
     }
     
-    public String getMsgTimeOut()   {
+    public String getMsgError()   {
         return (String)this.contenidoInforme;
     }
 }

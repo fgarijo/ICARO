@@ -1,7 +1,7 @@
 /*
  *  
  */
-package icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.clasesImpAutomatas;
+package icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFconGesAcciones.estadosyTransiciones;
 
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 import java.io.Serializable;

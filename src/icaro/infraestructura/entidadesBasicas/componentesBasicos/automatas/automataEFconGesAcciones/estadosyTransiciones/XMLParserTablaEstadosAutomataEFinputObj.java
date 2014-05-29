@@ -1,8 +1,10 @@
 /*
  *  
  */
-package icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.clasesImpAutomatas;
+package icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFconGesAcciones.estadosyTransiciones;
 
+import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFconGesAcciones.estadosyTransiciones.TransicionAutomataEF;
+import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFconGesAcciones.estadosyTransiciones.TablaEstadosAutomataEFinputObjts;
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 import java.io.IOException;
 

@@ -2,9 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.clasesImpAutomatas;
+package icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.accionesAutomataEF;
 
-import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFconGesAcciones.ItfAutomataEFconGestAcciones;
+import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.ItfUsoAutomataEFE;
+
+
 
 /**
  *
@@ -23,7 +25,7 @@ public class AccionProxy extends Accion{
     }
     
     @Override
-    public void setItfAutomata(ItfAutomataEFconGestAcciones itfAutomata){
+    public void setItfAutomata(ItfUsoAutomataEFE itfAutomata){
         accion.setItfAutomata(itfAutomata);
     }
 //    @Override

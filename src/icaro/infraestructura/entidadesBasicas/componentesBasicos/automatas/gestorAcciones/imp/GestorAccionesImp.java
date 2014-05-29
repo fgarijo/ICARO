@@ -6,15 +6,12 @@
 package icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.gestorAcciones.imp;
 
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
-import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFconGesAcciones.ItfAutomataEFconGestAcciones;
-import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.clasesImpAutomatas.Accion;
-import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.clasesImpAutomatas.AccionAsincrona;
-import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.clasesImpAutomatas.AccionProxy;
-import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.clasesImpAutomatas.AccionSincrona;
+import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.accionesAutomataEF.Accion;
+import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.accionesAutomataEF.AccionAsincrona;
+import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.accionesAutomataEF.AccionProxy;
+import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.accionesAutomataEF.AccionSincrona;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.gestorAcciones.ItfGestorAcciones;
 import icaro.infraestructura.entidadesBasicas.comunicacion.ComunicacionAgentes;
-import icaro.infraestructura.patronAgenteCognitivo.factoriaEInterfacesPatCogn.AgenteCognitivo;
-import icaro.infraestructura.patronAgenteCognitivo.procesadorObjetivos.factoriaEInterfacesPrObj.ItfProcesadorObjetivos;
 import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.ItfUsoAutomataEFE;
 import icaro.infraestructura.patronAgenteReactivo.control.acciones.AccionesSemanticasAgenteReactivo;
 import icaro.infraestructura.patronAgenteReactivo.control.acciones.ExcepcionEjecucionAcciones;
@@ -286,6 +283,7 @@ public class GestorAccionesImp implements ItfGestorAcciones{
                                                           "El metodo a invocar no existe. Se ha producido una excepcion InvocationTargetException");
         }
 	}
+    @Override
          public synchronized void ejecutarMetodoThread(Class claseAccionEjecutar,String identMetodo, Object... paramsEjecucion) throws Exception { 
              throw new ExcepcionEjecucionAcciones( "GestorAccionesImp", "error al ejecutar un metodo"+ identMetodo + " de la clase: " + accionesSemAgteReactivo.getClass().getName(),
                                                           "El metodo no esta iplementado. Se ha producido una excepcion InvocationTargetException"); 
