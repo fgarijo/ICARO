@@ -6,9 +6,9 @@
 package icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.gestorAcciones.imp;
 
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
-import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.accionesAutomataEF.Accion;
+import icaro.infraestructura.entidadesBasicas.acciones.Accion;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.accionesAutomataEF.AccionAsincrona;
-import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.accionesAutomataEF.AccionProxy;
+import icaro.infraestructura.entidadesBasicas.acciones.AccionProxy;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.accionesAutomataEF.AccionSincrona;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.gestorAcciones.ItfGestorAcciones;
 import icaro.infraestructura.entidadesBasicas.comunicacion.ComunicacionAgentes;

@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package icaro.infraestructura.entidadesBasicas.procesadorCognitivo;
+package icaro.infraestructura.entidadesBasicas.informes;
 
 /**
  *

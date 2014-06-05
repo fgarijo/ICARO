@@ -2,8 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package icaro.infraestructura.entidadesBasicas.procesadorCognitivo;
+package icaro.infraestructura.entidadesBasicas.informes;
 
+import icaro.infraestructura.entidadesBasicas.informes.InformeDeTarea;
+import icaro.infraestructura.entidadesBasicas.informes.Informe;
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 import icaro.infraestructura.patronAgenteCognitivo.procesadorObjetivos.factoriaEInterfacesPrObj.ItfProcesadorObjetivos;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.ItfUsoRecursoTrazas;

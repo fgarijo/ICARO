@@ -4,6 +4,7 @@
  */
 package icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.accionesAutomataEF;
 
+import icaro.infraestructura.entidadesBasicas.informes.Informe;
 import icaro.infraestructura.entidadesBasicas.procesadorCognitivo.*;
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.ItfUsoAutomataEFE;
@@ -15,7 +16,7 @@ import java.util.Calendar;
  *
  * @author FGarijo
  */
-public class InputTimeout extends Thread {
+public class GeneracionInputTimeout extends Thread {
 
 	protected long milis;
         protected boolean trazar = false;
@@ -41,7 +42,7 @@ public class InputTimeout extends Thread {
      protected  ItfUsoRecursoTrazas trazas;
 
     
-     public InputTimeout(long milis, ItfUsoAutomataEFE automataItf, Informe informeAGenerar) {
+     public GeneracionInputTimeout(long milis, ItfUsoAutomataEFE automataItf, Informe informeAGenerar) {
       super("Timeout "+informeAGenerar.getidentEntidadEmisora());
       this.milis= milis;
       this.finalizar= false;
@@ -49,7 +50,7 @@ public class InputTimeout extends Thread {
       this.setDaemon(true);
       this.informeAGenerar = informeAGenerar;
     }
-     public InputTimeout(long milis, ItfUsoAutomataEFE automataItf, Informe informeAGenerar,boolean traza) {
+     public GeneracionInputTimeout(long milis, ItfUsoAutomataEFE automataItf, Informe informeAGenerar,boolean traza) {
       super("Timeout "+informeAGenerar.getidentEntidadEmisora());
       this.milis= milis;
       this.finalizar= false;

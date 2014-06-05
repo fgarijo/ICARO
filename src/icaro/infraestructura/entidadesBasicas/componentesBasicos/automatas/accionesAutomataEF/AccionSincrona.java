@@ -3,6 +3,8 @@
  * and open the template in the editor.
  */
 package icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.accionesAutomataEF;
+import icaro.infraestructura.entidadesBasicas.informes.InformeTemporizacion;
+import icaro.infraestructura.entidadesBasicas.informes.InformeError;
 import icaro.infraestructura.entidadesBasicas.procesadorCognitivo.*;
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.gestorAcciones.ItfGestorAcciones;
@@ -88,7 +90,7 @@ public abstract class AccionSincrona {
 //        }
         if(msgTimeout==null)msgTimeout = NombresPredefinidos.PREFIJO_MSG_TIMEOUT;
         InformeTemporizacion informeTemp = new InformeTemporizacion (idAccion, msgTimeout );
-        InputTimeout informeTemporizado = new InputTimeout ( milis, itfAutomata,informeTemp );
+        GeneracionInputTimeout informeTemporizado = new GeneracionInputTimeout ( milis, itfAutomata,informeTemp );
         informeTemporizado.start();
     }
     public void generarInformeTemporizadoFromConfigProperty (String identproperty,Objetivo contxtGoal,String idAgenteOrdenante, String msgTimeout){

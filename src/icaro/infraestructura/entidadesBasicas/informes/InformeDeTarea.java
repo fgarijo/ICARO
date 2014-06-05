@@ -3,7 +3,10 @@
  * and open the template in the editor.
  */
 
-package icaro.infraestructura.entidadesBasicas.procesadorCognitivo;
+package icaro.infraestructura.entidadesBasicas.informes;
+
+import icaro.infraestructura.entidadesBasicas.informes.Informe;
+import icaro.infraestructura.entidadesBasicas.procesadorCognitivo.CausaTerminacionTarea;
 
 /**
  *

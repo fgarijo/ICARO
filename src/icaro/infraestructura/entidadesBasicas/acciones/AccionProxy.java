@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.accionesAutomataEF;
+package icaro.infraestructura.entidadesBasicas.acciones;
 
+import icaro.infraestructura.entidadesBasicas.acciones.Accion;
 import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.ItfUsoAutomataEFE;
 
 

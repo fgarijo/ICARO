@@ -3,6 +3,8 @@
  * and open the template in the editor.
  */
 package icaro.infraestructura.entidadesBasicas.procesadorCognitivo;
+import icaro.infraestructura.entidadesBasicas.informes.InformeTimeout;
+import icaro.infraestructura.entidadesBasicas.informes.InformeDeTarea;
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 import icaro.infraestructura.entidadesBasicas.comunicacion.ComunicacionAgentes;
 import icaro.infraestructura.entidadesBasicas.excepciones.ExcepcionEnComponente;

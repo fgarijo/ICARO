@@ -4,7 +4,7 @@
  */
 
 package icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.gestorAcciones;
-import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.accionesAutomataEF.Accion;
+import icaro.infraestructura.entidadesBasicas.acciones.Accion;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.accionesAutomataEF.AccionSincrona;
 
 /**
