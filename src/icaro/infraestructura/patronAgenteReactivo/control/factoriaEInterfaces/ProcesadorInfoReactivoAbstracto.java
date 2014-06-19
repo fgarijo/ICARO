@@ -6,6 +6,7 @@ import icaro.infraestructura.entidadesBasicas.interfaces.InterfazGestion;
 import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.imp.AutomataEFEImp;
 import icaro.infraestructura.patronAgenteReactivo.control.acciones.AccionesSemanticasAgenteReactivo;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.AgenteReactivoAbstracto;
+import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.ItfUsoAgenteReactivo;
 import icaro.infraestructura.patronAgenteReactivo.percepcion.factoriaEInterfaces.ItfConsumidorPercepcion;
 import icaro.infraestructura.patronAgenteReactivo.percepcion.factoriaEInterfaces.ItfProductorPercepcion;
 
@@ -35,8 +36,9 @@ import icaro.infraestructura.patronAgenteReactivo.percepcion.factoriaEInterfaces
 	 * Nombre del componente a efectos de traza
 	 * @uml.property  name="nombre"
 	 */
-	public String nombre;
+	public String identAgte;
         public  AgenteReactivoAbstracto agente;
+        protected ItfUsoAgenteReactivo itfUsoGestorAreportar;
 	/**
 	 * @uml.property  name="percepcionConsumidor"
 	 * @uml.associationEnd  multiplicity="(1 1)"
@@ -65,7 +67,7 @@ import icaro.infraestructura.patronAgenteReactivo.percepcion.factoriaEInterfaces
         public void arranca()
 	{
 		if (DEBUG)
-			System.out.println(nombre + ": arranca()");
+			System.out.println(identAgte + ": arranca()");
 		estado = InterfazGestion.ESTADO_ACTIVO;
 		
 	}
@@ -87,10 +89,10 @@ import icaro.infraestructura.patronAgenteReactivo.percepcion.factoriaEInterfaces
 	 *@return    estado del control
 	 */
      @Override
-	public int obtenerEstado()
+	public synchronized int obtenerEstado()
 	{
 		if (DEBUG)
-			System.out.println(nombre + ": obtenerEstado()");
+			System.out.println(identAgte + ": obtenerEstado()");
 		return estado;
 	}
 
@@ -99,7 +101,7 @@ import icaro.infraestructura.patronAgenteReactivo.percepcion.factoriaEInterfaces
 	 *  Description of the Method
 	 */
      @Override
-	public void para()
+	public synchronized void para()
 	{
 //		throw new java.lang.UnsupportedOperationException("El metodo para() an no est implementado.");
                 estado = InterfazGestion.ESTADO_PARADO;
@@ -119,14 +121,23 @@ import icaro.infraestructura.patronAgenteReactivo.percepcion.factoriaEInterfaces
 	{
 		if (DEBUG)
 		{
-			System.out.println(nombre + ":terminando ...");
+			System.out.println(identAgte + ":terminando ...");
 		}
 		estado = InterfazGestion.ESTADO_TERMINADO;
 		// vamos a terminar usando la percepcin para salir de los posibles consume()
 	//	percepcionProductor.produceParaConsumirInmediatamente(new ItemControl(ItemControl.OPERACION_TERMINAR));
 //                automataControl.transita("terminar");
 	}
-//     @Override
+     @Override
+     public void setGestorAReportar(ItfUsoAgenteReactivo itfUsoGestor){
+         itfUsoGestorAreportar = itfUsoGestor;
+     }
+     
+     @Override
+     public ItfUsoAgenteReactivo getGestorAReportar(){
+         return itfUsoGestorAreportar;
+     }
+     public  abstract void inicializarInfoGestorAcciones(String identAgte,ItfProductorPercepcion itfEvtosInternos );
 //     public synchronized void procesarInfoControlAgteReactivo (Object infoParaProcesar  ) {
 //      if(this.estado == InterfazGestion.ESTADO_ACTIVO)
 //          if( infoParaProcesar instanceof InfoContEvtMsgAgteReactivo){

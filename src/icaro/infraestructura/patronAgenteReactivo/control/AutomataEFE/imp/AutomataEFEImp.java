@@ -1,5 +1,5 @@
 /*
-    Copyright 2001 Telefnica I+D. All rights reserved
+    
  */
 package icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.imp;
 
@@ -251,7 +251,7 @@ public class AutomataEFEImp implements ItfUsoAutomataEFE {
 		}
              return false;
 	}
-        @Override
+     
         public boolean procesaInput(Object input, Object ... parametros) {
     
             Object[] valoresParametrosAccion = {};

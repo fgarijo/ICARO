@@ -167,7 +167,7 @@ public class FactoriaAgenteReactivoImp extends FactoriaAgenteReactivo {
                  AgenteReactivoAbstracto patron = new AgenteReactivoImp(nombreInstanciaAgente,itfAutomata,itfControlAgteReactivo,itfProductorPercepcion,itfConsumidorPercepcion);
         // paso 3. 4  Se define la interfaz de uso del agente creado en las acciones semánticas específicas
 
-        accionesSemanticasEspecificas.setItfUsoAgenteReactivo(patron);
+//        accionesSemanticasEspecificas.setItfUsoAgenteReactivo(patron);
         // Quedan definidos todos los objetos necesarios para implementar el ejemplar creado
         logger.debug(nombreInstanciaAgente + ":Creaci�n del Agente ...ok");
    //         trazas.aceptaNuevaTraza(new InfoTraza(nombreInstanciaAgente,
@@ -315,7 +315,7 @@ public void crearAgenteReactivo(String nombreInstanciaAgente, String rutaComport
 
         // paso 3. 4  Se define la interfaz de uso del agente creado en las acciones semánticas específicas
 
-        accionesSemanticasEspecificas.setItfUsoAgenteReactivo(patron);
+//        accionesSemanticasEspecificas.setItfUsoAgenteReactivo(patron);
         // Quedan definidos todos los objetos necesarios para implementar el ejemplar creado
         logger.debug(nombreInstanciaAgente + ":Creacion del Agente ...ok");
    //         trazas.aceptaNuevaTraza(new InfoTraza(nombreInstanciaAgente,

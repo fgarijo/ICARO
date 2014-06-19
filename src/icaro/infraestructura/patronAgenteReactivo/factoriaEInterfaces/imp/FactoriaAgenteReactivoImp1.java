@@ -158,7 +158,7 @@ public class FactoriaAgenteReactivoImp1 extends FactoriaAgenteReactivo {
                  ItfUsoAutomataEFsinAcciones itfAutomata = (ItfUsoAutomataEFsinAcciones) ClaseGeneradoraAutomataEFsinAcciones.instance(NombresPredefinidos.FICHERO_AUTOMATA_CICLO_VIDA_COMPONENTE);
                 this.agente.setComponentesInternos(nombreInstanciaAgente,itfAutomata,itfControlAgteReactivo,itfProductorPercepcion,itfGestionPercepcion);
         // paso 3. 4  Se define la interfaz de uso del agente creado en las acciones semánticas específicas
-        accionesSemanticasEspecificas.setItfUsoAgenteReactivo(agente);
+//        accionesSemanticasEspecificas.setItfUsoAgenteReactivo(agente);
         // Quedan definidos todos los objetos necesarios para implementar el ejemplar creado
         logger.debug(nombreInstanciaAgente + ":Creacion del Agente ...ok");
    //         trazas.aceptaNuevaTraza(new InfoTraza(nombreInstanciaAgente,

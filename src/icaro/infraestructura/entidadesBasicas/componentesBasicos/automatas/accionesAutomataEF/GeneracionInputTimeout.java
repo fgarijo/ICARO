@@ -7,10 +7,15 @@ package icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.acci
 import icaro.infraestructura.entidadesBasicas.informes.Informe;
 import icaro.infraestructura.entidadesBasicas.procesadorCognitivo.*;
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
+import icaro.infraestructura.entidadesBasicas.comunicacion.EventoRecAgte;
 import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.ItfUsoAutomataEFE;
+import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.ItfUsoAgenteReactivo;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.ItfUsoRecursoTrazas;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.imp.componentes.InfoTraza;
+import java.rmi.RemoteException;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -32,7 +37,7 @@ public class GeneracionInputTimeout extends Thread {
 	 * @uml.property  name="agente"
 	 * @uml.associationEnd  multiplicity="(1 1)"
 	 */
-     protected ItfUsoAutomataEFE itfAutomata;
+     protected ItfUsoAgenteReactivo itfUsoAgenteReceptor;
 
      /**
 	 * Evento a producir
@@ -42,19 +47,19 @@ public class GeneracionInputTimeout extends Thread {
      protected  ItfUsoRecursoTrazas trazas;
 
     
-     public GeneracionInputTimeout(long milis, ItfUsoAutomataEFE automataItf, Informe informeAGenerar) {
+     public GeneracionInputTimeout(long milis, ItfUsoAgenteReactivo itfusoAfteRecptor, Informe informeAGenerar) {
       super("Timeout "+informeAGenerar.getidentEntidadEmisora());
       this.milis= milis;
       this.finalizar= false;
-      this.itfAutomata = automataItf;
+      this.itfUsoAgenteReceptor = itfusoAfteRecptor;
       this.setDaemon(true);
       this.informeAGenerar = informeAGenerar;
     }
-     public GeneracionInputTimeout(long milis, ItfUsoAutomataEFE automataItf, Informe informeAGenerar,boolean traza) {
+     public GeneracionInputTimeout(long milis, ItfUsoAgenteReactivo itfusoAfteRecptor, Informe informeAGenerar,boolean traza) {
       super("Timeout "+informeAGenerar.getidentEntidadEmisora());
       this.milis= milis;
       this.finalizar= false;
-      this.itfAutomata = automataItf;
+      this.itfUsoAgenteReceptor = itfusoAfteRecptor;
       this.setDaemon(true);
       this.informeAGenerar = informeAGenerar;
       this.trazar = traza;
@@ -130,14 +135,21 @@ public class GeneracionInputTimeout extends Thread {
         		             ".....Hora->" + hora + " , Minuto->" + minutos + " , segundos->" + segundos +         		             
           		             " ... milisegundos desde 1 de enero de 1970 UTC->" + lctm2 + " . DIFERENCIA->" + lctm12,
         		             InfoTraza.NivelTraza.debug));
-////                 }
-////              catch (Exception ex) {}                            
+                try {
+                    ////                 }
+                    ////              catch (Exception ex) {}    
+                                        this.itfUsoAgenteReceptor.aceptaEvento(new EventoRecAgte("inputTimeout",informeAGenerar,this.getClass().getSimpleName(),null));
+                } catch (RemoteException ex) {
+                    Logger.getLogger(GeneracionInputTimeout.class.getName()).log(Level.SEVERE, null, ex);
+                }
           }
-//                    
-        } catch (InterruptedException ex) {}
+//                 EventoRecAgte ev = new EventoRecAgte("inputTimeout",informeAGenerar,this.getClass().getSimpleName(),null);
+        
+        } catch (InterruptedException ex) {};
+           
 
         // Genera un nuevo evento de input
-        this.itfAutomata.procesaInput(informeAGenerar); 
+       
 
       }    
       

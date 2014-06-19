@@ -449,9 +449,9 @@ public class AgenteReactivoImp extends AgenteReactivoAbstracto {
     }
 
     @Override
-//    public String toString() {
-//        return nombre;
-//    }
+    public  ItfProductorPercepcion getItfProductorPercepcion(){
+    return itfProductorPercepcion;
+}
 
     //@Override
     /**

@@ -5,6 +5,7 @@ import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.Facto
 import icaro.infraestructura.patronRecursoSimple.*;
 import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.DescInstanciaRecursoAplicacion;
 import icaro.infraestructura.patronAgenteReactivo.control.factoriaEInterfaces.imp.FactoriaControlAgteReactivoInputObjImp0;
+import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.imp.FactoriaAgenteReactivoInputObjImp0;
 import icaro.infraestructura.patronRecursoSimple.imp.FactoriaRecursoSimpleImp2;
 import icaro.infraestructura.recursosOrganizacion.configuracion.ItfUsoConfiguracion;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.ItfUsoRecursoTrazas;
@@ -18,6 +19,7 @@ public  class FactoriaComponenteIcaro {
         private static FactoriaRecursoSimple instanceFactoriaRecursoSimple;
         private static FactoriaAutomatas instanceFactoriaAutomatas;
         private static FactoriaControlAgteReactivoInputObjImp0 instanceFactoriaControlAgteReactivoInputObjImp0;
+        private static FactoriaAgenteReactivoInputObjImp0 instanceFactoriaAgteReactivoInputObjImp0;
         public ItfUsoRecursoTrazas recursoTrazas ;
         public ItfUsoRepositorioInterfaces repositorioInterfaces;
 
@@ -36,7 +38,7 @@ public  class FactoriaComponenteIcaro {
 			instanceFactoriaAutomatas = new FactoriaAutomatas();
 		return instanceFactoriaAutomatas;
 	}
-	public static FactoriaControlAgteReactivoInputObjImp0 instanceAgteReactInpObj(){
+	public static FactoriaControlAgteReactivoInputObjImp0 instanceControlAgteReactInpObj(){
             if (instanceFactoriaControlAgteReactivoInputObjImp0 == null)
 			instanceFactoriaControlAgteReactivoInputObjImp0 = new FactoriaControlAgteReactivoInputObjImp0();
 		return instanceFactoriaControlAgteReactivoInputObjImp0;
@@ -44,7 +46,12 @@ public  class FactoriaComponenteIcaro {
 	public  void crearRecursoSimple(DescInstanciaRecursoAplicacion recurso){
             
         }
-        
+        public static FactoriaAgenteReactivoInputObjImp0 instanceAgteReactInpObj(){
+            if (instanceFactoriaAgteReactivoInputObjImp0 == null)
+			instanceFactoriaAgteReactivoInputObjImp0 = new FactoriaAgenteReactivoInputObjImp0();
+		return instanceFactoriaAgteReactivoInputObjImp0;
+        }
+	
       public  void crearRepositorioInterfaces(){ 	
        
             try {

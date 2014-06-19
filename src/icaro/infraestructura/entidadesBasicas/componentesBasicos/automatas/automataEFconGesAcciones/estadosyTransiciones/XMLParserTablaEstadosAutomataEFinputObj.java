@@ -315,7 +315,7 @@ public class XMLParserTablaEstadosAutomataEFinputObj {
 //            java.util.logging.Logger.getLogger(FactoriaAgenteReactivoImp.class.getName()).log(Level.SEVERE, null, ex);
 //                mensajeError (identClase, " No se encuentra la clase especificada en la descripcion del automata" );
                 String msgAviso = "Se esta buscando una clase: " + identClase + " que implemente las acciones del automata en la ruta :"+
-                        this.rutaCarpetaAcciones + "  pero no se ha encontrado ";
+                 this.rutaCarpetaAcciones + "  pero no se ha encontrado. La accion se considerara un metodo de la clase Acciones Semanticas";
                 System.out.println(msgAviso);
                 return null;
 //        throw new ExcepcionEnComponente ( "PatronAgenteReactivo", " No se encuentra la clase de acciones semanticas en la ruta :"+rutaComportamiento,"Factoria del Agente Reactivo","Class obtenerClaseAccionesSemanticas(DescInstanciaAgente instAgente)"  );
@@ -351,7 +351,8 @@ public class XMLParserTablaEstadosAutomataEFinputObj {
                   }else{
                       if (!buscadoClaseAccionesSemanticas){
                           identClaseAccionesSemanticas = NombresPredefinidos.NOMBRE_ACCIONES_SEMANTICAS+identAgtePropietarioAutomata;
-                          claseAccionesSemanticas = obtenerClaseAcciones(NombresPredefinidos.NOMBRE_ACCIONES_SEMANTICAS+identAgtePropietarioAutomata);
+                          claseAccionesSemanticas = obtenerClaseAcciones(identClaseAccionesSemanticas);
+                          if(claseAccionesSemanticas==null)claseAccionesSemanticas = obtenerClaseAcciones(NombresPredefinidos.NOMBRE_ACCIONES_SEMANTICAS);
                           buscadoClaseAccionesSemanticas = true;
                       }
                       // buscamos la clase y si no  la encontramos  suponemos que es un metodo de las acciones semanticas

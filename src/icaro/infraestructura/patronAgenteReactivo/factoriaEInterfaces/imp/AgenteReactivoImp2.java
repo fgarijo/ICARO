@@ -176,7 +176,8 @@ public class AgenteReactivoImp2 extends AgenteReactivoAbstracto implements Seria
                 itfAutomataCicloVida.transita(NombresPredefinidos.INPUT_OK);
                 estadoAgente = itfAutomataCicloVida.estadoActual();
                 itfControlAgteReactivo.arranca();
-                aceptaEvento(new EventoRecAgte("comenzar", nombre, nombre));
+//                aceptaEvento(new EventoRecAgte("comenzar", nombre, nombre));
+                itfControlAgteReactivo.procesarInput("comenzar", (Object)null);
             } else {
                 itfAutomataCicloVida.transita(NombresPredefinidos.INPUT_ERROR);
                 estadoAgente = itfAutomataCicloVida.estadoActual();
@@ -355,6 +356,20 @@ public class AgenteReactivoImp2 extends AgenteReactivoAbstracto implements Seria
                 InfoTraza.NivelTraza.debug));
                 }
    }
+    public void procesaEventoInterno(EventoSimple evtoInterno){
+        logger.debug(nombre + ": Se procesa un evento interno:" + evtoInterno.toString());
+        trazas.aceptaNuevaTraza(new InfoTraza(nombre,
+                ": Se procesa un evento interno:" + evtoInterno.toString(),InfoTraza.NivelTraza.debug));
+         trazas.aceptaNuevaTrazaEventoRecibido(nombre, evtoInterno);
+        if ((estadoAgente.equals(NombresPredefinidos.ESTADO_ACTIVO))){
+                    itfProductorPercepcion.produceParaConsumirInmediatamente(evtoInterno);
+                }else
+                    {
+                  trazas.aceptaNuevaTraza(new InfoTraza(nombre,
+                ": El agente se encuentra en el estado: " + estadoAgente + " y no puede procesar el evento interno recibido",
+                InfoTraza.NivelTraza.debug));
+                }
+   }
     protected void clasificarEvento(Object ev) {
         if (ev instanceof EventoRecAgte) {
             itfProductorPercepcion.produce(ev);
@@ -450,6 +465,10 @@ public class AgenteReactivoImp2 extends AgenteReactivoAbstracto implements Seria
     @Override
 public ItfControlAgteReactivo getItfControl(){
 		return this.itfControlAgteReactivo;
+}
+    @Override
+    public  ItfProductorPercepcion getItfProductorPercepcion(){
+    return itfProductorPercepcion;
 }
 
 public AgenteReactivoAbstracto getPatron() {

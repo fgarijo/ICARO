@@ -9,9 +9,11 @@ import icaro.infraestructura.patronAgenteReactivo.percepcion.factoriaEInterfaces
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.ItfUsoRecursoTrazas;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.imp.componentes.InfoTraza;
 import java.rmi.RemoteException;
+import java.util.concurrent.LinkedBlockingDeque;
 
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 
 import org.apache.log4j.Logger;
@@ -23,8 +25,9 @@ public class PercepcionAgenteReactivoImp extends PercepcionAbstracto {
 
 	private static final int CAPACIDAD_BUZON_PORDEFECTO = 15;
 	private ProcesadorItemsPercepReactivo procesador;
-	private LinkedBlockingQueue<Object> buzon;
+	private LinkedBlockingDeque<Object> buzon;
 	private EnvioItemsThread envioItems;
+        static final AtomicLong seq = new AtomicLong(0);
 
 	private AgenteReactivoAbstracto agente;
 
@@ -39,14 +42,14 @@ public class PercepcionAgenteReactivoImp extends PercepcionAbstracto {
 //		this.envioItems = new EnvioItemsThread();
 	}
         public PercepcionAgenteReactivoImp(AgenteReactivoAbstracto agente) {
-		buzon = new LinkedBlockingQueue<Object>(CAPACIDAD_BUZON_PORDEFECTO);
+		buzon = new LinkedBlockingDeque<Object>(CAPACIDAD_BUZON_PORDEFECTO);
 		this.agente = agente;
 		this.procesador = new ProcesadorItemsPercepReactivo(agente, agente.getItfControl());
 		this.envioItems = new EnvioItemsThread();
 
 	}
     public PercepcionAgenteReactivoImp(int CapacidadBuzon, ProcesadorItemsPercepReactivo prItems,AgenteReactivoAbstracto agente) {
-		buzon = new LinkedBlockingQueue<Object>(CapacidadBuzon);
+		buzon = new LinkedBlockingDeque<Object>(CapacidadBuzon);
 		this.agente = agente;
 		this.procesador = prItems;
 		this.envioItems = new EnvioItemsThread();
@@ -55,10 +58,10 @@ public class PercepcionAgenteReactivoImp extends PercepcionAbstracto {
 	public PercepcionAgenteReactivoImp(AgenteReactivoAbstracto agente,ProcesadorItemsPercepReactivo procesador) {
                 this.agente = agente;
                 this.procesador = procesador;
-		buzon = new LinkedBlockingQueue<Object>(CAPACIDAD_BUZON_PORDEFECTO);
+		buzon = new LinkedBlockingDeque<Object>(CAPACIDAD_BUZON_PORDEFECTO);
                 this.envioItems = new EnvioItemsThread();
 	}
- public void SetParametrosPercepcionAgenteReactivoImp(LinkedBlockingQueue<Object> colaEvtosyMsgs, ProcesadorItemsPercepReactivo prItems,AgenteReactivoAbstracto agente) {
+ public void SetParametrosPercepcionAgenteReactivoImp(LinkedBlockingDeque<Object> colaEvtosyMsgs, ProcesadorItemsPercepReactivo prItems,AgenteReactivoAbstracto agente) {
 		this.buzon=colaEvtosyMsgs;
 		this.agente = agente;
 		this.procesador = prItems;
@@ -170,8 +173,12 @@ public void produce(Object evento)
 	 *
 	 *@param  evento  Evento que se consumir el primero
 	 */
+        @Override
 	public void produceParaConsumirInmediatamente(Object evento)
 	{
-		buzon.offer(evento);
+		buzon.addFirst(evento);
+               
 	}
+        
+   
 }

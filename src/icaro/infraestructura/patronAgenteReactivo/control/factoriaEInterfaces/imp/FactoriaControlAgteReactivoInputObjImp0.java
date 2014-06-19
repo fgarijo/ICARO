@@ -20,6 +20,7 @@ import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.imp.Automa
 import icaro.infraestructura.entidadesBasicas.interfaces.InterfazGestion;
 import icaro.infraestructura.entidadesBasicas.excepciones.ExcepcionEnComponente;
 import icaro.infraestructura.entidadesBasicas.factorias.FactoriaComponenteIcaro;
+import icaro.infraestructura.patronAgenteReactivo.control.GestorAccionesAgteReactivoImp;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.AgenteReactivoAbstracto;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.ItfUsoAgenteReactivo;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.imp.ConfiguracionTrazas;
@@ -116,20 +117,27 @@ private static final long serialVersionUID = 1L;
 //        }
 
 //    private ItfProductorPercepcion percepcionProductor;
- public ProcesadorInfoReactivoAutInObjImp0 crearControlAgteReactivo( String nombreFicheroTablaEstados,String rutaFicheroAccs, AgenteReactivoAbstracto agente)throws ExcepcionEnComponente {
+ public ProcesadorInfoReactivoAbstracto crearControlAgteReactivo( String nombreFicheroTablaEstados,String rutaFicheroAccs, AgenteReactivoAbstracto agente)throws ExcepcionEnComponente {
 
         new ConfiguracionTrazas(logger);
 
             try {
                 nombreAgente = agente.getIdentAgente();
                 interpAutomat = FactoriaAutomatas.instanceAtms().
-                crearAutomataEFconGestAcciones(nombreAgente, nombreFicheroTablaEstados, rutaFicheroAccs, DEBUG);
+                crearInterpreteAutomataEFconGestorAcciones(nombreAgente, nombreFicheroTablaEstados, rutaFicheroAccs, DEBUG);
+                GestorAccionesAgteReactivoImp gestorAcciones = new GestorAccionesAgteReactivoImp();
+                gestorAcciones.setPropietario(nombreAgente);
+              
 //                ProcesadorInfoReactivoAutInObjImp0 procesadorInfoReactivo = new ProcesadorInfoReactivoAutInObjImp0(interpAutomat, agente);
 //                if (procesadorInfoReactivo != null ) return procesadorInfoReactivo;
 //                    this.generarErrorCreacionAutomata(nombreFicheroTablaEstados);
 //                    throw new ExcepcionEnComponente ("AutomataEFEImp", "no se pudo crear el Automata EFE","Automta EFE","automataControl = new AutomataEFEImp(" );
 //                }
-                return new ProcesadorInfoReactivoAutInObjImp0(interpAutomat, agente);
+                interpAutomat.setGestorAcciones(gestorAcciones);
+                ProcesadorInfoReactivoAbstracto controlAgte = new ProcesadorInfoReactivoAutInObjImp0(interpAutomat,gestorAcciones, agente);
+//                gestorAcciones.inicializarInfoAccionesAgteReactivo(agente.getIdentAgente(),agente.getItfProductorPercepcion(),itfCtrlAgte);
+                return controlAgte;
+//                return new ProcesadorInfoReactivoAutInObjImp0(interpAutomat, agente);
                 }
                 catch (Exception ex)
                 {

@@ -236,7 +236,17 @@ public class ProcesadorEventosImp extends ProcesadorInfoReactivoAbstracto{
 //	yield();
     }
 
-
+@Override
+    public void procesarInput (Object input, Object ...paramsAccion  ){
+    if (paramsAccion == null)automataControl.procesaInput(input);
+        automataControl.procesaInput(input, paramsAccion);
+}
+        @Override
+        public   void inicializarInfoGestorAcciones(String identAgte,ItfProductorPercepcion itfEvtosInternos ){
+     if(accionesSemanticasAgenteCreado !=null){
+         accionesSemanticasAgenteCreado.inicializarAcciones(identAgte, this,itfEvtosInternos);
+     }
+ }
 	/**
 	 *  Elimina los recursos internos usados por el control
 	 */

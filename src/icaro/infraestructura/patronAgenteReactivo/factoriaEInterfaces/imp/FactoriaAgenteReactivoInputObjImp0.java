@@ -42,7 +42,7 @@ import org.apache.log4j.Logger;
 
 
 /**
- * Produce instancias del patr�n
+ * Produce instancias del patron
  *
  * @F Garijo
  * @created 20  Mayo  2010
@@ -61,11 +61,11 @@ public class FactoriaAgenteReactivoInputObjImp0 extends FactoriaComponenteIcaro 
 	 * @uml.property  name="control"
 	 * @uml.associationEnd
 	 */
-    protected ItfControlAgteReactivo itfControlAgteReactivo;
+    protected ProcesadorInfoReactivoAbstracto controlAgteReactivo;
 
 //    protected ItfUsoRecursoTrazas trazas = NombresPredefinidos.RECURSO_TRAZAS_OBJ;
     private String nombreInstanciaAgente;
-    protected AgenteReactivoAbstracto agente;
+    protected AgenteReactivoImp2 agente;
     private NombresPredefinidos.TipoEntidad tipoEntidad = NombresPredefinidos.TipoEntidad.Reactivo ;
 
 //    protected ItfUsoRepositorioInterfaces repositorioIntfaces= NombresPredefinidos.REPOSITORIO_INTERFACES_OBJ;
@@ -153,29 +153,24 @@ public class FactoriaAgenteReactivoInputObjImp0 extends FactoriaComponenteIcaro 
 	//		String rutaTabla = obtenerRutaTablaTransiciones(descInstanciaAgente);
                         String rutaTabla = descInstanciaAgente.getDescComportamiento().getLocalizacionFicheroAutomata();
                         String rutaAcciones = descInstanciaAgente.getDescComportamiento().getLocalizacionComportamiento();
-//         if ((accionesSemanticasEspecificas !=null)&(rutaTabla!=null)){
                          if ((rutaTabla!=null)){
-
-             try {
-// En esta version la percepcion envia la informacion procesada al control
-// Se crea en primer lugar el control y postieriormente la percepcion y la clase que implementa
-// las interfaces externas    
-// Se crea  un objeto que implementa las interfaces de  uso y de gestion del agente
-//            accionesSemanticasEspecificas.setNombreAgente(nombreInstanciaAgente);
-            this.agente = (AgenteReactivoAbstracto)new AgenteReactivoImp2(nombreInstanciaAgente);
+                         try {
+// Se crea el objeto que implementa las interfaces de  uso y de gestion
+                  this.agente = new AgenteReactivoImp2(nombreInstanciaAgente);
 // Se crea el control del agente por medio de su factoria
 		//	ProcesadorEventosAbstracto control = FactoriaControlAgteReactivo.instancia().crearControlAgteReactivo( accionesSemanticasEspecificas,rutaTabla , nombreInstanciaAgente, itfConsumidorPercepcion, itfProductorPercepcion);
-                itfControlAgteReactivo = (ItfControlAgteReactivo)FactoriaControlAgteReactivoInputObjImp0.instanceAgteReactInpObj().crearControlAgteReactivo( rutaTabla ,rutaAcciones, agente);
+                controlAgteReactivo = FactoriaControlAgteReactivoInputObjImp0.instanceControlAgteReactInpObj().crearControlAgteReactivo( rutaTabla ,rutaAcciones, agente);
 //                itfControlAgteReactivo = (ItfControlAgteReactivo) control ;
 // Se crea la percepcion y se le pasa la interfaz del control
-            PercepcionAbstracto percepcion = FactoriaPercepcion.instancia().crearPercepcion(agente,itfControlAgteReactivo);
+            PercepcionAbstracto percepcion = FactoriaPercepcion.instancia().crearPercepcion(agente,controlAgteReactivo);
             itfGestionPercepcion = (InterfazGestionPercepcion) percepcion;
             itfProductorPercepcion = (ItfProductorPercepcion) percepcion;
+            controlAgteReactivo.inicializarInfoGestorAcciones(nombreInstanciaAgente, itfProductorPercepcion);
 	// paso 3.3 se crea la instancia que implementa las interfaces
 	//	AgenteReactivoAbstracto patron = new AgenteReactivoImp(nombreInstanciaAgente,itfControlAgteReactivo,itfProductorPercepcion,itfConsumidorPercepcion);
           // Se crea el automata del ciclo de vida para implementar la interfaz de Gestion
                  ItfUsoAutomataEFsinAcciones itfAutomata = (ItfUsoAutomataEFsinAcciones) ClaseGeneradoraAutomataEFsinAcciones.instance(NombresPredefinidos.FICHERO_AUTOMATA_CICLO_VIDA_COMPONENTE);
-                this.agente.setComponentesInternos(nombreInstanciaAgente,itfAutomata,itfControlAgteReactivo,itfProductorPercepcion,itfGestionPercepcion);
+                this.agente.setComponentesInternos(nombreInstanciaAgente,itfAutomata,controlAgteReactivo,itfProductorPercepcion,itfGestionPercepcion);
         // paso 3. 4  Se define la interfaz de uso del agente creado en las acciones semánticas específicas
 //        accionesSemanticasEspecificas.setItfUsoAgenteReactivo(agente);
 //         accionesSemanticasEspecificas.setCtrlGlobalAgenteReactivo(agente);
@@ -216,21 +211,90 @@ public class FactoriaAgenteReactivoInputObjImp0 extends FactoriaComponenteIcaro 
             System.err.println(" No se puede crear la Instancia del agente . La descripcion del comportamiento no es correcta.");
          }
      }
- public AgenteReactivoAbstracto crearAgenteReactivo(String rutaTabla ,String rutaAcciones, String agenteId){
-     DescInstanciaAgente descInsPrueba = new DescInstanciaAgente();
-     descInsPrueba.setId(agenteId);
-     DescComportamientoAgente comprtPrueba = new DescComportamientoAgente();
-     comprtPrueba.setLocalizacionComportamiento(rutaAcciones);
-     comprtPrueba.setLocalizacionFicheroAutomata(rutaTabla);
-     descInsPrueba.setDescComportamiento(comprtPrueba);
+ public void crearAgenteReactivo(String rutaTabla,String rutaAcciones, String agenteId)throws ExcepcionEnComponente{
+     nombreInstanciaAgente  = agenteId;
+     //     String rutaTabla = descInstanciaAgente.getDescComportamiento().getLocalizacionFicheroAutomata();
+//                        String rutaAcciones = descInstanciaAgente.getDescComportamiento().getLocalizacionComportamiento();
+                         if ((rutaTabla!=null)){
+                         try {
+// Se crea el objeto que implementa las interfaces de  uso y de gestion
+                  this.agente = new AgenteReactivoImp2(nombreInstanciaAgente);
+// Se crea el control del agente por medio de su factoria
+		//	ProcesadorEventosAbstracto control = FactoriaControlAgteReactivo.instancia().crearControlAgteReactivo( accionesSemanticasEspecificas,rutaTabla , nombreInstanciaAgente, itfConsumidorPercepcion, itfProductorPercepcion);
+                controlAgteReactivo = FactoriaControlAgteReactivoInputObjImp0.instanceControlAgteReactInpObj().crearControlAgteReactivo( rutaTabla ,rutaAcciones, agente);
+//                itfControlAgteReactivo = (ItfControlAgteReactivo) control ;
+// Se crea la percepcion y se le pasa la interfaz del control
+            PercepcionAbstracto percepcion = FactoriaPercepcion.instancia().crearPercepcion(agente,controlAgteReactivo);
+            itfGestionPercepcion = (InterfazGestionPercepcion) percepcion;
+            itfProductorPercepcion = (ItfProductorPercepcion) percepcion;
+            controlAgteReactivo.inicializarInfoGestorAcciones(nombreInstanciaAgente, itfProductorPercepcion);
+	// paso 3.3 se crea la instancia que implementa las interfaces
+	//	AgenteReactivoAbstracto patron = new AgenteReactivoImp(nombreInstanciaAgente,itfControlAgteReactivo,itfProductorPercepcion,itfConsumidorPercepcion);
+          // Se crea el automata del ciclo de vida para implementar la interfaz de Gestion
+                 ItfUsoAutomataEFsinAcciones itfAutomata = (ItfUsoAutomataEFsinAcciones) ClaseGeneradoraAutomataEFsinAcciones.instance(NombresPredefinidos.FICHERO_AUTOMATA_CICLO_VIDA_COMPONENTE);
+                this.agente.setComponentesInternos(nombreInstanciaAgente,itfAutomata,controlAgteReactivo,itfProductorPercepcion,itfGestionPercepcion);
+        // paso 3. 4  Se define la interfaz de uso del agente creado en las acciones semánticas específicas
+//        accionesSemanticasEspecificas.setItfUsoAgenteReactivo(agente);
+//         accionesSemanticasEspecificas.setCtrlGlobalAgenteReactivo(agente);
+        // Quedan definidos todos los objetos necesarios para implementar el ejemplar creado
+        logger.debug(nombreInstanciaAgente + ":Creacion del Agente ...ok");
+        if (recursoTrazas!=null ) recursoTrazas.aceptaNuevaTraza(new InfoTraza(nombreInstanciaAgente,tipoEntidad,
+                    nombreInstanciaAgente + ":Creacion del Agente ...ok", NivelTraza.debug));
+        // Paso 4 Procedemos a registrar las interfaces de la instancia crada en el repositorio
+                if (this.repositorioInterfaces == null)crearRepositorioInterfaces();
+			repositorioInterfaces.registrarInterfaz(
+					NombresPredefinidos.ITF_GESTION + nombreInstanciaAgente, (ItfGestionAgenteReactivo)agente);
+			repositorioInterfaces.registrarInterfaz(
+					NombresPredefinidos.ITF_USO + nombreInstanciaAgente, (ItfUsoAgenteReactivo)agente);
+
+			// activamos trazas pesadas
+			agente.setDebug(false);
+        }
+
+        catch ( ExcepcionEnComponente exc) {
+			logger.error("Error al crear El CONTROL del agente. La factoria no puede crear la instancia o no se pueden obtener la interfaces : " + nombreInstanciaAgente, exc);
+            System.err.println(" No se puede crear el control del agente. La factoria no puede crear la instancia.");
+                    exc.putCompDondeEstaContenido("patronAgenteReactivo.contol");
+                    exc.putParteAfectada("FactoriaControlAgenteReactivoImp");
+                    throw exc;
+        }
+		catch (Exception ex) {
+			logger.error("Error AL CREAR LA PERCEPCON. La factoria no puede crear la instancia : " + nombreInstanciaAgente, ex);
+            System.err
+					.println(" No se puede crear la Percepcion del agente. La factoria no puede crear la instancia.");
+            throw new ExcepcionEnComponente("patronAgenteReactivo.contol", "posible error al crear l paercepcion","percepcion",""  );
+        }
+
+        }
+         else {
+            recursoTrazas.aceptaNuevaTraza(new InfoTraza(nombreInstanciaAgente,
+                    nombreInstanciaAgente + ":No se puede crear el agente. El comportamiento no esta bien definido",
+                    NivelTraza.error));
+            System.err.println(" No se puede crear la Instancia del agente . La descripcion del comportamiento no es correcta.");
+         }
+ }
+ 
+public  void crearAgenteReactivo(String agenteId,String rutaComportamiento){
+//     DescInstanciaAgente descInsPrueba = new DescInstanciaAgente();
+//     descInsPrueba.setId(agenteId);
+//     DescComportamientoAgente comprtAgteDesc = new DescComportamientoAgente();
+//     comprtAgteDesc.setLocalizacionComportamiento(rutacomportamiento);
+     String rutaAutomata=obtenerRutaValidaAutomata ( rutaComportamiento );
+   if (rutaAutomata != null){
          try {
-             this.crearAgenteReactivo(descInsPrueba);
-             return agente;
+             this.crearAgenteReactivo(rutaAutomata,rutaComportamiento,agenteId);   
          } catch (ExcepcionEnComponente ex) {
              java.util.logging.Logger.getLogger(FactoriaAgenteReactivoInputObjImp0.class.getName()).log(Level.SEVERE, null, ex);
-             return null;
          }
- }	
+             
+         }else{
+       recursoTrazas.aceptaNuevaTraza(new InfoTraza(nombreInstanciaAgente,
+                    nombreInstanciaAgente + ":No se puede crear el agente. No se encuentra fichero de la tabla de estados en la ruta :+"
+               + rutaComportamiento + " Revisar la existencia del fichero en esa ruta",
+                    NivelTraza.error));
+            System.err.println(" No se puede crear la Instancia del agente . La descripcion del comportamiento no es correcta.");
+   }
+ }
 
 //public void crearAgenteReactivo(String nombreInstanciaAgente, String rutaComportamiento)throws ExcepcionEnComponente {
 //
@@ -309,37 +373,37 @@ public class FactoriaAgenteReactivoInputObjImp0 extends FactoriaComponenteIcaro 
 //            throw new ExcepcionEnComponente("patronAgenteReactivo.contol", "posible error al crear la percepcion","percepcion",""  );
 //        }
 //     }
-//    private String obtenerRutaValidaAutomata (String rutaComportamiento){
-//    // La ruta del comportamiento no incluye la clase
-//    // Obtenemos la clase de AS en l aruta
-//    //   rutaComportamiento =File.separator+rutaComportamiento.replace(".", File.separator);
-//   //   String rutaBusqueda = NombresPredefinidos.RUTA_SRC+rutaComportamiento;
-//        String msgInfoUsuario;
-//        rutaComportamiento = "/" +rutaComportamiento.replace(".", "/");
-//         String rutaAutomata = rutaComportamiento +"/"+ NombresPredefinidos.FICHERO_AUTOMATA;
-//		InputStream input = this.getClass().getResourceAsStream(rutaAutomata);
-//		logger.debug(rutaAutomata+"?"+ ((input != null) ? "  OK" : "  null"));
-//		if  (input != null) return rutaAutomata;
-//                else {
-//                    // intentamos otra política de nombrado
-//                    String nombreEntidad = rutaComportamiento.substring(rutaComportamiento.lastIndexOf("/")+1);
-//                    String primerCaracter= nombreEntidad.substring(0,1);
-//                    nombreEntidad = nombreEntidad.replaceFirst(primerCaracter, primerCaracter.toUpperCase());
-//                    rutaAutomata = rutaComportamiento +"/automata"+nombreEntidad+".xml";
-//                    input = this.getClass().getResourceAsStream(rutaAutomata);
-//                    if  (input != null) return rutaAutomata;
-//                    else {
-//                    // la entidad no se encuentra o no esta definida 
-//                    msgInfoUsuario = "Error no se encuentra el fichero especificado \n"+
-//                            "Para el comportamiento:" + rutaComportamiento + 
-//                            "En la ruta: " + rutaAutomata + "\n" +
-//                            "Verifique la existencia del fichero en el directorio src \n";
-//                    logger.fatal(msgInfoUsuario);
-//      //              throw new ExcepcionEnComponente ( "PatronAgenteReactivo", "No se encuentra el fichero del automata  en la ruta :"+rutaAutomata,"Factoria del Agente Reactivo",this.getClass().getName()  );
-//                    return null;
-//                    }
-//                }
-//    }  
+    private String obtenerRutaValidaAutomata (String rutaComportamiento){
+    // La ruta del comportamiento no incluye la clase
+    // Obtenemos la clase de AS en l aruta
+    //   rutaComportamiento =File.separator+rutaComportamiento.replace(".", File.separator);
+   //   String rutaBusqueda = NombresPredefinidos.RUTA_SRC+rutaComportamiento;
+        String msgInfoUsuario;
+        rutaComportamiento = "/" +rutaComportamiento.replace(".", "/");
+         String rutaAutomata = rutaComportamiento +"/"+ NombresPredefinidos.FICHERO_AUTOMATA;
+		InputStream input = this.getClass().getResourceAsStream(rutaAutomata);
+		logger.debug(rutaAutomata+"?"+ ((input != null) ? "  OK" : "  null"));
+		if  (input != null) return rutaAutomata;
+                else {
+                    // intentamos otra política de nombrado
+                    String nombreEntidad = rutaComportamiento.substring(rutaComportamiento.lastIndexOf("/")+1);
+                    String primerCaracter= nombreEntidad.substring(0,1);
+                    nombreEntidad = nombreEntidad.replaceFirst(primerCaracter, primerCaracter.toUpperCase());
+                    rutaAutomata = rutaComportamiento +"/automata"+nombreEntidad+".xml";
+                    input = this.getClass().getResourceAsStream(rutaAutomata);
+                    if  (input != null) return rutaAutomata;
+                    else {
+                    // la entidad no se encuentra o no esta definida 
+                    msgInfoUsuario = "Error no se encuentra el fichero especificado \n"+
+                            "Para el comportamiento:" + rutaComportamiento + 
+                            "En la ruta: " + rutaAutomata + "\n" +
+                            "Verifique la existencia del fichero en el directorio src \n";
+                    logger.fatal(msgInfoUsuario);
+      //              throw new ExcepcionEnComponente ( "PatronAgenteReactivo", "No se encuentra el fichero del automata  en la ruta :"+rutaAutomata,"Factoria del Agente Reactivo",this.getClass().getName()  );
+                    return null;
+                    }
+                }
+    }  
 //    private Class obtenerClaseAccionesSemanticas(DescInstanciaAgente instAgente)throws ExcepcionEnComponente {
 //
 //    	DescComportamientoAgente comportamiento = instAgente.getDescComportamiento();
@@ -481,6 +545,7 @@ public class FactoriaAgenteReactivoInputObjImp0 extends FactoriaComponenteIcaro 
     public void setParametrosLoggerAgReactivo(String archivoLog, String nivelLog) {
         new ConfiguracionTrazas(logger, archivoLog, nivelLog);
     }
+}
 
 	/**
 	 * Lee del fichero de config el nombre del agente
@@ -492,37 +557,39 @@ public class FactoriaAgenteReactivoInputObjImp0 extends FactoriaComponenteIcaro 
 //		String nombre = config.getNombre();
 //		return nombre;
 //	}
-public static void main(String args[]) {
+//public static void main(String args[]) {
 //         XMLParserTablaEstadosAutomataEFinputObj prueba1 =   new XMLParserTablaEstadosAutomataEFinputObj("Iniciador");
 //         prueba1.extraeTablaEstadosDesdeFicheroXML("/icaro/infraestructura/entidadesBasicas/componentesBasicos/automatas/clasesImpAutomatas/automataPrueba.xml", null);
 //         String rutaFichero = prueba1.obtenerRutaValidaAutomata (NombresPredefinidos.COMPORTAMIENTO_PORDEFECTO_INICIADOR);
 //         prueba1.extraeTablaEstadosDesdeFicheroXML("/icaro/gestores/iniciador/automataPrueba.xml", null);
 //         prueba1.extraeTablaEstadosDesdeFicheroXML("/icaro/pruebas/automataPruebas.xml", null);
 //             String rutaFicheroAutomata = "/icaro/gestores/iniciador/automataPrueba.xml";  // da error
-             String rutaFicheroAutomata = "/icaro/pruebas/automataPruebas.xml";
-             String rutaCarpetaAcciones = "icaro.pruebas";
-             String identPropietario = "Iniciador";
-             String origen = "prueba1";
-             String destino = identPropietario;
-             String estadoActual;
-             Boolean esEstadoFinal;
-             try {
-             AgenteReactivoAbstracto itfPrueba = FactoriaAgenteReactivoInputObjImp0.instance().
-                     crearAgenteReactivo(rutaFicheroAutomata,rutaCarpetaAcciones,identPropietario);
-             EventoRecAgte eventoPrueba = new EventoRecAgte("comenzar", origen,destino);
-         
-             itfPrueba.aceptaEvento(eventoPrueba);
-         } catch (Exception ex) {
-             java.util.logging.Logger.getLogger(FactoriaAgenteReactivoInputObjImp0.class.getName()).log(Level.SEVERE, null, ex);
-         }
-//             interpretePrueba.volverAEstadoInicial(); // Estado inicial dela utomata
-//             estadoActual = interpretePrueba.estadoActual(); // debe dar el estado inicial 
-//             esEstadoFinal = interpretePrueba.esEstadoFinal(estadoActual); // debe dar falso
-//             interpretePrueba.cambiarEstado("creandoRecursosNucleoOrganizacion");
-//             estadoActual = interpretePrueba.estadoActual();
-//             interpretePrueba.cambiarEstado("creandoRecursosNucleoOrganizacio"); // deben salir las trazas
-//             interpretePrueba.ejecutarTransicion("existenEntidadesDescripcion", (Object) null);
-        }
-
-
-}
+////             String rutaFicheroAutomata = "/icaro/pruebas/automataPruebas.xml";
+////             String rutaCarpetaAcciones = "icaro.pruebas";
+////             String identPropietario = "Iniciador";
+////             String origen = "prueba1";
+////             String destino = identPropietario;
+////             String estadoActual;
+////             Boolean esEstadoFinal;
+////             try {
+//////             AgenteReactivoAbstracto itfPrueba = FactoriaAgenteReactivoInputObjImp0.instance().
+//////                     crearAgenteReactivo(rutaFicheroAutomata,rutaCarpetaAcciones,identPropietario);
+////              FactoriaComponenteIcaro.instanceAgteReactInpObj().
+////                     crearAgenteReactivo(rutaFicheroAutomata,rutaCarpetaAcciones,identPropietario);   
+////             EventoRecAgte eventoPrueba = new EventoRecAgte("comenzar", origen,destino);
+////        ItfUsoAgenteReactivo itfPrueba = NombresPredefinidos.REPOSITORIO_INTERFACES_OBJ
+////             itfPrueba.aceptaEvento(eventoPrueba);
+////         } catch (Exception ex) {
+////             java.util.logging.Logger.getLogger(FactoriaAgenteReactivoInputObjImp0.class.getName()).log(Level.SEVERE, null, ex);
+////         }
+//////             interpretePrueba.volverAEstadoInicial(); // Estado inicial dela utomata
+//////             estadoActual = interpretePrueba.estadoActual(); // debe dar el estado inicial 
+//////             esEstadoFinal = interpretePrueba.esEstadoFinal(estadoActual); // debe dar falso
+//////             interpretePrueba.cambiarEstado("creandoRecursosNucleoOrganizacion");
+//////             estadoActual = interpretePrueba.estadoActual();
+//////             interpretePrueba.cambiarEstado("creandoRecursosNucleoOrganizacio"); // deben salir las trazas
+//////             interpretePrueba.ejecutarTransicion("existenEntidadesDescripcion", (Object) null);
+////        }
+//
+//
+//}

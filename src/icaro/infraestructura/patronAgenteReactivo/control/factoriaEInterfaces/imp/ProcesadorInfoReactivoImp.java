@@ -232,7 +232,7 @@ public class ProcesadorInfoReactivoImp extends ProcesadorInfoReactivoAbstracto i
              InfoContEvtMsgAgteReactivo infoParaAutomata = (InfoContEvtMsgAgteReactivo) infoParaProcesar;
             automataControl.procesaInput(infoParaAutomata.getInput(),infoParaAutomata.getvaloresParametrosAccion());
           }else{
-              System.out.println(nombre + ": El input debe ser de  clase InfoContEvtMsgAgteReactivo  y el objeto es clase" + infoParaProcesar.getClass()
+              System.out.println(identAgte + ": El input debe ser de  clase InfoContEvtMsgAgteReactivo  y el objeto es clase" + infoParaProcesar.getClass()
                       + " Cambiar el contenido del evento");
 //              automataControl.procesaInput(infoParaProcesar);
           }
@@ -250,7 +250,11 @@ public class ProcesadorInfoReactivoImp extends ProcesadorInfoReactivoAbstracto i
         return this.DEBUG;
     }
 
-
+@Override
+    public void procesarInput (Object input, Object ...paramsAccion  ){
+    if (paramsAccion == null)automataControl.procesaInput(input);
+        automataControl.procesaInput(input, paramsAccion);
+}
 
     public synchronized int getEstado() {
         return estado;
@@ -268,15 +272,23 @@ public class ProcesadorInfoReactivoImp extends ProcesadorInfoReactivoAbstracto i
 	 * @return
 	 * @uml.property  name="control"
 	 */
-public synchronized  void setGestorAReportar(ItfUsoAgenteReactivo itfUsoGestorAReportar) {
+        @Override
+        public synchronized  void setGestorAReportar(ItfUsoAgenteReactivo itfUsoGestorAReportar) {
 
        accionesSemanticasAgenteCreado.setItfUsoGestorAReportar(itfUsoGestorAReportar);
 
         }
 
-    @Override
+ public   void inicializarInfoGestorAcciones(String identAgte,ItfProductorPercepcion itfEvtosInternos ){
+     if(accionesSemanticasAgenteCreado !=null){
+         accionesSemanticasAgenteCreado.inicializarAcciones(identAgte, this,itfEvtosInternos);
+     }
+ }
+ 
+  
+        @Override
     public String toString() {
-        return nombre;
+        return identAgte;
     }
 
     //@Override

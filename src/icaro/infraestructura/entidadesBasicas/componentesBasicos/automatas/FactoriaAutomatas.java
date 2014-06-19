@@ -9,10 +9,14 @@ import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.autom
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFconGesAcciones.estadosyTransiciones.TablaEstadosAutomataEFinputObjts;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFconGesAcciones.estadosyTransiciones.XMLParserTablaEstadosAutomataEFinputObj;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.gestorAcciones.ItfGestorAcciones;
-import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.gestorAcciones.imp.GestorAccionesImp;
+import icaro.infraestructura.patronAgenteReactivo.control.GestorAccionesAgteReactivoImp;
 import icaro.infraestructura.entidadesBasicas.factorias.FactoriaComponenteIcaro;
 import icaro.pruebas.InformeArranqueGestor;
 import icaro.gestores.informacionComun.VocabularioGestores;
+import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.gestorAcciones.GestorAccionesAbstr;
+import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.ItfUsoAutomataEFE;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -28,18 +32,34 @@ public class FactoriaAutomatas extends FactoriaComponenteIcaro{
 //			instance = new FactoriaAutomatas();
 //		return instance;
 //	}
-	
-	public  InterpreteAutomataEFconGestAcciones crearAutomataEFconGestAcciones(
+    
+	public  InterpreteAutomataEFconGestAcciones crearInterpreteAutomataEFconGestorAcciones(String identPropietario,
+            String rutaFicheroAutomata,String rutaCarpetaAcciones,Boolean trazar ){
+            XMLParserTablaEstadosAutomataEFinputObj parser =   new XMLParserTablaEstadosAutomataEFinputObj(identPropietario);     
+            TablaEstadosAutomataEFinputObjts tablaEF =  parser.extraeTablaEstadosDesdeFicheroXML(rutaFicheroAutomata, rutaCarpetaAcciones);
+            return  new InterpreteAutomataEFconGestAcciones(tablaEF,trazar);
+        }
+        public GestorAccionesAbstr crearGestorAcciones ( Class claseGestor){
+            try {
+                return (GestorAccionesAbstr)claseGestor.newInstance();
+            } catch (InstantiationException ex) {
+                Logger.getLogger(FactoriaAutomatas.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(FactoriaAutomatas.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return null;
+        }
+	public  InterpreteAutomataEFconGestAcciones crearAutomataParaControlAgteReactivo(
                 String identPropietario,String rutaFicheroAutomata,String rutaCarpetaAcciones,Boolean trazar){
             
 	XMLParserTablaEstadosAutomataEFinputObj prueba1 =   new XMLParserTablaEstadosAutomataEFinputObj(identPropietario);
 
          TablaEstadosAutomataEFinputObjts tablaEF =  prueba1.extraeTablaEstadosDesdeFicheroXML(rutaFicheroAutomata, rutaCarpetaAcciones);
          // crear el ejecutor de acciones
-         GestorAccionesImp gestAccionesItf = new GestorAccionesImp(identPropietario);
+         GestorAccionesAbstr gestAcciones = crearGestorAcciones (GestorAccionesAgteReactivoImp.class);
+         gestAcciones.setPropietario(identPropietario);
          InterpreteAutomataEFconGestAcciones interpreteAutomata = new InterpreteAutomataEFconGestAcciones(tablaEF,trazar);
-         gestAccionesItf.setItfAutomataEFconGestAcciones(interpreteAutomata);
-         interpreteAutomata.setItfGestorAcciones(gestAccionesItf);
+         interpreteAutomata.setGestorAcciones(gestAcciones);
          return interpreteAutomata;
         }
          public static void main(String args[]) {
@@ -54,19 +74,19 @@ public class FactoriaAutomatas extends FactoriaComponenteIcaro{
              String identPropietario = "Iniciador";
              String estadoActual;
              Boolean esEstadoFinal;
-             InterpreteAutomataEFconGestAcciones interpretePrueba;
+             ItfUsoAutomataEFE interpretePrueba;
             interpretePrueba= FactoriaComponenteIcaro.instanceAtms().
-                              crearAutomataEFconGestAcciones(identPropietario,rutaFicheroAutomata,rutaCarpetaAcciones,Boolean.TRUE);
+                              crearAutomataParaControlAgteReactivo(identPropietario,rutaFicheroAutomata,rutaCarpetaAcciones,Boolean.TRUE);
              interpretePrueba.volverAEstadoInicial(); // Estado inicial dela utomata
-             estadoActual = interpretePrueba.estadoActual(); // debe dar el estado inicial 
-             esEstadoFinal = interpretePrueba.esEstadoFinal(estadoActual); // debe dar falso
-             interpretePrueba.cambiarEstado("creandoRecursosNucleoOrganizacion");
-             estadoActual = interpretePrueba.estadoActual();
-             interpretePrueba.cambiarEstado("arrancandoGestorInicial"); // deben salir las trazas
+             estadoActual = interpretePrueba.getEstadoAutomata(); // debe dar el estado inicial 
+             esEstadoFinal = interpretePrueba.estasEnEstadoFinal(); // debe dar falso
+             interpretePrueba.cambiaEstado("creandoRecursosNucleoOrganizacion");
+             estadoActual = interpretePrueba.getEstadoAutomata();
+             interpretePrueba.cambiaEstado("arrancandoGestorInicial"); // deben salir las trazas
 //             interpretePrueba.ejecutarTransicion("existenEntidadesDescripcion");
 //              interpretePrueba.procesaInput("existenEntidadesDescripcion", "a", "b");
              InformeArranqueGestor informePrueba = new InformeArranqueGestor ("Prueba Factoria", VocabularioGestores.ResultadoArranqueGestorOK);
-              interpretePrueba.procesaInput(informePrueba, "a", "b");
+//              interpretePrueba.procesaInput(informePrueba, "a", "b");
         }
 
 }

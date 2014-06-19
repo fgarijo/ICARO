@@ -2,17 +2,22 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.accionesAutomataEF;
+package icaro.infraestructura.patronAgenteReactivo.control.acciones;
 import icaro.infraestructura.entidadesBasicas.informes.InformeTemporizacion;
 import icaro.infraestructura.entidadesBasicas.informes.InformeError;
 import icaro.infraestructura.entidadesBasicas.procesadorCognitivo.*;
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
+import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.accionesAutomataEF.GeneracionInputTimeout;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.gestorAcciones.ItfGestorAcciones;
 import icaro.infraestructura.entidadesBasicas.comunicacion.ComunicacionAgentes;
+import icaro.infraestructura.entidadesBasicas.comunicacion.EventoInternoAgteReactivo;
 import icaro.infraestructura.entidadesBasicas.excepciones.ExcepcionEnComponente;
 import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.ItfUsoAutomataEFE;
+import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.ItfUsoAgenteReactivo;
+import icaro.infraestructura.patronAgenteReactivo.percepcion.factoriaEInterfaces.ItfProductorPercepcion;
 import icaro.infraestructura.recursosOrganizacion.configuracion.ItfUsoConfiguracion;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.ItfUsoRecursoTrazas;
+import icaro.infraestructura.recursosOrganizacion.recursoTrazas.imp.componentes.InfoTraza;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.imp.componentes.InfoTraza.NivelTraza;
 import icaro.infraestructura.recursosOrganizacion.repositorioInterfaces.ItfUsoRepositorioInterfaces;
 import java.rmi.RemoteException;
@@ -26,7 +31,8 @@ import java.util.logging.Logger;
 
 public abstract class AccionSincrona {
 
-    protected ItfUsoAutomataEFE itfAutomata;
+    protected ItfProductorPercepcion itfEnvioEventosInternos;
+    protected ItfUsoAgenteReactivo itfUsoAgente;
 //    protected AgenteCognitivo agente;
     protected String  identAccion;
 //    protected String  identAgente;
@@ -37,6 +43,7 @@ public abstract class AccionSincrona {
     protected ItfUsoConfiguracion itfConfig;
     protected ItfGestorAcciones gestorAcciones;
     protected ComunicacionAgentes comunicator;
+    protected String identAgte;
 		
     public AccionSincrona(){
 		
@@ -45,12 +52,16 @@ public abstract class AccionSincrona {
 	}
     
 //    public AccionSincrona(ItfAutomataEFconGestAcciones envioInputs, AgenteCognitivo agente) {
-    public AccionSincrona(ItfUsoAutomataEFE envioInputs) {
-//    	this.itfProcObjetivos = envioHechos;
-//    	this.agente = agente;
-        this.trazas = NombresPredefinidos.RECURSO_TRAZAS_OBJ;
-//        this.identAgente = agente.getIdentAgente();
-        this.repoInterfaces = NombresPredefinidos.REPOSITORIO_INTERFACES_OBJ;
+//    public AccionSincrona() {
+////    	this.itfProcObjetivos = envioHechos;
+////    	this.agente = agente;
+//        this.trazas = NombresPredefinidos.RECURSO_TRAZAS_OBJ;
+////        this.identAgente = agente.getIdentAgente();
+//        this.repoInterfaces = NombresPredefinidos.REPOSITORIO_INTERFACES_OBJ;
+//    }
+    public void inicializar (String identAgte, ItfProductorPercepcion iftPercepAgte){
+        this.identAgte = identAgte;
+        this.itfEnvioEventosInternos = iftPercepAgte;
     }
 
     public abstract void ejecutar(Object... params);
@@ -69,7 +80,8 @@ public abstract class AccionSincrona {
     }
     
     public void generarInputAutomata (Object input){
-        itfAutomata.procesaInput(input);
+        if(itfEnvioEventosInternos !=null)
+        itfEnvioEventosInternos.produceParaConsumirInmediatamente(new EventoInternoAgteReactivo(identAccion, input, null));
  //       envioHechos.insertarHecho(informe.getContenidoInforme());
     }
 
@@ -90,7 +102,7 @@ public abstract class AccionSincrona {
 //        }
         if(msgTimeout==null)msgTimeout = NombresPredefinidos.PREFIJO_MSG_TIMEOUT;
         InformeTemporizacion informeTemp = new InformeTemporizacion (idAccion, msgTimeout );
-        GeneracionInputTimeout informeTemporizado = new GeneracionInputTimeout ( milis, itfAutomata,informeTemp );
+        GeneracionInputTimeout informeTemporizado = new GeneracionInputTimeout ( milis, itfUsoAgente,informeTemp );
         informeTemporizado.start();
     }
     public void generarInformeTemporizadoFromConfigProperty (String identproperty,Objetivo contxtGoal,String idAgenteOrdenante, String msgTimeout){
@@ -138,19 +150,27 @@ public abstract class AccionSincrona {
          }
         return itfConfig;
     }
-
+public void procesarInput (Object input,Object[] infoComplementaria ){
+     if ( itfEnvioEventosInternos == null){
+         trazas.trazar(identAgte, " El interfaz para el envio de eventos internos no esta definida "
+                 + " El input:  " + input + " No sera procesado ", InfoTraza.NivelTraza.error);
+     }else 
+     {
+          itfEnvioEventosInternos.produceParaConsumirInmediatamente(new EventoInternoAgteReactivo(identAgte, input, infoComplementaria));        
+     }
+}
 //    public void setEnvioHechos(ItfProcesadorObjetivos envioHechos) {
 //        this.itfProcObjetivos = envioHechos;
 //    }
-     public void setItfAutomata(ItfUsoAutomataEFE itfAutomata){
-         this.itfAutomata = itfAutomata;
-     }
-      public ItfUsoAutomataEFE getItfAutomata(){
-         return this.itfAutomata ;
-     }
-     public void setTrazas(ItfUsoRecursoTrazas trazasItf) {
-        this.trazas = trazasItf;
-    }
+//     public void setItfAutomata(ItfUsoAutomataEFE itfAutomata){
+//         this.itfAutomata = itfAutomata;
+//     }
+//      public ItfUsoAutomataEFE getItfAutomata(){
+//         return this.itfAutomata ;
+//     }
+//     public void setTrazas(ItfUsoRecursoTrazas trazasItf) {
+//        this.trazas = trazasItf;
+//    }
 //    public ItfConfigMotorDeReglas getItfConfigMotorDeReglas() {
 //        return itfProcObjetivos.getItfConfigMotorDeReglas();
 //    }

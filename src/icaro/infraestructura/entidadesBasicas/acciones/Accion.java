@@ -4,7 +4,7 @@ package icaro.infraestructura.entidadesBasicas.acciones;
 import icaro.infraestructura.entidadesBasicas.informes.InformeTemporizacion;
 import icaro.infraestructura.entidadesBasicas.informes.InformeError;
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
-import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.accionesAutomataEF.AccionSincrona;
+import icaro.infraestructura.patronAgenteReactivo.control.acciones.AccionSincrona;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.accionesAutomataEF.GeneracionInputTimeout;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.gestorAcciones.ItfGestorAcciones;
 import icaro.infraestructura.entidadesBasicas.comunicacion.ComunicacionAgentes;
@@ -78,8 +78,8 @@ public abstract class Accion extends Thread {
 //        }
         if(msgTimeout==null)msgTimeout = NombresPredefinidos.PREFIJO_MSG_TIMEOUT;
         InformeTemporizacion informeTemp = new InformeTemporizacion (idAccion, msgTimeout );
-        GeneracionInputTimeout informeTemporizado = new GeneracionInputTimeout ( milis, itfAutomata,informeTemp );
-        informeTemporizado.start();
+//        GeneracionInputTimeout informeTemporizado = new GeneracionInputTimeout ( milis, itfAutomata,informeTemp );
+//        informeTemporizado.start();
     }
     public void generarInformeTemporizadoFromConfigProperty (String identproperty,Objetivo contxtGoal,String idAgenteOrdenante, String msgTimeout){
         try {

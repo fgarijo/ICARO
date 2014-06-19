@@ -14,13 +14,15 @@ import icaro.infraestructura.entidadesBasicas.interfaces.InterfazGestion;
 /**
  * 
  *@author     F Garijo
- *@created    10 de enero  de 2009
+ *@created    10 de enero  de 2014
  */
 
 public interface ItfControlAgteReactivo extends InterfazGestion {
 
 public void setGestorAReportar(ItfUsoAgenteReactivo itfUsoGestorAReportar);
+public ItfUsoAgenteReactivo getGestorAReportar();
 //public void procesarInfoControlAgteReactivo (InfoContEvtMsgAgteReactivo infoParaProcesar  );
 public void procesarInfoControlAgteReactivo (Object infoParaProcesar  );
+public void procesarInput (Object input, Object ...paramsAccion  );
 public String getEstadoControlAgenteReactivo ( );
 }

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.accionesAutomataEF;
+package icaro.infraestructura.patronAgenteReactivo.control.acciones;
 
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 

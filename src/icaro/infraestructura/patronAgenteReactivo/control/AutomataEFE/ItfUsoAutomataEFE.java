@@ -28,13 +28,14 @@ public interface ItfUsoAutomataEFE {
 	public  boolean procesaInput(String input, Object[] parametros);
         public  boolean procesaInput(Object input);
 //        public  boolean procesaInputObj(Object input, Object[] parametros);
-        public  boolean procesaInput(Object input, Object... parametros);
+//        public  boolean procesaInput(Object input, Object... parametros);
 
 	/**
 	 *  Imprime la tabla de estados y el estado actual del autmata
 	 *
 	 *@return    Cadena con la informacin
 	 */
+        @Override
 	public String toString();
 
 

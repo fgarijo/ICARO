@@ -14,7 +14,7 @@ public class GenerarEventoTimeOut extends Thread {
 	/**
 	 * @uml.property  name="nombre"
 	 */
-	private String nombre;
+	private String inputAenviar;
 	/**
 	 * @uml.property  name="origen"
 	 */
@@ -30,10 +30,10 @@ public class GenerarEventoTimeOut extends Thread {
 	 */
 	private ItfUsoRepositorioInterfaces repositorio;
 	
-	public GenerarEventoTimeOut(long milis,String nombre,String origen,String destino, ItfUsoRepositorioInterfaces repositorio) {
+	public GenerarEventoTimeOut(long milis,String identInput,String origen,String destino, ItfUsoRepositorioInterfaces repositorio) {
 		super();
 		this.milis = milis;
-		this.nombre = nombre;
+		this.inputAenviar = identInput;
 		this.origen = origen;
 		this.destino = destino;
 		this.repositorio = repositorio;
@@ -45,7 +45,7 @@ public class GenerarEventoTimeOut extends Thread {
 		try {
 			sleep(milis);
 			ItfUsoAgenteReactivo destinatario = (ItfUsoAgenteReactivo) repositorio.obtenerInterfaz(NombresPredefinidos.ITF_USO+destino);
-			destinatario.aceptaEvento(new EventoRecAgte(nombre,origen,destino));
+			destinatario.aceptaEvento(new EventoRecAgte(inputAenviar,origen,destino));
 		} catch (Exception e) {
 			System.err.println("Error al enviar evento de timeout");
 			e.printStackTrace();

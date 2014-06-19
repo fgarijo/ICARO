@@ -3,6 +3,7 @@ package icaro.infraestructura.clasesGeneradorasOrganizacion;
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 import icaro.infraestructura.entidadesBasicas.comunicacion.EventoRecAgte;
 import icaro.infraestructura.entidadesBasicas.excepciones.ExcepcionEnComponente;
+import icaro.infraestructura.entidadesBasicas.factorias.FactoriaComponenteIcaro;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.AgenteReactivoAbstracto;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.FactoriaAgenteReactivo;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.ItfGestionAgenteReactivo;
@@ -72,8 +73,8 @@ public class ArranqueSistemaIniciadorPruebaModeloInputGestAccs {
                }
             // Se crea el iniciador que se encargara de crear el resto de componentes
 
-            ItfGestionAgenteReactivo ItfGestIniciador = null;
-             ItfUsoAgenteReactivo ItfUsoIniciador = null;
+            ItfGestionAgenteReactivo itfGestIniciador = null;
+             ItfUsoAgenteReactivo itfUsoIniciador = null;
 //                try {
     //        
                    
@@ -94,16 +95,19 @@ public class ArranqueSistemaIniciadorPruebaModeloInputGestAccs {
              String estadoActual;
              Boolean esEstadoFinal;
              try {
-             AgenteReactivoAbstracto itfPrueba = FactoriaAgenteReactivoInputObjImp0.instance().
-                     crearAgenteReactivo(rutaFicheroAutomata,rutaCarpetaAcciones,identPropietario);
-             itfPrueba.arranca();
-             EventoRecAgte eventoPrueba = new EventoRecAgte("comenzar", origen,destino);
-             estadoActual =itfPrueba.getItfControl().getEstadoControlAgenteReactivo();
-             recursoTrazas.trazar(identPropietario, "Antes de enviar el evento Estoy en el estado : "+ estadoActual, NivelTraza.debug);
+//             AgenteReactivoAbstracto itfPrueba = FactoriaAgenteReactivoInputObjImp0.instance().
+//                     crearAgenteReactivo(rutaFicheroAutomata,rutaCarpetaAcciones,identPropietario);
+             FactoriaComponenteIcaro.instanceAgteReactInpObj().crearAgenteReactivo(rutaFicheroAutomata, rutaCarpetaAcciones,identPropietario);
+             itfUsoIniciador =  (ItfUsoAgenteReactivo) NombresPredefinidos.REPOSITORIO_INTERFACES_OBJ.obtenerInterfazUso(identPropietario);
+            itfGestIniciador = (ItfGestionAgenteReactivo) NombresPredefinidos.REPOSITORIO_INTERFACES_OBJ.obtenerInterfazGestion(identPropietario);
+            itfGestIniciador.arranca();
+            EventoRecAgte eventoPrueba = new EventoRecAgte("comenzar", origen,destino);
+//             estadoActual =itfUsoIniciador.getItfControl().getEstadoControlAgenteReactivo();
+//             recursoTrazas.trazar(identPropietario, "Antes de enviar el evento Estoy en el estado : "+ estadoActual, NivelTraza.debug);
          
-             itfPrueba.aceptaEvento(eventoPrueba);
-            estadoActual =itfPrueba.getItfControl().getEstadoControlAgenteReactivo();
-             recursoTrazas.trazar(identPropietario, "Despues de enviar el evento Estoy en el estado : "+ estadoActual, NivelTraza.debug);
+             itfUsoIniciador.aceptaEvento(eventoPrueba);
+//            estadoActual =itfUsoIniciador.getItfControl().getEstadoControlAgenteReactivo();
+//             recursoTrazas.trazar(identPropietario, "Despues de enviar el evento Estoy en el estado : "+ estadoActual, NivelTraza.debug);
               }
                catch (ExcepcionEnComponente e) {
                     msgUsuario = "Error. No se ha podido crear el gestor de organizacion con nombre " + NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION;

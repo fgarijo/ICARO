@@ -77,7 +77,7 @@ public class PanelTrazasClasificadas extends javax.swing.JFrame {
         String identEntidadEmisora  = traza.getEntidadEmisora();
         // En el panel principal solo mostramos la informacion de las entidades que envian informacion
         
-                Boolean identEntidadIgualAnterior = identEntidadEmisora.equals(ultimaEntidadEmisora);
+       Boolean identEntidadIgualAnterior = identEntidadEmisora.equals(ultimaEntidadEmisora);
  
 /*  
         if (traza.getNivel() == InfoTraza.NivelTraza.debug ){

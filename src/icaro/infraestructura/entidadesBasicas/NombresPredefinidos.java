@@ -15,6 +15,7 @@ public class NombresPredefinidos {
   public static final String TIPO_REACTIVO = "Reactivo";
   public static final String ROL_AGENTE = "Gestor";
   public static final String NOMBRE_ENTIDAD_AGENTE = "Agente";
+  public static final String NOMBRE_ENTIDAD_INDEFINIDA = "Entidad No efinida";
   public static final String NOMBRE_ENTIDAD_RECURSO = "Recurso";
   public static String NOMBRE_GESTOR_AGENTES = "GestorAgentes";
   public static String NOMBRE_GESTOR_RECURSOS = "GestorRecursos" ;
@@ -36,6 +37,7 @@ public class NombresPredefinidos {
   public static final String NOMBRE_FICHERO_PDFTO_REGLAS = "reglas.drl";
   public static final String NOMBRE_FICHERO_PDFTO_ACCIONES_SMT = "AccionesSemanticas.class";
   public static final String NOMBRE_ACCIONES_SEMANTICAS = "AccionesSemanticas";
+  public static final String NOMBRE_TABLA_AUTOMATA_EF = "automata";
   public static final String NOMBRE_FICHERO_CL_GENER_RECURSO = "ClaseGeneradora.class";
 //  public static final String EXPR_REG_NOMBRE_FICHERO_AUTOMATA = "automata*.xml";
 //  public static final String EXPR_REG_NOMBRE_FICHERO_REGLAS = "reglas([0-9a-zA-Z])*.drl";

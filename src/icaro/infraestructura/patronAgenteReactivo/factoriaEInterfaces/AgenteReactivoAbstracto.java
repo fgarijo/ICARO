@@ -34,6 +34,7 @@ public abstract class AgenteReactivoAbstracto extends UnicastRemoteObject implem
         public abstract  String getIdentAgente()throws java.rmi.RemoteException;
         @Override
         public abstract void aceptaMensaje(MensajeSimple mensaje);
+        public abstract ItfProductorPercepcion getItfProductorPercepcion();
 	/**
 	 * @uml.property  name="control"
 	 * @uml.associationEnd  readOnly="true"

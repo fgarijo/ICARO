@@ -9,6 +9,7 @@ import icaro.infraestructura.entidadesBasicas.InfoTraza.NivelTraza;
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFconGesAcciones.estadosyTransiciones.TablaEstadosAutomataEFinputObjts;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFconGesAcciones.estadosyTransiciones.TransicionAutomataEF;
+import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.gestorAcciones.GestorAccionesAbstr;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.gestorAcciones.ItfGestorAcciones;
 import icaro.infraestructura.patronAgenteReactivo.control.AutomataEFE.ItfUsoAutomataEFE;
 import icaro.infraestructura.patronAgenteReactivo.control.acciones.AccionesSemanticasAgenteReactivo;
@@ -93,7 +94,8 @@ public  class InterpreteAutomataEFconGestAcciones implements ItfUsoAutomataEFE,S
 	 */
 	public ItfUsoRecursoTrazas trazas;
         protected ItfGestorAcciones itfGestAcciones;
-	
+	protected GestorAccionesAbstr gestAcciones;
+//        protected String propietario;
 
 	/**
 	 *  Crea un autmata XML
@@ -147,7 +149,7 @@ public  class InterpreteAutomataEFconGestAcciones implements ItfUsoAutomataEFE,S
 	 *
 	 *@return    est en estado final o no
 	 */
-	public boolean esEstadoFinal(String estadoId)
+	public synchronized boolean esEstadoFinal(String estadoId)
 	{
 		return (tablaEstadosAutomata.esEstadoFinal(estadoId));
 	}
@@ -181,7 +183,7 @@ public  class InterpreteAutomataEFconGestAcciones implements ItfUsoAutomataEFE,S
 //            }
 //         return true;      
 //        }
-        public boolean ejecutarTransicion(String input){
+        public synchronized boolean ejecutarTransicion(String input){
             
 //            String inputAutomata ;
 //           
@@ -190,6 +192,7 @@ public  class InterpreteAutomataEFconGestAcciones implements ItfUsoAutomataEFE,S
 //            }else {// tomamos como input el nombre de la clase del input
 //                inputAutomata = input.getClass().getSimpleName();
 //            }
+        
            if( !tablaEstadosAutomata.esInputValidoDeEstado(estadoActual, input)){
                this.trazas.trazar (this.getClass().getSimpleName()," El input : " + input + " No coincide con los inputs definidos en el automata "+
                        " en el estado  :" + estadoActual ,InfoTraza.NivelTraza.error );
@@ -200,7 +203,7 @@ public  class InterpreteAutomataEFconGestAcciones implements ItfUsoAutomataEFE,S
                    // mensaje de error el inputno es valido en el estado actual
                     this.trazas.trazar (this.getClass().getSimpleName()," No existe transicion asociada al input : " + input +
                        " en el estado  :" + estadoActual ,InfoTraza.NivelTraza.error );
-                    return false;
+                    return true;
             }
                    // obtenemos el tipo de transción ************* Revisar
              Integer tipoTransicion = transicion.getTipoTransicion();
@@ -234,7 +237,7 @@ public  class InterpreteAutomataEFconGestAcciones implements ItfUsoAutomataEFE,S
         }
         
         @Override
-        public void transita(String input){
+        public synchronized void transita(String input){
                 ejecutarTransicion(input, null);
 //	{
 //		String siguiente;
@@ -306,16 +309,16 @@ public  class InterpreteAutomataEFconGestAcciones implements ItfUsoAutomataEFE,S
 //                        }
 //}
         @Override
-        public void cambiaEstado(String estado)
+        public synchronized void cambiaEstado(String estado)
 	{
 		estadoActual = estado;
 	}
  @Override
-        public String getEstadoAutomata(){
+        public synchronized String getEstadoAutomata(){
             return estadoActual;
         }
         
-public void interpretarTransicion(TransicionAutomataEF transicion){
+public synchronized void interpretarTransicion(TransicionAutomataEF transicion){
     // le manda la accion  al ejecutor de acciones para que ejecute y transita al estado que indica la transicion
     Integer tipoTransicion = transicion.getTipoTransicion();
     String input = transicion.getInput();
@@ -333,7 +336,7 @@ public void interpretarTransicion(TransicionAutomataEF transicion){
 	 *@return    Cadena con la informacin
 	 */
         @Override
-     public boolean procesaInput(Object input){
+     public synchronized boolean procesaInput(Object input){
            String inputAutomata ;
            Object[] parametroAccion = new Object[1];
            
@@ -351,7 +354,7 @@ public void interpretarTransicion(TransicionAutomataEF transicion){
           return ejecutarTransicion( inputAutomata,parametroAccion);
       }
         @Override
-     public  boolean procesaInput(String input, Object[] parametros){
+     public synchronized boolean procesaInput(String input, Object[] parametros){
          return ejecutarTransicion( input, parametros);
      }
            
@@ -359,8 +362,8 @@ public void interpretarTransicion(TransicionAutomataEF transicion){
 //       if(parametros==null) return procesaInput(input);
 //        return ejecutarTransicion( input,  parametros);
 //  }
-        @Override
-        public boolean procesaInput(Object input, Object ... parametros) {
+      
+        public synchronized boolean procesaInput(Object input, Object ... parametros) {
     
 //             if(parametros==null) return procesaInput(input);
             String inputAutomata ;
@@ -405,7 +408,7 @@ public void interpretarTransicion(TransicionAutomataEF transicion){
 //					InfoTraza.NivelTraza.error));
 //            return false;
         }
-        private  boolean ejecutarTransicion(String input,Object[] params){
+        private synchronized boolean ejecutarTransicion(String input,Object[] params){
             
 //            String inputAutomata = input.getClass().getSimpleName();
 //           
@@ -413,6 +416,8 @@ public void interpretarTransicion(TransicionAutomataEF transicion){
 //                inputAutomata = (String)input;
 //            }
 //           if( tablaEstadosAutomata.esInputValidoDeEstado(estadoActual, inputAutomata)){
+            
+//            this.trazas.trazar(this., input, InfoTraza.NivelTraza.error);
             String estado = estadoActual();
                TransicionAutomataEF transicion = this.tablaEstadosAutomata.getTransicion(estadoActual()+input);
                if (transicion == null){
@@ -522,8 +527,13 @@ public void interpretarTransicion(TransicionAutomataEF transicion){
             this.trazas = itftrazas;
             
         }
-         public void setItfGestorAcciones(ItfGestorAcciones gestAccItf){
-            this.itfGestAcciones = gestAccItf;
+         public void setGestorAcciones(GestorAccionesAbstr gestAccItf){
+            this.gestAcciones = gestAccItf;
+            this.itfGestAcciones= gestAccItf;
+            
+        }
+         public GestorAccionesAbstr getGestorAcciones(){
+            return gestAcciones ;
             
         }
 	
