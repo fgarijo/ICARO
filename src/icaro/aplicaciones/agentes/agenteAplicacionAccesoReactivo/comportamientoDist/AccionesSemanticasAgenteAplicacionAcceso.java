@@ -94,10 +94,12 @@ public class AccionesSemanticasAgenteAplicacionAcceso extends AccionesSemanticas
 //			(NombresPredefinidos.ITF_USO+this.nombreAgente);
 			Object[] datosEnvio = new Object[]{infoUsuario.tomaUsuario(), infoUsuario.tomaPassword()};
 			if(ok){
-				this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte("usuarioValido",datosEnvio,this.nombreAgente,NombresPredefinidos.NOMBRE_AGENTE_APLICACION+"Acceso"));
+                             this.informaraMiAutomata("usuarioValido", datosEnvio);
+//				this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte("usuarioValido",datosEnvio,this.nombreAgente,NombresPredefinidos.NOMBRE_AGENTE_APLICACION+"Acceso"));
 			}
 			else
-				itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte("usuarioNoValido", datosEnvio,this.nombreAgente,this.nombreAgente));
+                            this.informaraMiAutomata("usuarioNoValido", datosEnvio);
+//				itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte("usuarioNoValido", datosEnvio,this.nombreAgente,this.nombreAgente));
 			
 		}
 		catch (Exception e) {
@@ -281,16 +283,15 @@ public class AccionesSemanticasAgenteAplicacionAcceso extends AccionesSemanticas
 									InfoTraza.NivelTraza.error));
 			
 			try{
-				
-				itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte("error",this.nombreAgente,this.nombreAgente));
+				this.informaraMiAutomata("error", null);
+//				itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte("error",this.nombreAgente,this.nombreAgente));
 			}
 			catch(Exception exc){
 				try {
 					ItfUsoRecursoTrazas trazas = (ItfUsoRecursoTrazas)ClaseGeneradoraRepositorioInterfaces.instance().obtenerInterfaz(
 							NombresPredefinidos.ITF_USO+NombresPredefinidos.RECURSO_TRAZAS);
 							trazas.aceptaNuevaTraza(new InfoTraza(this.nombreAgente, 
-																  "Fallo al enviar un evento error.", 
-																  InfoTraza.NivelTraza.error));
+                                                            "Fallo al enviar un evento error.", InfoTraza.NivelTraza.error));
 				}catch(Exception e2){e2.printStackTrace();}
 				logger.error("Fallo al enviar un evento error.",exc);
 			}

@@ -14,7 +14,7 @@ import icaro.infraestructura.entidadesBasicas.procesadorCognitivo.Tarea;
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 import icaro.infraestructura.entidadesBasicas.comunicacion.AdaptadorRegRMI;
 import icaro.infraestructura.entidadesBasicas.procesadorCognitivo.CausaTerminacionTarea;
-import icaro.infraestructura.entidadesBasicas.procesadorCognitivo.InformeDeTarea;
+import icaro.infraestructura.entidadesBasicas.informes.InformeDeTarea;
 import icaro.infraestructura.entidadesBasicas.procesadorCognitivo.Objetivo;
 
 /**
