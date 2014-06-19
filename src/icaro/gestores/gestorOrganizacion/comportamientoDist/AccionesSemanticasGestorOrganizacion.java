@@ -15,6 +15,7 @@ import icaro.infraestructura.entidadesBasicas.interfaces.InterfazGestion;
 import icaro.infraestructura.entidadesBasicas.interfaces.InterfazUsoAgente;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.FactoriaAgenteReactivo;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.ItfGestionAgenteReactivo;
+import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.ItfUsoAgenteReactivo;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.imp.HebraMonitorizacion;
 import icaro.infraestructura.recursosOrganizacion.configuracion.ItfUsoConfiguracion;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.imp.componentes.InfoTraza;
@@ -51,7 +52,7 @@ public class AccionesSemanticasGestorOrganizacion extends
         private ItfUsoRecursoTrazas ItfUsoRecTrazas;
         private ItfUsoConfiguracion config;
         private String identEsteNodo ;
-
+        private ItfUsoAgenteReactivo itfUsoPropiadeEsteAgente;
 	public AccionesSemanticasGestorOrganizacion() {
 		try {
 			// creo el repositorio de interfaces
@@ -88,6 +89,8 @@ public class AccionesSemanticasGestorOrganizacion extends
 							NombresPredefinidos.ITF_USO
 									+ NombresPredefinidos.CONFIGURACION);
 //                           String itMonit = config.getValorPropiedadGlobal("intervaloMonitorizacion");
+                         itfUsoPropiadeEsteAgente=(ItfUsoAgenteReactivo)itfUsoRepositorio.obtenerInterfazUso(NombresPredefinidos.ITF_USO
+                                                                         +nombreAgente);
 			tiempoParaNuevaMonitorizacion = Integer.parseInt(config.getValorPropiedadGlobal("intervaloMonitorizacion"));
 //			tiempoParaNuevaMonitorizacion = Integer.parseInt(config.getValorPropiedadGlobal("gestores.comun.intervaloMonitorizacion"));
                         maxNumIntentosCreacionCompGestionados = Integer.parseInt(config.getValorPropiedadGlobal("maxIntentosCompGestionados"));

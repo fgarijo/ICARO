@@ -58,6 +58,7 @@ public class AccionesSemanticasGestorAgentes extends AccionesSemanticasAgenteRea
      */
     private HebraMonitorizacion hebra;
     private ItfUsoConfiguracion config;
+    private ItfUsoAgenteReactivo itfUsoPropiadeEsteAgente;
     /**
      * Tiempo de monitorizacion
      */
@@ -93,20 +94,21 @@ public class AccionesSemanticasGestorAgentes extends AccionesSemanticasAgenteRea
 //            ItfUsoConfiguracion config = (ItfUsoConfiguracion) ClaseGeneradoraRepositorioInterfaces.instance().obtenerInterfaz(
 //                    NombresPredefinidos.ITF_USO + NombresPredefinidos.CONFIGURACION);
 //            tiempoParaNuevaMonitorizacion = Integer.parseInt(config.getValorPropiedadGlobal(NombresPredefinidos.INTERVALO_MONITORIZACION_ATR_PROPERTY));
-            config = (ItfUsoConfiguracion) itfUsoRepositorio.obtenerInterfaz(
-							NombresPredefinidos.ITF_USO
+                config = (ItfUsoConfiguracion) itfUsoRepositorio.obtenerInterfaz(NombresPredefinidos.ITF_USO
 									+ NombresPredefinidos.CONFIGURACION);
-
+                itfUsoPropiadeEsteAgente=(ItfUsoAgenteReactivo)itfUsoRepositorio.obtenerInterfazUso(NombresPredefinidos.ITF_USO
+                                                                         +nombreAgente);
                         tiempoParaNuevaMonitorizacion = Integer.parseInt(config.getValorPropiedadGlobal(NombresPredefinidos.INTERVALO_MONITORIZACION_ATR_PROPERTY));
 			descGestorAgentes = config.getDescInstanciaGestor(NombresPredefinidos.NOMBRE_GESTOR_AGENTES);
 			esteNodo = descGestorAgentes.getNodo().getNombreUso();
                         String maxIntentos =config.getValorPropiedadGlobal("maxIntentosCompGestionados");
                         if (maxIntentos != null)
-                                                 maxNumIntentosCreacionCompGestionados = Integer.parseInt(maxIntentos); 
-            this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
-                    "gestor_configurado",
-                    NombresPredefinidos.NOMBRE_GESTOR_AGENTES,
-                    NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
+                                                 maxNumIntentosCreacionCompGestionados = Integer.parseInt(maxIntentos);
+                        this.informaraMiAutomata("gestor_configurado", null);
+//            this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
+//                    "gestor_configurado",
+//                    NombresPredefinidos.NOMBRE_GESTOR_AGENTES,
+//                    NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
         } catch (Exception e) {
                 trazas.aceptaNuevaTraza(new InfoTraza("GestorAgentes","Hubo problemas al configurar el gestor de agentes.",
                         InfoTraza.NivelTraza.error));
@@ -236,10 +238,11 @@ public class AccionesSemanticasGestorAgentes extends AccionesSemanticasAgenteRea
             
 
             try {
-                this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
-                        "error_en_creacion_agentes",
-                        NombresPredefinidos.NOMBRE_GESTOR_AGENTES,
-                        NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
+                this.informaraMiAutomata("error_en_creacion_agentes", null);
+//                this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
+//                        "error_en_creacion_agentes",
+//                        NombresPredefinidos.NOMBRE_GESTOR_AGENTES,
+//                        NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -609,10 +612,11 @@ private void crearUnAgenteEnNodoRemotoConRMI(DescInstanciaAgenteAplicacion descA
 					InfoTraza.NivelTraza.error));
 			e.printStackTrace();
 			try {
-				this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
-						"error_en_creacion_agente",
-						NombresPredefinidos.NOMBRE_GESTOR_AGENTES,
-						NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
+                             this.informaraMiAutomata("error_en_creacion_agente", null);
+//				this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
+//						"error_en_creacion_agente",
+//						NombresPredefinidos.NOMBRE_GESTOR_AGENTES,
+//						NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
@@ -651,10 +655,11 @@ public void addDescripcionGN (String identNodoGN, InterfazUsoAgente itfUsoGestor
                     InfoTraza.NivelTraza.debug));
         
         try {
-            this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
-                    "imposible_recuperar_creacion",
-                    NombresPredefinidos.NOMBRE_GESTOR_AGENTES,
-                    NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
+            this.informaraMiAutomata("imposible_recuperar_creacion", null);
+//            this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
+//                    "imposible_recuperar_creacion",
+//                    NombresPredefinidos.NOMBRE_GESTOR_AGENTES,
+//                    NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -752,10 +757,11 @@ public void addDescripcionGN (String identNodoGN, InterfazUsoAgente itfUsoGestor
                         InfoTraza.NivelTraza.error));
            
             try {
-                this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
-                        "error_en_arranque_agentes",
-                        NombresPredefinidos.NOMBRE_GESTOR_AGENTES,
-                        NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
+                 this.informaraMiAutomata("error_en_arranque_agentes", null);
+//                this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
+//                        "error_en_arranque_agentes",
+//                        NombresPredefinidos.NOMBRE_GESTOR_AGENTES,
+//                        NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -768,10 +774,11 @@ public void addDescripcionGN (String identNodoGN, InterfazUsoAgente itfUsoGestor
                         InfoTraza.NivelTraza.debug));
             
             try {
-                this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
-                        "agentes_arrancados_ok",
-                        NombresPredefinidos.NOMBRE_GESTOR_AGENTES,
-                        NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
+                this.informaraMiAutomata("agentes_arrancados_ok", null);
+//                this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
+//                        "agentes_arrancados_ok",
+//                        NombresPredefinidos.NOMBRE_GESTOR_AGENTES,
+//                        NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
                 this.itfUsoGestorAReportar.aceptaEvento(new EventoRecAgte(
                         "gestor_agentes_arrancado_ok",
                         NombresPredefinidos.NOMBRE_GESTOR_AGENTES,
@@ -818,10 +825,11 @@ public void addDescripcionGN (String identNodoGN, InterfazUsoAgente itfUsoGestor
         
 
         try {
-            this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
-                    "tratamiento_terminar_agentes_y_gestor_agentes",
-                    NombresPredefinidos.NOMBRE_GESTOR_AGENTES,
-                    NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
+            this.informaraMiAutomata("tratamiento_terminar_agentes_y_gestor_agentes", null);
+//            this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
+//                    "tratamiento_terminar_agentes_y_gestor_agentes",
+//                    NombresPredefinidos.NOMBRE_GESTOR_AGENTES,
+//                    NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -841,10 +849,11 @@ public void addDescripcionGN (String identNodoGN, InterfazUsoAgente itfUsoGestor
                     InfoTraza.NivelTraza.debug));
         
         try {
-            this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
-                    "imposible_recuperar_arranque",
-                    NombresPredefinidos.NOMBRE_GESTOR_AGENTES,
-                    NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
+            this.informaraMiAutomata("imposible_recuperar_arranque", null);
+//            this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
+//                    "imposible_recuperar_arranque",
+//                    NombresPredefinidos.NOMBRE_GESTOR_AGENTES,
+//                    NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -868,9 +877,10 @@ public void addDescripcionGN (String identNodoGN, InterfazUsoAgente itfUsoGestor
                     "error_en_arranque_gestores",
                     NombresPredefinidos.NOMBRE_GESTOR_RECURSOS,
                     NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION));
-            this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte("informe_generado",
-                    NombresPredefinidos.NOMBRE_GESTOR_AGENTES,
-                    NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
+            this.informaraMiAutomata("informe_generado", null);
+//            this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte("informe_generado",
+//                    NombresPredefinidos.NOMBRE_GESTOR_AGENTES,
+//                    NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1111,18 +1121,20 @@ Boolean interfacesRegistradas = false;
 
         if (errorEncontrado) {
             try {
-                this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
-                        "error_al_monitorizar",
-                        NombresPredefinidos.NOMBRE_GESTOR_AGENTES,
-                        NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
+                this.informaraMiAutomata("error_al_monitorizar", null);
+//                this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
+//                        "error_al_monitorizar",
+//                        NombresPredefinidos.NOMBRE_GESTOR_AGENTES,
+//                        NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
             try {
-                this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte("agentes_ok",
-                        NombresPredefinidos.NOMBRE_GESTOR_AGENTES,
-                        NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
+                 this.informaraMiAutomata("agentes_ok", null);
+//                this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte("agentes_ok",
+//                        NombresPredefinidos.NOMBRE_GESTOR_AGENTES,
+//                        NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1196,9 +1208,10 @@ Boolean interfacesRegistradas = false;
                     InfoTraza.NivelTraza.debug));
           if (listaDescripcionesAgtesACrear ==null )
                     try {
-                        this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte( "agentes_terminados",
-                                NombresPredefinidos.NOMBRE_GESTOR_AGENTES,
-                                NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
+                         this.informaraMiAutomata("agentes_terminados", null);
+//                        this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte( "agentes_terminados",
+//                                NombresPredefinidos.NOMBRE_GESTOR_AGENTES,
+//                                NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
                         } catch (Exception e) {
                          e.printStackTrace();
             } else
@@ -1254,10 +1267,11 @@ Boolean interfacesRegistradas = false;
                     InfoTraza.NivelTraza.debug));
 
         try {
-            this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
-                    "agentes_terminados",
-                    NombresPredefinidos.NOMBRE_GESTOR_AGENTES,
-                    NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
+            this.informaraMiAutomata("agentes_terminados", null);
+//            this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
+//                    "agentes_terminados",
+//                    NombresPredefinidos.NOMBRE_GESTOR_AGENTES,
+//                    NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1278,10 +1292,11 @@ Boolean interfacesRegistradas = false;
         
         
         try {
-            this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
-                    "imposible_recuperar_error_monitorizacion",
-                    NombresPredefinidos.NOMBRE_GESTOR_AGENTES,
-                    NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
+             this.informaraMiAutomata("imposible_recuperar_error_monitorizacion", null);
+//            this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
+//                    "imposible_recuperar_error_monitorizacion",
+//                    NombresPredefinidos.NOMBRE_GESTOR_AGENTES,
+//                    NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
         } catch (Exception e) {
             e.printStackTrace();
         }

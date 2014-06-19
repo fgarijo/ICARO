@@ -12,10 +12,12 @@ import icaro.infraestructura.entidadesBasicas.comunicacion.MensajeSimple;
 import icaro.infraestructura.patronAgenteReactivo.control.acciones.AccionesSemanticasAgenteReactivo;
 import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.DescInstanciaAgente;
 import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.DescInstanciaGestor;
+import icaro.infraestructura.entidadesBasicas.factorias.FactoriaComponenteIcaro;
 import icaro.infraestructura.entidadesBasicas.interfaces.InterfazGestion;
 import icaro.infraestructura.entidadesBasicas.interfaces.InterfazUsoAgente;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.FactoriaAgenteReactivo;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.ItfGestionAgenteReactivo;
+import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.ItfUsoAgenteReactivo;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.imp.HebraMonitorizacion;
 import icaro.infraestructura.patronRecursoSimple.ItfGestionRecursoSimple;
 import icaro.infraestructura.recursosOrganizacion.configuracion.ItfUsoConfiguracion;
@@ -47,23 +49,30 @@ public class AccionesSemanticasGestorOrganizacion extends AccionesSemanticasAgen
 	 */
 	private HebraMonitorizacion hebra;
         private InterfazGestion ItfGestionRecTrazas ;
-        private ItfUsoRecursoTrazas ItfUsoRecTrazas;
+        private ItfUsoConfiguracion config ;
+        private ItfUsoAgenteReactivo itfUsoPropiadeEsteAgente;
+//        private ItfUsoRecursoTrazas ItfUsoRecTrazas;
+         
 
 	public AccionesSemanticasGestorOrganizacion() {
 		 super();
-            try {
-		
-             ItfGestionRecTrazas = (InterfazGestion) this.itfUsoRepositorio.obtenerInterfaz(
-                        NombresPredefinidos.ITF_GESTION + NombresPredefinidos.RECURSO_TRAZAS);
-            
-		} catch (Exception ex) {
-			 logger.fatal("GestorOrganizacion: Fue imposible crear el repositorio de interfaces.");
-			trazas.aceptaNuevaTraza(new InfoTraza("GestorOrganizacion",
-					"Fue imposible crear el repositorio de interfaces.",
-					InfoTraza.NivelTraza.error));
-			ex.printStackTrace();
-			System.exit(1);
-		}
+//            try {
+//		
+//             ItfGestionRecTrazas = (InterfazGestion) this.itfUsoRepositorio.obtenerInterfaz(
+//                        NombresPredefinidos.ITF_GESTION + NombresPredefinidos.RECURSO_TRAZAS);
+//            
+//		} catch (Exception ex) {
+//			 logger.fatal("GestorOrganizacion: Fue imposible crear el repositorio de interfaces.");
+//			trazas.aceptaNuevaTraza(new InfoTraza("GestorOrganizacion",
+//					"Fue imposible crear el repositorio de interfaces.",
+//					InfoTraza.NivelTraza.error));
+//			ex.printStackTrace();
+//			System.exit(1);
+//		}
+                
+//                 trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
+//                        "Construyendo agente reactivo " + nombreAgente + ".",
+//                        InfoTraza.NivelTraza.debug));
 	}
 
 	/**
@@ -75,21 +84,16 @@ public class AccionesSemanticasGestorOrganizacion extends AccionesSemanticasAgen
 			 * En esta accion semantica se configura todo aquello que sea
 			 * necesario a partir del archivo xml
 			 */
+                    
                     trazas.setIdentAgenteAReportar(nombreAgente);
-                    trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
-                        "Construyendo agente reactivo " + nombreAgente + ".",
+                    trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente, "Configuracion del agente : " + nombreAgente + ".",
                         InfoTraza.NivelTraza.debug));
-
-			ItfUsoConfiguracion config = (ItfUsoConfiguracion) ClaseGeneradoraRepositorioInterfaces
-					.instance().obtenerInterfaz(
-							NombresPredefinidos.ITF_USO
-									+ NombresPredefinidos.CONFIGURACION);
-
-			tiempoParaNuevaMonitorizacion = Integer.parseInt(config.getValorPropiedadGlobal(NombresPredefinidos.INTERVALO_MONITORIZACION_ATR_PROPERTY));
-			this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
-					"gestor_configurado",
-					NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION,
-					NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION));
+                    config = (ItfUsoConfiguracion) this.itfUsoRepositorio.obtenerInterfaz(
+							NombresPredefinidos.ITF_USO+ NombresPredefinidos.CONFIGURACION);
+                    tiempoParaNuevaMonitorizacion = Integer.parseInt(config.getValorPropiedadGlobal(NombresPredefinidos.INTERVALO_MONITORIZACION_ATR_PROPERTY));
+                    itfUsoPropiadeEsteAgente=(ItfUsoAgenteReactivo)itfUsoRepositorio.obtenerInterfaz(NombresPredefinidos.ITF_USO
+                                                                         +nombreAgente);
+                        this.informaraMiAutomata("gestor_configurado", null);					
 		} catch (Exception e) {
 			e.printStackTrace();
 			 logger.error("GestorRecursos: Hubo problemas al configurar el gestor de Organizacion.");
@@ -105,13 +109,8 @@ public class AccionesSemanticasGestorOrganizacion extends AccionesSemanticasAgen
 	 */
 	public void crearGestores() {
 		try {
-			ItfUsoConfiguracion config = (ItfUsoConfiguracion) ClaseGeneradoraRepositorioInterfaces
-					.instance().obtenerInterfaz(
-							NombresPredefinidos.ITF_USO
-									+ NombresPredefinidos.CONFIGURACION);
-
 			// creo los gestores
-			logger.debug("GestorOrganizacion: Creando gestor de agentes...");
+//			logger.debug("GestorOrganizacion: Creando gestor de agentes...");
 			trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
 					"Creando gestor de agentes ...",
 					InfoTraza.NivelTraza.debug));
@@ -123,66 +122,66 @@ public class AccionesSemanticasGestorOrganizacion extends AccionesSemanticasAgen
 			DescInstanciaGestor gestorAgentes = config.getDescInstanciaGestor(NombresPredefinidos.NOMBRE_GESTOR_AGENTES);
 			String nodoDestino = gestorAgentes.getNodo().getNombreUso();
 			int intentos = 0;
-			boolean ok = false;
-			
-
+			boolean ok = false;		
 			if (nodoDestino.equals(esteNodo)) {
-				FactoriaAgenteReactivo.instancia().crearAgenteReactivo(
-						gestorAgentes);
-			} else {
-				while (!ok) {
-					++intentos;
-					try {
-						((FactoriaAgenteReactivo) ClaseGeneradoraRepositorioInterfaces
-								.instance()
-								.obtenerInterfaz(
-										NombresPredefinidos.FACTORIA_AGENTE_REACTIVO
-												+ nodoDestino))
-								.crearAgenteReactivo(gestorAgentes);
-						ok = true;
-					} catch (Exception e) {
-						trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
-								"Error al crear el agente "
-										+ NombresPredefinidos.NOMBRE_GESTOR_AGENTES
-										+ " en un nodo remoto. Se volver� a intentar en "
-										+ intentos
-										+ " segundos...\n nodo origen: "
-										+ esteNodo + "\t nodo destino: "
-										+ nodoDestino,
-								InfoTraza.NivelTraza.error));
-						logger
-								.error("Error al crear el agente "
-										+ NombresPredefinidos.NOMBRE_GESTOR_AGENTES
-										+ " en un nodo remoto. Se volver� a intentar en "
-										+ intentos
-										+ " segundos...\n nodo origen: "
-										+ esteNodo + "\t nodo destino: "
-										+ nodoDestino);
-
-						Thread.sleep(1000 * intentos);
-
-						ok = false;
-					}
-				}
+//				FactoriaAgenteReactivo.instancia().crearAgenteReactivo(gestorAgentes);
+                                FactoriaComponenteIcaro.instanceAgteReactInpObj().crearAgenteReactivo(gestorAgentes);
 			}
+                        
+                        
+//                        else {
+//				while (!ok) {
+//					++intentos;
+//					try {
+//						((FactoriaAgenteReactivo) ClaseGeneradoraRepositorioInterfaces
+//								.instance()
+//								.obtenerInterfaz(
+//										NombresPredefinidos.FACTORIA_AGENTE_REACTIVO
+//												+ nodoDestino))
+//								.crearAgenteReactivo(gestorAgentes);
+//						ok = true;
+//					} catch (Exception e) {
+//						trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
+//								"Error al crear el agente "
+//										+ NombresPredefinidos.NOMBRE_GESTOR_AGENTES
+//										+ " en un nodo remoto. Se volver� a intentar en "
+//										+ intentos
+//										+ " segundos...\n nodo origen: "
+//										+ esteNodo + "\t nodo destino: "
+//										+ nodoDestino,
+//								InfoTraza.NivelTraza.error));
+//						logger
+//								.error("Error al crear el agente "
+//										+ NombresPredefinidos.NOMBRE_GESTOR_AGENTES
+//										+ " en un nodo remoto. Se volver� a intentar en "
+//										+ intentos
+//										+ " segundos...\n nodo origen: "
+//										+ esteNodo + "\t nodo destino: "
+//										+ nodoDestino);
+//
+//						Thread.sleep(1000 * intentos);
+//
+//						ok = false;
+//					}
+//				}
+//			}
 
 			logger.debug("GestorOrganizacion: Gestor de agentes creado.");
 			trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
 					"Gestor de agentes creado.",
 					InfoTraza.NivelTraza.debug));
 
-			Set<Object> conjuntoEventos = new HashSet<Object>();
-			conjuntoEventos.add(EventoRecAgte.class);
+//			Set<Object> conjuntoEventos = new HashSet<Object>();
+//			conjuntoEventos.add(EventoRecAgte.class);
 
-			// indico a qui�n debe reportar
+			// indico a quien debe reportar
 
 		
 			((ItfGestionAgenteReactivo) itfUsoRepositorio
 					.obtenerInterfaz(
 							NombresPredefinidos.ITF_GESTION
 									+ NombresPredefinidos.NOMBRE_GESTOR_AGENTES))
-					.setGestorAReportar(
-							NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION);
+					.setGestorAReportar(NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION);
 
 			logger.debug("GestorOrganizacion: Creando gestor de recursos ...");
 			trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
@@ -196,80 +195,72 @@ public class AccionesSemanticasGestorOrganizacion extends AccionesSemanticasAgen
 			DescInstanciaAgente gestorRecursos = config.getDescInstanciaGestor(NombresPredefinidos.NOMBRE_GESTOR_RECURSOS); 
 			 nodoDestino = gestorRecursos.getNodo().getNombreUso();
 			if (nodoDestino.equals(esteNodo)) {
-				FactoriaAgenteReactivo.instancia().crearAgenteReactivo(
-						gestorRecursos);
-			} else {
-				intentos = 0;
-				ok = false;
-				while (!ok) {
-					++intentos;
-					try {
-						((FactoriaAgenteReactivo) ClaseGeneradoraRepositorioInterfaces
-								.instance()
-								.obtenerInterfaz(
-										NombresPredefinidos.FACTORIA_AGENTE_REACTIVO
-												+ nodoDestino))
-								.crearAgenteReactivo(gestorRecursos);
-						ok = true;
-					} catch (Exception e) {
-						trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
-								"Error al crear agente "
-										+ NombresPredefinidos.NOMBRE_GESTOR_RECURSOS
-										+ " en un nodo remoto. Se volver� a intentar en "
-										+ intentos
-										+ " segundos...\n nodo origen: "
-										+ esteNodo + "\t nodo destino: "
-										+ nodoDestino,
-								InfoTraza.NivelTraza.error));
-						logger
-								.error("Error al crear agente "
-										+ NombresPredefinidos.NOMBRE_GESTOR_RECURSOS
-										+ " en un nodo remoto. Se volver� a intentar en "
-										+ intentos
-										+ " segundos...\n nodo origen: "
-										+ esteNodo + "\t nodo destino: "
-										+ nodoDestino);
-
-						Thread.sleep(1000 * intentos);
-						ok = false;
-					}
-				}
+//				FactoriaAgenteReactivo.instancia().crearAgenteReactivo(gestorRecursos);
+                                FactoriaComponenteIcaro.instanceAgteReactInpObj().crearAgenteReactivo(gestorRecursos);
 			}
+//                        else {
+//				intentos = 0;
+//				ok = false;
+//				while (!ok) {
+//					++intentos;
+//					try {
+//						((FactoriaAgenteReactivo) ClaseGeneradoraRepositorioInterfaces
+//								.instance()
+//								.obtenerInterfaz(
+//										NombresPredefinidos.FACTORIA_AGENTE_REACTIVO
+//												+ nodoDestino))
+//								.crearAgenteReactivo(gestorRecursos);
+//						ok = true;
+//					} catch (Exception e) {
+//						trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
+//								"Error al crear agente "
+//										+ NombresPredefinidos.NOMBRE_GESTOR_RECURSOS
+//										+ " en un nodo remoto. Se volver� a intentar en "
+//										+ intentos
+//										+ " segundos...\n nodo origen: "
+//										+ esteNodo + "\t nodo destino: "
+//										+ nodoDestino,
+//								InfoTraza.NivelTraza.error));
+//						logger
+//								.error("Error al crear agente "
+//										+ NombresPredefinidos.NOMBRE_GESTOR_RECURSOS
+//										+ " en un nodo remoto. Se volver� a intentar en "
+//										+ intentos
+//										+ " segundos...\n nodo origen: "
+//										+ esteNodo + "\t nodo destino: "
+//										+ nodoDestino);
+//
+//						Thread.sleep(1000 * intentos);
+//						ok = false;
+//					}
+//				}
+//			}
 			logger.debug("GestorOrganizacion: Gestor de recursos creado.");
 			trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
 					"Gestor de recursos creado.",
 					InfoTraza.NivelTraza.debug));
 
-			// indico a qui�n debe reportar
-			((ItfGestionAgenteReactivo) ClaseGeneradoraRepositorioInterfaces
-					.instance()
-					.obtenerInterfaz(
-							NombresPredefinidos.ITF_GESTION
-									+ NombresPredefinidos.NOMBRE_GESTOR_RECURSOS))
-					.setGestorAReportar(NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION
-									);
+			// indico a quien debe reportar
+			((ItfGestionAgenteReactivo) this.itfUsoRepositorio.obtenerInterfaz(
+							NombresPredefinidos.ITF_GESTION+ NombresPredefinidos.NOMBRE_GESTOR_RECURSOS))
+					.setGestorAReportar(NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION);
 
-			logger.debug("GestorOrganizacion: Gestores registrados correctamente.");
-			
+			logger.debug("GestorOrganizacion: Gestores registrados correctamente.");	
 			trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
 					"Gestores registrados correctamente.",
 					InfoTraza.NivelTraza.debug));
+			this.informaraMiAutomata("gestores_creados",null);
 
-			this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte("gestores_creados",
-					NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION,
-					NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION));
-
+                        
+                        
 		} catch (Exception e) {
 			logger.error("GestorOrganizacion: Fue imposible crear los gestores de agentes y recursos en el gestor de la organizaci�n",e);
 			trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
-					"Fue imposible crear los gestores de agentes y recursos en el gestor de la organizaci�n",
+					"Fue imposible crear los gestores de agentes y recursos en el gestor de la organizacion",
 					InfoTraza.NivelTraza.error));
 			e.printStackTrace();
 			try {
-				this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
-						"error_en_creacion_gestores",
-						NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION,
-						NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION));
+				this.informaraMiAutomata ("error_en_creacion_gestores", null);
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
@@ -344,6 +335,7 @@ public class AccionesSemanticasGestorOrganizacion extends AccionesSemanticasAgen
 		hebra = new HebraMonitorizacion(tiempoParaNuevaMonitorizacion,
 				this.itfUsoPropiadeEsteAgente, "monitorizar");
 		this.hebra.start();
+                this.generarTimeOut(tiempoParaNuevaMonitorizacion, "monitorizar", nombreAgente, nombreAgente);
 		logger.debug("GestorOrganizacion: Gestor de la organizacion esperando peticiones.");
 		trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
 				"Gestor de la organizacion esperando peticiones.",
@@ -357,7 +349,7 @@ public class AccionesSemanticasGestorOrganizacion extends AccionesSemanticasAgen
 	public void decidirTratamientoErrorIrrecuperable() {
             
 		// el tratamiento ser� siempre cerrar todo el chiringuito
-		logger.debug("GestorOrganizacion: Se decide cerrar el sistema ante un error cr�tico irrecuperable.");
+		logger.debug("GestorOrganizacion: Se decide cerrar el sistema ante un error critico irrecuperable.");
 		trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
 				"Se decide cerrar el sistema ante un error critico irrecuperable.",
 				InfoTraza.NivelTraza.debug));
