@@ -1,22 +1,21 @@
 package icaro.gestores.gestorAgentes.comportamiento;
 
-import icaro.infraestructura.entidadesBasicas.excepciones.ExcepcionEnComponente;
-import icaro.infraestructura.patronAgenteCognitivo.factoriaEInterfacesPatCogn.FactoriaAgenteCognitivo;
-import icaro.infraestructura.entidadesBasicas.comunicacion.EventoRecAgte;
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 import icaro.infraestructura.entidadesBasicas.comunicacion.AdaptadorRegRMI;
+import icaro.infraestructura.entidadesBasicas.comunicacion.EventoRecAgte;
 import icaro.infraestructura.entidadesBasicas.comunicacion.InfoContEvtMsgAgteReactivo;
 import icaro.infraestructura.entidadesBasicas.comunicacion.MensajeSimple;
-import icaro.infraestructura.patronAgenteReactivo.control.acciones.AccionesSemanticasAgenteReactivo;
 import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.DescInstancia;
 import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.DescInstanciaAgente;
 import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.DescInstanciaAgenteAplicacion;
 import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.DescInstanciaGestor;
-
 import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.jaxb.TipoAgente;
+import icaro.infraestructura.entidadesBasicas.excepciones.ExcepcionEnComponente;
+import icaro.infraestructura.entidadesBasicas.factorias.FactoriaComponenteIcaro;
 import icaro.infraestructura.entidadesBasicas.interfaces.InterfazGestion;
 import icaro.infraestructura.entidadesBasicas.interfaces.InterfazUsoAgente;
-
+import icaro.infraestructura.patronAgenteCognitivo.factoriaEInterfacesPatCogn.FactoriaAgenteCognitivo;
+import icaro.infraestructura.patronAgenteReactivo.control.acciones.AccionesSemanticasAgenteReactivo;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.FactoriaAgenteReactivo;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.ItfGestionAgenteReactivo;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.ItfUsoAgenteReactivo;
@@ -29,7 +28,6 @@ import icaro.infraestructura.recursosOrganizacion.repositorioInterfaces.imp.Clas
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -72,6 +70,7 @@ public class AccionesSemanticasGestorAgentes extends AccionesSemanticasAgenteRea
     private ArrayList<DescInstancia> listaDescripcionesAgtesACrear;
     private ArrayList<DescInstanciaAgente> listaDescripcionesGestoresNodo;
     private Integer indiceAgteACrear = 0;
+    private Object[] sinParametros = null;
     /**
      * Constructor
      */
@@ -96,8 +95,7 @@ public class AccionesSemanticasGestorAgentes extends AccionesSemanticasAgenteRea
 //            tiempoParaNuevaMonitorizacion = Integer.parseInt(config.getValorPropiedadGlobal(NombresPredefinidos.INTERVALO_MONITORIZACION_ATR_PROPERTY));
                 config = (ItfUsoConfiguracion) itfUsoRepositorio.obtenerInterfaz(NombresPredefinidos.ITF_USO
 									+ NombresPredefinidos.CONFIGURACION);
-                itfUsoPropiadeEsteAgente=(ItfUsoAgenteReactivo)itfUsoRepositorio.obtenerInterfazUso(NombresPredefinidos.ITF_USO
-                                                                         +nombreAgente);
+                itfUsoPropiadeEsteAgente=(ItfUsoAgenteReactivo)itfUsoRepositorio.obtenerInterfazUso(nombreAgente);
                         tiempoParaNuevaMonitorizacion = Integer.parseInt(config.getValorPropiedadGlobal(NombresPredefinidos.INTERVALO_MONITORIZACION_ATR_PROPERTY));
 			descGestorAgentes = config.getDescInstanciaGestor(NombresPredefinidos.NOMBRE_GESTOR_AGENTES);
 			esteNodo = descGestorAgentes.getNodo().getNombreUso();
@@ -146,7 +144,7 @@ public class AccionesSemanticasGestorAgentes extends AccionesSemanticasAgenteRea
 
             if (listaDescripcionesAgtesACrear.isEmpty()) {
 
-                this.informaraMiAutomata("listaAgentesGestionadosVacia", null);
+                this.informaraMiAutomata("listaAgentesGestionadosVacia", sinParametros);
                 logger.debug("GestorAgentes: La lista de agentes gestionados es vacia.");
                 trazas.aceptaNuevaTraza(new InfoTraza(
                        "GestorAgentes",
@@ -154,12 +152,12 @@ public class AccionesSemanticasGestorAgentes extends AccionesSemanticasAgenteRea
                       InfoTraza.NivelTraza.debug));
 
             } else if ( indiceAgteACrear == listaDescripcionesAgtesACrear.size()){ // Se han creado todos los agentes
-                    this.informaraMiAutomata("agentes_creados", null);
+                    this.informaraMiAutomata("agentes_creados", sinParametros);
                     }else
 //
                      if (crearAgente( indiceAgteACrear)){
                          indiceAgteACrear ++ ;
-                        this.informaraMiAutomata("agente_creado", null);
+                        this.informaraMiAutomata("agente_creado", sinParametros);
                         }
 
                 
@@ -238,7 +236,7 @@ public class AccionesSemanticasGestorAgentes extends AccionesSemanticasAgenteRea
             
 
             try {
-                this.informaraMiAutomata("error_en_creacion_agentes", null);
+                this.informaraMiAutomata("error_en_creacion_agentes", sinParametros);
 //                this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //                        "error_en_creacion_agentes",
 //                        NombresPredefinidos.NOMBRE_GESTOR_AGENTES,
@@ -284,7 +282,7 @@ public class AccionesSemanticasGestorAgentes extends AccionesSemanticasAgenteRea
              String identAgenteACrear = descInstAgente.getId();
             try {
 
-             FactoriaAgenteReactivo.instancia().crearAgenteReactivo(descInstAgente);
+             FactoriaComponenteIcaro.instanceAgteReactInpObj().crearAgenteReactivo(descInstAgente);
 
             // indico a quien debe reportar
             ((ItfGestionAgenteReactivo) this.itfUsoRepositorio.obtenerInterfaz(NombresPredefinidos.ITF_GESTION + identAgenteACrear)).setGestorAReportar(
@@ -345,7 +343,8 @@ public class AccionesSemanticasGestorAgentes extends AccionesSemanticasAgenteRea
 //            boolean ok = false;
 //            int intentos = 0;
 //            if (nodoDestino.equals(esteNodo)) {
-                FactoriaAgenteReactivo.instancia().crearAgenteReactivo(instancia);
+//                FactoriaAgenteReactivo.instancia().crearAgenteReactivo(instancia);
+                  FactoriaComponenteIcaro.instanceAgteReactInpObj().crearAgenteReactivo(instancia);
 //            } else {
 //                while (!ok) {
 //                    ++intentos;
@@ -385,7 +384,7 @@ public class AccionesSemanticasGestorAgentes extends AccionesSemanticasAgenteRea
 //            Set<Object> conjuntoEventos = new HashSet<Object>();
 //            conjuntoEventos.add(EventoRecAgte.class);
 
-            // indico a qui�n debe reportar
+            // indico a quien debe reportar
             ((ItfGestionAgenteReactivo) this.itfUsoRepositorio.obtenerInterfaz(NombresPredefinidos.ITF_GESTION + nombreAgente)).setGestorAReportar(
                     NombresPredefinidos.NOMBRE_GESTOR_AGENTES);
 

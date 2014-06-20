@@ -68,12 +68,12 @@ public class AccionesSemanticasGestorRecursos extends AccionesSemanticasAgenteRe
 	public AccionesSemanticasGestorRecursos() {
 		super();
 		// obtenemos el repositorio de interfaces
-		this.itfUsoRepositorio = ClaseGeneradoraRepositorioInterfaces.instance();
+//		this.itfUsoRepositorio = ClaseGeneradoraRepositorioInterfaces.instance();
 	}
 
 	public void configurarGestor() {
 		try {
-			 config = (ItfUsoConfiguracion) itfUsoRepositorio.obtenerInterfaz(
+			 config = (ItfUsoConfiguracion) NombresPredefinidos.REPOSITORIO_INTERFACES_OBJ.obtenerInterfaz(
 							NombresPredefinidos.ITF_USO
 									+ NombresPredefinidos.CONFIGURACION);
 
@@ -114,7 +114,8 @@ public class AccionesSemanticasGestorRecursos extends AccionesSemanticasAgenteRe
 			List<DescInstancia> lista = config.getDescInstanciaGestor(NombresPredefinidos.NOMBRE_GESTOR_RECURSOS).getComponentesGestionados();
 
 			Object[] parametros = new Object[] { lista, new Integer(0) };
-                         this.informaraMiAutomata("recursos_listados", null);
+                         this.informaraMiAutomata("recursos_listados", lista, 0);
+
 //			this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte("recursos_listados",
 //					parametros, NombresPredefinidos.NOMBRE_GESTOR_RECURSOS,
 //					NombresPredefinidos.NOMBRE_GESTOR_RECURSOS));
@@ -180,20 +181,20 @@ public class AccionesSemanticasGestorRecursos extends AccionesSemanticasAgenteRe
 			if (error == false && encontrado == true) {
 				parametros = new Object[] { lista,
 						new Integer(indice.intValue() + 1) };
-                                this.informaraMiAutomata("recurso_creado", null);
+                                this.informaraMiAutomata("recurso_creado",lista, indice+ 1);
 //				this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //						"recurso_creado", parametros,
 //						NombresPredefinidos.NOMBRE_GESTOR_RECURSOS,
 //						NombresPredefinidos.NOMBRE_GESTOR_RECURSOS));
 			} else if (error == false && encontrado == false)
-                                this.informaraMiAutomata("recursos_creado", null);
+                                this.informaraMiAutomata("recursos_creados", 0);
 //				this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //						"recursos_creados", new Integer(0),
 //						NombresPredefinidos.NOMBRE_GESTOR_RECURSOS,
 //						NombresPredefinidos.NOMBRE_GESTOR_RECURSOS));
 			else if (error == true) {
 				parametros = new Object[] { lista, recurso, indice };
-                                this.informaraMiAutomata("error_en_creacion_recurso", null);
+                                this.informaraMiAutomata("error_en_creacion_recurso", recurso, indice);
 //				this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //						"error_en_creacion_recurso", parametros,
 //						NombresPredefinidos.NOMBRE_GESTOR_RECURSOS,
@@ -479,7 +480,7 @@ public class AccionesSemanticasGestorRecursos extends AccionesSemanticasAgenteRe
 			} else if (error) {
 				parametros = new Object[] { lista, recurso,
 						new Integer((reintento.intValue() - 1)), indice };
-                                 this.informaraMiAutomata("reintento_error", null);
+                                 this.informaraMiAutomata("reintento_error", lista,recurso,reintento-1);
 //				this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //						"reintento_error", parametros,
 //						NombresPredefinidos.NOMBRE_GESTOR_RECURSOS,
@@ -487,7 +488,7 @@ public class AccionesSemanticasGestorRecursos extends AccionesSemanticasAgenteRe
 			} else if (!error) {
 				parametros = new Object[] { lista,
 						new Integer((indice.intValue() + 1)) };
-                                this.informaraMiAutomata("reintento_ok", null);
+                                this.informaraMiAutomata("reintento_ok", lista, indice+1);
 //				this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte("reintento_ok",
 //						parametros, NombresPredefinidos.NOMBRE_GESTOR_RECURSOS,
 //						NombresPredefinidos.NOMBRE_GESTOR_RECURSOS));
@@ -640,7 +641,7 @@ public class AccionesSemanticasGestorRecursos extends AccionesSemanticasAgenteRe
 						"Terminado arranque recurso "+ nombreRec + ". Arrancando el siguiente recurso.",
 						InfoTraza.NivelTraza.debug));
 				try {
-                                    this.informaraMiAutomata("recurso_arrancado", null);
+                                    this.informaraMiAutomata("recurso_arrancado", indice+1);
 //					this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //							"recurso_arrancado", new Integer(
 //									indice.intValue() + 1),
@@ -761,14 +762,14 @@ public class AccionesSemanticasGestorRecursos extends AccionesSemanticasAgenteRe
 	 * Crea y arranca un recurso. Es necesario pasar las caracter�sticas del
 	 * recurso a crear por par�metro.
 	 */
-	public void crearRecurso() {
-		// esto hay que recuperarlo de los par�metros
-		logger.debug("GestorRecursos: crearRecurso():Este metodo no esta implementado");
-		trazas.aceptaNuevaTraza(new InfoTraza("GestorRecursos",
-				"crearRecurso():Este m�todo no est� implementado",
-				InfoTraza.NivelTraza.debug));
-		throw new UnsupportedOperationException();
-	}
+//	public void crearRecurso() {
+//		// esto hay que recuperarlo de los par�metros
+//		logger.debug("GestorRecursos: crearRecurso():Este metodo no esta implementado");
+//		trazas.aceptaNuevaTraza(new InfoTraza("GestorRecursos",
+//				"crearRecurso():Este m�todo no est� implementado",
+//				InfoTraza.NivelTraza.debug));
+//		throw new UnsupportedOperationException();
+//	}
 
 	/**
 	 * Monitoriza secuencialmente todos los recursos activos que est�n definidos
@@ -881,7 +882,7 @@ public class AccionesSemanticasGestorRecursos extends AccionesSemanticasAgenteRe
 		}
 		logger.debug("GestorRecursos: Finalizado proceso de terminaci�n de todos los recursos.");
 		trazas.aceptaNuevaTraza(new InfoTraza("GestorRecursos",
-				"Finalizado proceso de terminaci�n de todos los recursos.",
+				"Finalizado proceso de terminacion de todos los recursos.",
 				InfoTraza.NivelTraza.debug));
 		try {
                      this.informaraMiAutomata("recursos_terminados", null);

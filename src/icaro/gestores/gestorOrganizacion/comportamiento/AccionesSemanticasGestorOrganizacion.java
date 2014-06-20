@@ -278,6 +278,7 @@ public class AccionesSemanticasGestorOrganizacion extends AccionesSemanticasAgen
 					.obtenerInterfaz(NombresPredefinidos.ITF_GESTION
 							+ NombresPredefinidos.NOMBRE_GESTOR_AGENTES))
 					.arranca();
+                        this.informaraMiAutomata("gestor_agentes_arrancado_ok", null);
 			// this.itfUsoAgente.aceptaEvento(new
 			// EventoRecAgte("gestor_agentes_arrancado_ok"));
 
@@ -310,6 +311,7 @@ public class AccionesSemanticasGestorOrganizacion extends AccionesSemanticasAgen
 					.obtenerInterfaz(NombresPredefinidos.ITF_GESTION
 							+ NombresPredefinidos.NOMBRE_GESTOR_RECURSOS))
 					.arranca();
+                        this.informaraMiAutomata("gestor_recursos_arrancado_ok", null);
 			// this.itfUsoAgente.aceptaEvento(new
 			// EventoRecAgte("gestor_recursos_arrancado_ok"));
 		} catch (Exception e) {
@@ -332,6 +334,7 @@ public class AccionesSemanticasGestorOrganizacion extends AccionesSemanticasAgen
 
 	public void gestoresArrancadosConExito() {
 		// creo hebra de monitorizacion
+
 		hebra = new HebraMonitorizacion(tiempoParaNuevaMonitorizacion,
 				this.itfUsoPropiadeEsteAgente, "monitorizar");
 		this.hebra.start();

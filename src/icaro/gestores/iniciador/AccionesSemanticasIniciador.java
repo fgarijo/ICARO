@@ -7,6 +7,7 @@ import icaro.infraestructura.entidadesBasicas.excepciones.ExcepcionEnComponente;
 import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.ComprobadorRutasEntidades;
 import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.DescInstanciaGestor;
 import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.jaxb.DescComportamientoAgente;
+import icaro.infraestructura.entidadesBasicas.factorias.FactoriaComponenteIcaro;
 import icaro.infraestructura.entidadesBasicas.interfaces.InterfazGestion;
 
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.FactoriaAgenteReactivo;
@@ -286,7 +287,8 @@ public void crearRecursosNucleoOrganizacion () throws Exception {
                 try {
                //     FactoriaAgenteReactivo.instancia().crearAgenteReactivo(identGestorNodo ,locComportamientoGestor);
                      DescInstanciaGestor desCompGestor = configuracionExterna.getDescInstanciaGestor(identGestorNodo);
-                    FactoriaAgenteReactivo.instancia().crearAgenteReactivo(desCompGestor);
+//                    FactoriaAgenteReactivo.instancia().crearAgenteReactivo(desCompGestor);
+                      FactoriaComponenteIcaro.instanceAgteReactInpObj().crearAgenteReactivo(desCompGestor);
                     ItfgestGestorInicial = (ItfGestionAgenteReactivo) itfUsoRepositorio.obtenerInterfaz(
                             NombresPredefinidos.ITF_GESTION + identGestorNodo);
 
@@ -309,7 +311,8 @@ public void crearRecursosNucleoOrganizacion () throws Exception {
 
     public void crearGestorOrganizacion () throws Exception {
         try {           
-            FactoriaAgenteReactivo.instancia().crearAgenteReactivo(NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION ,NombresPredefinidos.COMPORTAMIENTO_PORDEFECTO_GESTOR_ORGANIZACION);
+//            FactoriaAgenteReactivo.instancia().crearAgenteReactivo(NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION ,NombresPredefinidos.COMPORTAMIENTO_PORDEFECTO_GESTOR_ORGANIZACION);
+            FactoriaComponenteIcaro.instanceAgteReactInpObj().crearAgenteReactivo(NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION,NombresPredefinidos.COMPORTAMIENTO_PORDEFECTO_GESTOR_ORGANIZACION);
             ItfgestGestorInicial = (ItfGestionAgenteReactivo) itfUsoRepositorio.obtenerInterfaz(
                             NombresPredefinidos.ITF_GESTION + NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION);
               this.informaraMiAutomata("GestorOrganizacionCreado", null);
