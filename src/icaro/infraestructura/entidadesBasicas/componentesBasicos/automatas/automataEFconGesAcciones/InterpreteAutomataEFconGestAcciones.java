@@ -104,7 +104,7 @@ public  class InterpreteAutomataEFconGestAcciones implements ItfUsoAutomataEFE,S
 	 *@param  nivelTraza               Profundidad de las trazas (usar constantes
 	 *      definidas estticas en esta clase)
 	 */
-	public InterpreteAutomataEFconGestAcciones(TablaEstadosAutomataEFinputObjts intpTablaEstados, Boolean activarTrazas)
+	public   InterpreteAutomataEFconGestAcciones(TablaEstadosAutomataEFinputObjts intpTablaEstados, Boolean activarTrazas)
 	{
 
     //    XMLParserTablaAutomataSinAcciones parser = new XMLParserTablaAutomataSinAcciones();

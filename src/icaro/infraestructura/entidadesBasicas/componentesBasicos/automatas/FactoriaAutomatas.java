@@ -33,13 +33,13 @@ public class FactoriaAutomatas extends FactoriaComponenteIcaro{
 //		return instance;
 //	}
     
-	public  InterpreteAutomataEFconGestAcciones crearInterpreteAutomataEFconGestorAcciones(String identPropietario,
+	public synchronized InterpreteAutomataEFconGestAcciones crearInterpreteAutomataEFconGestorAcciones(String identPropietario,
             String rutaFicheroAutomata,String rutaCarpetaAcciones,Boolean trazar ){
             XMLParserTablaEstadosAutomataEFinputObj parser =   new XMLParserTablaEstadosAutomataEFinputObj(identPropietario);     
             TablaEstadosAutomataEFinputObjts tablaEF =  parser.extraeTablaEstadosDesdeFicheroXML(rutaFicheroAutomata, rutaCarpetaAcciones);
             return  new InterpreteAutomataEFconGestAcciones(tablaEF,trazar);
         }
-        public GestorAccionesAbstr crearGestorAcciones ( Class claseGestor){
+        public synchronized GestorAccionesAbstr crearGestorAcciones ( Class claseGestor){
             try {
                 return (GestorAccionesAbstr)claseGestor.newInstance();
             } catch (InstantiationException ex) {
@@ -49,7 +49,7 @@ public class FactoriaAutomatas extends FactoriaComponenteIcaro{
             }
             return null;
         }
-	public  InterpreteAutomataEFconGestAcciones crearAutomataParaControlAgteReactivo(
+	public  synchronized InterpreteAutomataEFconGestAcciones crearAutomataParaControlAgteReactivo(
                 String identPropietario,String rutaFicheroAutomata,String rutaCarpetaAcciones,Boolean trazar){
             
 	XMLParserTablaEstadosAutomataEFinputObj prueba1 =   new XMLParserTablaEstadosAutomataEFinputObj(identPropietario);
