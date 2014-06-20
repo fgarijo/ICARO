@@ -135,7 +135,7 @@ public class FactoriaAgenteReactivoInputObjImp0 extends FactoriaComponenteIcaro 
 //	throw new ExcepcionEnComponente("\n\nError al comprobar los comportamientos de los gestores, agentes y recursos descritos en el fichero de descripcion del XML " );
         }
         }
-    public void crearAgenteReactivo(DescInstanciaAgente descInstanciaAgente)throws ExcepcionEnComponente {
+    public synchronized void crearAgenteReactivo(DescInstanciaAgente descInstanciaAgente)throws ExcepcionEnComponente {
 
         // Paso 1 Se obtienen los objetos de la descripcion
 
@@ -274,7 +274,7 @@ public class FactoriaAgenteReactivoInputObjImp0 extends FactoriaComponenteIcaro 
          }
  }
  
-public  void crearAgenteReactivo(String agenteId,String rutaComportamiento){
+public synchronized void crearAgenteReactivo(String agenteId,String rutaComportamiento){
 //     DescInstanciaAgente descInsPrueba = new DescInstanciaAgente();
 //     descInsPrueba.setId(agenteId);
 //     DescComportamientoAgente comprtAgteDesc = new DescComportamientoAgente();

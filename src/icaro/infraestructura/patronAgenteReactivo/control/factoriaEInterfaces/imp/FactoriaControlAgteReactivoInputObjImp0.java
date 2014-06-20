@@ -117,7 +117,7 @@ private static final long serialVersionUID = 1L;
 //        }
 
 //    private ItfProductorPercepcion percepcionProductor;
- public ProcesadorInfoReactivoAbstracto crearControlAgteReactivo( String nombreFicheroTablaEstados,String rutaFicheroAccs, AgenteReactivoAbstracto agente)throws ExcepcionEnComponente {
+ public synchronized ProcesadorInfoReactivoAbstracto crearControlAgteReactivo( String nombreFicheroTablaEstados,String rutaFicheroAccs, AgenteReactivoAbstracto agente)throws ExcepcionEnComponente {
 
         new ConfiguracionTrazas(logger);
 
@@ -198,7 +198,7 @@ private static final long serialVersionUID = 1L;
 //    //elijo la implementacin adecuada (aunque podra haber ms)
 //    }
 
-    public ProcesadorEventosImp crearControlAgteReactivo(AccionesSemanticasAgenteReactivo accionesSemanticasEspecificas, String nombreFicheroTablaEstados, String nombreDelAgente,ItfConsumidorPercepcion percConsumidor,
+    public synchronized ProcesadorEventosImp crearControlAgteReactivo(AccionesSemanticasAgenteReactivo accionesSemanticasEspecificas, String nombreFicheroTablaEstados, String nombreDelAgente,ItfConsumidorPercepcion percConsumidor,
 			ItfProductorPercepcion percProductor)throws ExcepcionEnComponente {
         return null;
     }

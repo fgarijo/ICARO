@@ -213,13 +213,32 @@ public void setLogger(Logger logger){
 //
 //   }
 
-public void informaraMiAutomata(String input, Object[] infoComplementaria){
+//public void informaraMiAutomata(String input, Object[] infoComplementaria){
+//    
+//    if ( itfEnvioEventosInternos !=null) 
+//    itfEnvioEventosInternos.produceParaConsumirInmediatamente(new EventoInternoAgteReactivo(nombreAgente, input, infoComplementaria));
+//    else  trazas.trazar(nombreAgente, " El interfaz para el envio de eventos internos no esta definida "
+//                 + " El input:  " + input + " No sera procesado ", InfoTraza.NivelTraza.error);
+//}
+public void informaraMiAutomata(String input, Object...infoComplementaria){
     
+  Object paramsAccion[] = {};
+		
+		if (infoComplementaria == null ||(infoComplementaria.length == 1 && infoComplementaria[0]==null) )
+                    paramsAccion = new Object[0];
+                else {
+                    paramsAccion = new Object[infoComplementaria.length];
+			for (int i=0; (i<infoComplementaria.length ); i++) {
+				paramsAccion[i] = infoComplementaria[i];
+                        }
+                }
     if ( itfEnvioEventosInternos !=null) 
-    itfEnvioEventosInternos.produceParaConsumirInmediatamente(new EventoInternoAgteReactivo(nombreAgente, input, infoComplementaria));
+    itfEnvioEventosInternos.produceParaConsumirInmediatamente(new EventoInternoAgteReactivo(nombreAgente, input, paramsAccion));
     else  trazas.trazar(nombreAgente, " El interfaz para el envio de eventos internos no esta definida "
                  + " El input:  " + input + " No sera procesado ", InfoTraza.NivelTraza.error);
 }
+
+
 //
 // public void setItfAutomata (ItfUsoAutomataEFE automataItf){
 //     itfAutomataEFE = automataItf;
