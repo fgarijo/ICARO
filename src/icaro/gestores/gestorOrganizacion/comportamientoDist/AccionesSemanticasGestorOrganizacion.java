@@ -643,7 +643,7 @@ public class AccionesSemanticasGestorOrganizacion extends
 			trazas.aceptaNuevaTraza(new InfoTraza("GestorOrganizacion",
 					"No se pudo acceder al gestor de agentes.",
 					InfoTraza.NivelTraza.debug));
-                        informaraMiAutomata("gestor_agentes_terminado", null);
+                        informaraMiAutomata("gestor_agentes_terminado");
 			ex.printStackTrace();
 		}
 	}
@@ -678,7 +678,7 @@ public class AccionesSemanticasGestorOrganizacion extends
 			trazas.aceptaNuevaTraza(new InfoTraza("GestorOrganizacion",
 					"No se pudo acceder al gestor de recursos.",
 					InfoTraza.NivelTraza.debug));
-                        informaraMiAutomata("gestor_agentes_terminado", null);
+                        informaraMiAutomata("gestor_agentes_terminado");
 			ex.printStackTrace();
 		}
 
@@ -693,7 +693,7 @@ public class AccionesSemanticasGestorOrganizacion extends
 	String estadoInternoAgente =	this.ctrlGlobalAgenteReactivo.getItfControl().getEstadoControlAgenteReactivo();
 		trazas.setIdentAgenteAReportar(nombreAgente);
                 trazas.pedirConfirmacionTerminacionAlUsuario();
-		  this.informaraMiAutomata("termina", null);
+		  this.informaraMiAutomata("termina");
 		/*try {
 			// this.itfUsoAgente.aceptaEvento(new
 			// EventoRecAgte("termina",null,null));
@@ -723,7 +723,7 @@ public class AccionesSemanticasGestorOrganizacion extends
 //            this.itfUsoPropiadeEsteAgente.aceptaEvento(new
 //			 EventoRecAgte ("termina",this.nombreAgente,this.nombreAgente));
 //                        this.ctrlGlobalAgenteReactivo.getItfControl().getEstadoControlAgenteReactivo();
-                        this.informaraMiAutomata("termina", null);
+                        this.informaraMiAutomata("termina");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

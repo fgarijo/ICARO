@@ -3,7 +3,7 @@ package icaro.pruebas;
 import icaro.gestores.iniciador.*;
 import icaro.infraestructura.entidadesBasicas.comunicacion.EventoRecAgte;
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
-import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.clasesImpAutomatas.AccionSincrona;
+import icaro.infraestructura.patronAgenteReactivo.control.acciones.AccionSincrona;
 import icaro.infraestructura.patronAgenteReactivo.control.acciones.AccionesSemanticasAgenteReactivo;
 import icaro.infraestructura.entidadesBasicas.excepciones.ExcepcionEnComponente;
 import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.ComprobadorRutasEntidades;
@@ -130,17 +130,17 @@ public class VerificarExistenciaEntidadesDescripcion extends AccionSincrona {
     try {
 
         if (SeHapodidoLocalizarEsquema && SeHapodidoLocalizarFicheroDescripcion){
-          this.getItfAutomata().transita("existenEntidadesDescripcion");
+          this.procesarInput("existenEntidadesDescripcion",null);
                        
          }
          else {
-           this.getItfAutomata().transita( "errorLocalizacionFicherosDescripcion");
+           this.procesarInput("errorLocalizacionFicherosDescripcion",null);
                }
         }
         catch (Exception e2) {
             e2.printStackTrace();
             ItfUsoRecTrazas.aceptaNuevaTraza(new InfoTraza("Iniciador",tipoEntidad,
-                    "No se ha enviar un evento a si mismo notificando la  validacion de las rutas de las entidades de descripcion . ", InfoTraza.NivelTraza.error));
+                    "No se ha podido enviar un evento a si mismo notificando la  validacion de las rutas de las entidades de descripcion . ", InfoTraza.NivelTraza.error));
 
          }
          }

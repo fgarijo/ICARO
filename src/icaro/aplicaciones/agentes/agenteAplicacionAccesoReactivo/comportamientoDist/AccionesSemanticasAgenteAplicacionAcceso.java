@@ -283,7 +283,7 @@ public class AccionesSemanticasAgenteAplicacionAcceso extends AccionesSemanticas
 									InfoTraza.NivelTraza.error));
 			
 			try{
-				this.informaraMiAutomata("error", null);
+				this.informaraMiAutomata("error");
 //				itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte("error",this.nombreAgente,this.nombreAgente));
 			}
 			catch(Exception exc){

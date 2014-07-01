@@ -30,7 +30,7 @@
 		<transicion input="error_en_creacion_gestores" accion="recuperarErrorCreacionGestores" estadoSiguiente="errorCreacionGestores" modoDeTransicion="bloqueante"/>
 	</estado>
 	<estado idIntermedio="arrancandoGestorRecursos">
-		<transicion input="gestor_recursos_arrancado_ok" accion="arrancarGestorAgentes" estadoSiguiente="arrancandoGestorAgentes" modoDeTransicion="bloqueante"/>
+		<transicion input="recursos_creados_ok" accion="arrancarGestorAgentes" estadoSiguiente="arrancandoGestorAgentes" modoDeTransicion="bloqueante"/>
 		<transicion input="error_en_arranque_gestores" accion="recuperarErrorArranqueGestores" estadoSiguiente="errorArranqueGestores" modoDeTransicion="bloqueante"/>
 	</estado>
 	<estado idIntermedio="arrancandoGestorAgentes">

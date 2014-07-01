@@ -3,17 +3,15 @@
  */
 package icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFconGesAcciones.estadosyTransiciones;
 
-import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFconGesAcciones.estadosyTransiciones.TransicionAutomataEF;
-import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.automataEFconGesAcciones.estadosyTransiciones.TablaEstadosAutomataEFinputObjts;
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
+import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.ComprobadorRutasEntidades;
 import java.io.IOException;
-
+import java.io.InputStream;
 import java.net.URL;
+import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.InputStream;
-import java.util.logging.Logger;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -41,6 +39,7 @@ public class XMLParserTablaEstadosAutomataEFinputObj {
     private String identAgtePropietarioAutomata;
     private boolean buscadoClaseAccionesSemanticas = false;
     private Class claseAccionesSemanticas;
+    private  ComprobadorRutasEntidades comprobadorRutas;
 	/**
 	 *  Constructor
 	 */
@@ -56,12 +55,14 @@ public class XMLParserTablaEstadosAutomataEFinputObj {
          * Convierte el fichero dado en una tablaEstados y una tabla de transiciones que utilizara el automata
 	 *
 	 *@param  nombreFich  Nombre del fichero a convertir
+         * @param rutaCarpetaAccs
 	 *@return             Tabla del autmata extrado de ese fichero
 	 */
 	public TablaEstadosAutomataEFinputObjts extraeTablaEstadosDesdeFicheroXML(String nombreFich, String rutaCarpetaAccs){
 		 this.tablaEstados = new TablaEstadosAutomataEFinputObjts();
                  this.identFicheroDescAutomata = nombreFich;
                  this.rutaCarpetaAcciones = rutaCarpetaAccs;
+                 this.comprobadorRutas= new ComprobadorRutasEntidades();
 
 		// Esta parte es genrica para cualquier parsing XML
 		// parsing XML
@@ -249,7 +250,7 @@ public class XMLParserTablaEstadosAutomataEFinputObj {
             Boolean hayErrores = false;
 //            Class claseAccion = null;
             // Pocesar el encabezamiento de la transicion y el input
-            if (identNodo.equalsIgnoreCase(NombresPredefinidos.NOMBRE_TRANSICION_AUTOMATA_EF)|
+            if (identNodo.equalsIgnoreCase(NombresPredefinidos.NOMBRE_TRANSICION_AUTOMATA_EF)||
                (identNodo.equalsIgnoreCase(NombresPredefinidos.NOMBRE_TRANSICION_UNIVERSAL_AUTOMATA_EF))) {
                 mapaNombreNodo = nodoTransicion.getAttributes();
                 input = mapaNombreNodo.getNamedItem(NombresPredefinidos.NOMBRE_INPUT_AUTOMATA_EF)
@@ -306,20 +307,21 @@ public class XMLParserTablaEstadosAutomataEFinputObj {
           identClase = identClase.replaceFirst(primerCaracter, primerCaracter.toUpperCase());
 //        String rutaAccionesSemanticas = rutaComportamiento+ "."+NombresPredefinidos.NOMBRE_ACCIONES_SEMANTICAS+nombreEntidad;
 //          String rutaAccion = "icaro.aplicaciones.agentes.agenteAplicacionAccesoReactivo.comportamientoPrueba";
-          if (this.rutaCarpetaAcciones!=null)
+          if (this.rutaCarpetaAcciones!=null){
             identClase = this.rutaCarpetaAcciones+"."+ identClase;
-            try {
-                Class claseAcciones = Class.forName(identClase);
-                return claseAcciones;
-            } catch (ClassNotFoundException ex) {
+          }
+          try {
+            Class claseAcciones = Class.forName(identClase);
+            return claseAcciones;
+          } catch (ClassNotFoundException ex) {
 //            java.util.logging.Logger.getLogger(FactoriaAgenteReactivoImp.class.getName()).log(Level.SEVERE, null, ex);
 //                mensajeError (identClase, " No se encuentra la clase especificada en la descripcion del automata" );
-                String msgAviso = "Se esta buscando una clase: " + identClase + " que implemente las acciones del automata en la ruta :"+
-                 this.rutaCarpetaAcciones + "  pero no se ha encontrado. La accion se considerara un metodo de la clase Acciones Semanticas";
-                System.out.println(msgAviso);
-                return null;
+            String msgAviso = "Se esta buscando una clase: " + identClase + " que implemente las acciones del automata en la ruta :"+
+             this.rutaCarpetaAcciones + "  pero no se ha encontrado. La accion se considerara un metodo de la clase Acciones Semanticas";
+            System.out.println(msgAviso);
+            return null;
 //        throw new ExcepcionEnComponente ( "PatronAgenteReactivo", " No se encuentra la clase de acciones semanticas en la ruta :"+rutaComportamiento,"Factoria del Agente Reactivo","Class obtenerClaseAccionesSemanticas(DescInstanciaAgente instAgente)"  );
-            }
+          }
          }
          
        private TransicionAutomataEF validarInfoTransicion (String idEstado, String idInput, String idAccion,String estadoSguiente, String modoAccion) {
@@ -350,20 +352,21 @@ public class XMLParserTablaEstadosAutomataEFinputObj {
                   // no se hace nada porque la clase ya es null
                   }else{
                       if (!buscadoClaseAccionesSemanticas){
-                          identClaseAccionesSemanticas = NombresPredefinidos.NOMBRE_ACCIONES_SEMANTICAS+identAgtePropietarioAutomata;
-                          claseAccionesSemanticas = obtenerClaseAcciones(identClaseAccionesSemanticas);
-                          if(claseAccionesSemanticas==null)claseAccionesSemanticas = obtenerClaseAcciones(NombresPredefinidos.NOMBRE_ACCIONES_SEMANTICAS);
+//                          identClaseAccionesSemanticas = NombresPredefinidos.NOMBRE_ACCIONES_SEMANTICAS+identAgtePropietarioAutomata;
+//                          claseAccionesSemanticas = obtenerClaseAcciones(identClaseAccionesSemanticas);
+                         claseAccionesSemanticas = comprobadorRutas.obtenerClaseAccionesSemanticas(rutaCarpetaAcciones) ;
+//                          if(claseAccionesSemanticas==null)claseAccionesSemanticas = obtenerClaseAcciones(NombresPredefinidos.NOMBRE_ACCIONES_SEMANTICAS);
                           buscadoClaseAccionesSemanticas = true;
                       }
                       // buscamos la clase y si no  la encontramos  suponemos que es un metodo de las acciones semanticas
-                         claseAccion = obtenerClaseAcciones(idAccion);
+                         claseAccion = comprobadorRutas.obtenerClaseAccionesReactivo(idAccion,rutaCarpetaAcciones);
                          if (claseAccion!=null ){}  // si la clase se ha encontrado no hace nada 
                          else if (claseAccionesSemanticas ==null){ // No se encuentra la clase y no existe clase acciones semanticas  
                                  hayErrores= true;
                                  String msgError = "Debe existir una clase: " + idAccion + " o una clase : " + identClaseAccionesSemanticas +
                                         " que implemente las acciones del automata en la ruta :"+this.rutaCarpetaAcciones + 
                                         "  pero no se han encontrado. Revisar la ruta definida y el fichero del automata";
-                System.out.println(msgError);
+                                System.out.println(msgError);
 //                                 mensajeError(idEstado, " No se encuentra la clase : "+ idAccion);                        
                                }else {  // Existe la clase AS deberiamos validar que el identAcciones es un metodo de la clase
                                 // pero lo dejamos para la ejecución
@@ -423,10 +426,12 @@ public class XMLParserTablaEstadosAutomataEFinputObj {
     }
          
         public static void main(String args[]) {
-         XMLParserTablaEstadosAutomataEFinputObj prueba1 =   new XMLParserTablaEstadosAutomataEFinputObj("Iniciador");
+         XMLParserTablaEstadosAutomataEFinputObj prueba1 =   new XMLParserTablaEstadosAutomataEFinputObj("AccionesSemanticasAgenteAplicacionAcceso");
 //         prueba1.extraeTablaEstadosDesdeFicheroXML("/icaro/infraestructura/entidadesBasicas/componentesBasicos/automatas/clasesImpAutomatas/automataPrueba.xml", null);
 //         String rutaFichero = prueba1.obtenerRutaValidaAutomata (NombresPredefinidos.COMPORTAMIENTO_PORDEFECTO_INICIADOR);
 //         prueba1.extraeTablaEstadosDesdeFicheroXML("/icaro/gestores/iniciador/automataPrueba.xml", null);
-         prueba1.extraeTablaEstadosDesdeFicheroXML("/icaro/pruebas/automataPruebas.xml", null);
+         //prueba1.extraeTablaEstadosDesdeFicheroXML("/icaro/pruebas/automataPruebas.xml", null);
+         prueba1.extraeTablaEstadosDesdeFicheroXML("/icaro/aplicaciones/agentes/agenteAplicacionAccesoReactivo/comportamiento/automata.xml", "icaro.aplicaciones.agentes.agenteAplicacionAccesoReactivo.comportamiento");
+        
         }
 }

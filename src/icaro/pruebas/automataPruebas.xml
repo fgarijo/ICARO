@@ -19,8 +19,11 @@
 		<transicion input="error_al_crearGestorInicial" accion="generarInformeErrorIrrecuperable" estadoSiguiente="generandoInformeError" modoDeTransicion="bloqueante"/>
 	</estado>
 	<estado idIntermedio="arrancandoGestorInicial">
-		<transicion input="GestorInicial_arrancado_ok" accion="terminarPorPropiaVoluntad" estadoSiguiente="comenzandoTerminacion" modoDeTransicion="bloqueante"/>
-		<transicion input="error_al_arrancarGestorInicial" accion="generarInformeErrorIrrecuperable" estadoSiguiente="generandoInformeError" modoDeTransicion="bloqueante"/>
+	<!--	
+            <transicion input="GestorInicial_arrancado_ok" accion="terminarPorPropiaVoluntad" estadoSiguiente="comenzandoTerminacion" modoDeTransicion="bloqueante"/>
+	-->	
+                <transicion input="InformeArranqueGestor" accion="analizarInformeArranque" estadoSiguiente="comenzandoTerminacion" modoDeTransicion="bloqueante"/>
+                <transicion input="error_al_arrancarGestorInicial" accion="generarInformeErrorIrrecuperable" estadoSiguiente="generandoInformeError" modoDeTransicion="bloqueante"/>
 	</estado>
 	<estado idIntermedio="generandoInformeError">
 		<transicion input="informe_generado" estadoSiguiente="procesandoTerminacion" modoDeTransicion="bloqueante"/>

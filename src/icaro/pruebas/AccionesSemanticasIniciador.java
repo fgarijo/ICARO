@@ -1,14 +1,16 @@
 package icaro.pruebas;
 
+import icaro.gestores.informacionComun.VocabularioGestores;
 import icaro.gestores.iniciador.*;
 import icaro.infraestructura.entidadesBasicas.comunicacion.EventoRecAgte;
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
-import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.clasesImpAutomatas.AccionSincrona;
+import icaro.infraestructura.patronAgenteReactivo.control.acciones.AccionSincrona;
 import icaro.infraestructura.patronAgenteReactivo.control.acciones.AccionesSemanticasAgenteReactivo;
 import icaro.infraestructura.entidadesBasicas.excepciones.ExcepcionEnComponente;
 import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.ComprobadorRutasEntidades;
 import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.DescInstanciaGestor;
 import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.jaxb.DescComportamientoAgente;
+import icaro.infraestructura.entidadesBasicas.factorias.FactoriaComponenteIcaro;
 import icaro.infraestructura.entidadesBasicas.interfaces.InterfazGestion;
 
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.FactoriaAgenteReactivo;
@@ -34,7 +36,7 @@ import java.util.logging.Logger;
  * Implementacion por defecto de las acciones que se ejecutar�n por parte del gestor de agentes.
  * @author     
  */
-public class AccionesSemanticasIniciador extends AccionSincrona {
+public class AccionesSemanticasIniciador extends AccionesSemanticasAgenteReactivo {
 
     /**
      * Almacn de los nombres de los agentes que este gestor debe gestionar
@@ -138,27 +140,25 @@ public void verificarExistenciaEntidadesDescripcion () {
                         InfoTraza.NivelTraza.error));
                         SeHapodidoLocalizarFicheroDescripcion = false;
        }
-//    try {
-//
-//        if (SeHapodidoLocalizarEsquema && SeHapodidoLocalizarFicheroDescripcion){
+    try {
+
+        if (SeHapodidoLocalizarEsquema && SeHapodidoLocalizarFicheroDescripcion){
 //          this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //                        "existenEntidadesDescripcion",
 //                        nombreAgente,
 //                        nombreAgente));
-//         }
-//         else {
-//           this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
-//                        "errorLocalizacionFicherosDescripcion",
-//                        nombreAgente,
-//                        nombreAgente));
-//               }
-//        }
-//        catch (Exception e2) {
-//            e2.printStackTrace();
-//            ItfUsoRecTrazas.aceptaNuevaTraza(new InfoTraza("Iniciador",tipoEntidad,
-//                    "No se ha enviar un evento a si mismo notificando la  validacion de las rutas de las entidades de descripcion . ", InfoTraza.NivelTraza.error));
-//
-//         }
+            this.informaraMiAutomata("existenEntidadesDescripcion");
+         }
+         else {
+           this.informaraMiAutomata("errorLocalizacionFicherosDescripcion");
+               }
+        }
+        catch (Exception e2) {
+            e2.printStackTrace();
+            ItfUsoRecTrazas.aceptaNuevaTraza(new InfoTraza("Iniciador",tipoEntidad,
+                    "No se ha enviar un evento a si mismo notificando la  validacion de las rutas de las entidades de descripcion . ", InfoTraza.NivelTraza.error));
+
+         }
          }
 
 public void crearRecursosNucleoOrganizacion () throws Exception {
@@ -172,43 +172,45 @@ public void crearRecursosNucleoOrganizacion () throws Exception {
     //    ItfUsoRepositorioInterfaces repositorioInterfaces = RepositorioInterfaces.instance(RepositorioInterfaces.IMP_LOCAL);
                trazas.trazar(this.nombreAgente,"Creacion de recursos nucleo Organizacion", NivelTraza.info);
                configuracionExterna = ClaseGeneradoraConfiguracion.instance();
-   // Se crea una configuracion con el fichero de descripcion de la organizacion
-        //        rutaDescripcionOrganizacion =NombresPredefinidos.RUTA_DESCRIPCIONES+NombresPredefinidos.DESCRIPCION_XML_POR_DEFECTO+".xml";
-//               configuracionExterna.interpretarDescripOrganizacion(rutaDescripcionOrganizacion);
-//               if(!configuracionExterna.validarDescripOrganizacion()){
-//            	  ItfUsoRecTrazas.aceptaNuevaTraza(new InfoTraza(this.nombreAgente,
-//                        "Se produjo un error al interpretar el fichero de descripcion de la organizacion",
-//                        InfoTraza.NivelTraza.error));
-////                this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
-////                        "error_InterpretacionDescripcionOrganizacion",
-////                        NombresPredefinidos.NOMBRE_INICIADOR,
-////                        NombresPredefinidos.NOMBRE_INICIADOR));
-//            }else {
-//                // registro la configuracion
-//               itfUsoRepositorio.registrarInterfaz(
-//                        NombresPredefinidos.ITF_USO + NombresPredefinidos.CONFIGURACION,configuracionExterna);
-//               // Ahora que la configuracion es correcta , interpreto las propiedades globales
-//              //  y pongo la configuracion de trazas definida por el usuario
-//                       Boolean ConfiguracionTrazas = false;
-//                       if (NombresPredefinidos.ACTIVACION_PANEL_TRAZAS_DEBUG.startsWith("t")){
-//                           ConfiguracionTrazas = true;
-//                       }
-//                       else
+//    Se crea una configuracion con el fichero de descripcion de la organizacion
+                rutaDescripcionOrganizacion =NombresPredefinidos.RUTA_DESCRIPCIONES+NombresPredefinidos.DESCRIPCION_XML_POR_DEFECTO+".xml";
+               configuracionExterna.interpretarDescripOrganizacion(rutaDescripcionOrganizacion);
+               if(!configuracionExterna.validarDescripOrganizacion()){
+            	  ItfUsoRecTrazas.aceptaNuevaTraza(new InfoTraza(this.nombreAgente,
+                        "Se produjo un error al interpretar el fichero de descripcion de la organizacion",
+                        InfoTraza.NivelTraza.error));
+//                this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
+//                        "error_InterpretacionDescripcionOrganizacion",
+//                        NombresPredefinidos.NOMBRE_INICIADOR,
+//                        NombresPredefinidos.NOMBRE_INICIADOR));
+            }else {
+                // registro la configuracion
+               itfUsoRepositorio.registrarInterfaz(
+                        NombresPredefinidos.ITF_USO + NombresPredefinidos.CONFIGURACION,configuracionExterna);
+               // Ahora que la configuracion es correcta , interpreto las propiedades globales
+              //  y pongo la configuracion de trazas definida por el usuario
+                       Boolean ConfiguracionTrazas = false;
+                       if (NombresPredefinidos.ACTIVACION_PANEL_TRAZAS_DEBUG.startsWith("t")){
+                           ConfiguracionTrazas = true;
+                       }
+                       else
 //                           itfGestionRecTrazas.termina();
 //                       ItfUsoRecTrazas.visualizacionDeTrazas(ConfiguracionTrazas);
 
 
-                        // Se crea el gestor de Organizacion
-                // DescInstanciaAgente descGestor = configuracionExterna.getDescInstanciaGestor(NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION);
-                    // creo el agente gestor de organizacion
-               
-                    // arranco la organizacion
+//                         Se crea el gestor de Organizacion
+//                 DescInstanciaAgente descGestor = configuracionExterna.getDescInstanciaGestor(NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION);
+//                     creo el agente gestor de organizacion
+//               
+//                     arranco la organizacion
 
 //                    this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //                        "recursosNucleoCreados",
 //                        NombresPredefinidos.NOMBRE_INICIADOR,
 //                        NombresPredefinidos.NOMBRE_INICIADOR));
-//               } //    ItfgestGestorOrg.arranca();
+                       this.informaraMiAutomata("recursosNucleoCreados");
+               } //    ItfgestGestorOrg.arranca();
+                this.informaraMiAutomata("recursosNucleoCreados");
             } catch (IllegalArgumentException ie) {
             	System.err.println("Error. La organizacion no se ha compilado correctamente. Compruebe que los ficheros xml de los automatas se encuentren en el classpath.");
             	ie.printStackTrace();
@@ -216,7 +218,7 @@ public void crearRecursosNucleoOrganizacion () throws Exception {
                 
             }
                 catch (ExcepcionEnComponente ie) {
-                  msgUsuario = "Se produjo un error al interpretar el fichero de descripcion de la organizacion  \n"+
+                  msgUsuario = "Se produjo un error tras informar a mi automata de que todos los recurso del nucleo estaban creados  \n"+
                      "La ruta especificada es : " + rutaDescripcionOrganizacion; 
             	  ItfUsoRecTrazas.aceptaNuevaTraza(new InfoTraza("Iniciador", msgUsuario,InfoTraza.NivelTraza.error));
 //                this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
@@ -225,7 +227,7 @@ public void crearRecursosNucleoOrganizacion () throws Exception {
 //                        NombresPredefinidos.NOMBRE_INICIADOR));
             }
             catch (Exception e) {
-                msgUsuario = "Se produjo un error al interpretar el fichero de descripcion de la organizacion  \n"+
+                msgUsuario = "Se produjo un error tras informar a mi automata de que todos los recurso del nucleo estaban creados  \n"+
                      "La ruta especificada es : " + rutaDescripcionOrganizacion;
                 System.err.println(msgUsuario);
                 e.printStackTrace();
@@ -319,9 +321,11 @@ public void crearRecursosNucleoOrganizacion () throws Exception {
                 try {
                //     FactoriaAgenteReactivo.instancia().crearAgenteReactivo(identGestorNodo ,locComportamientoGestor);
                      DescInstanciaGestor desCompGestor = configuracionExterna.getDescInstanciaGestor(identGestorNodo);
-                    FactoriaAgenteReactivo.instancia().crearAgenteReactivo(desCompGestor);
+//                    FactoriaAgenteReactivo.instancia().crearAgenteReactivo(desCompGestor);
+                     FactoriaComponenteIcaro.instanceAgteReactInpObj().crearAgenteReactivo(desCompGestor);
                     itfgestGestorInicial = (ItfGestionAgenteReactivo) itfUsoRepositorio.obtenerInterfaz(
                             NombresPredefinidos.ITF_GESTION + identGestorNodo);
+                    this.informaraMiAutomata("GestorInicialCreado");
 
 //                        this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //                        "GestorInicialCreado",
@@ -350,6 +354,7 @@ public void crearRecursosNucleoOrganizacion () throws Exception {
             FactoriaAgenteReactivo.instancia().crearAgenteReactivo(NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION ,NombresPredefinidos.COMPORTAMIENTO_PORDEFECTO_GESTOR_ORGANIZACION);
             itfgestGestorInicial = (ItfGestionAgenteReactivo) itfUsoRepositorio.obtenerInterfaz(
                             NombresPredefinidos.ITF_GESTION + NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION);
+            this.informaraMiAutomata("GestorOrganizacionCreado");
 
 //              this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //                        "GestorOrganizacionCreado",
@@ -381,12 +386,14 @@ public void crearRecursosNucleoOrganizacion () throws Exception {
 
         try {
             
-            ItfUsoRecTrazas.aceptaNuevaTraza(new InfoTraza("Iniciador",
+            trazas.aceptaNuevaTraza(new InfoTraza("Iniciador",
                     "Arrancando el Gestor Inicial . ", InfoTraza.NivelTraza.debug));
             
             if  (itfgestGestorInicial != null ){
                  // arranca  el Gestor de  Organizacion y Termina el iniciador
                        this. itfgestGestorInicial.arranca();
+//                       this.informaraMiAutomata("GestorInicial_arrancado_ok", null);
+                       this.procesarInput(new InformeArranqueGestor(identGestorNodo, VocabularioGestores.ResultadoArranqueGestorOK), null);
 //                       this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //                        "GestorInicial_arrancado_ok",
 //                        nombreAgente,
@@ -415,6 +422,26 @@ public void crearRecursosNucleoOrganizacion () throws Exception {
             
         }
         
+    }
+    public void analizarInformeArranque (InformeArranqueGestor informeRecibido){
+        if (informeRecibido.getContenidoInforme().equals(VocabularioGestores.ResultadoArranqueGestorOK))
+            try {
+            this.terminarPorPropiaVoluntad();
+        } catch (Exception ex) {
+            Logger.getLogger(AccionesSemanticasIniciador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Throwable ex) {
+            Logger.getLogger(AccionesSemanticasIniciador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    public void analizarInformeArranque (InformeArranqueGestor informeRecibido, String par1, String par2){
+        if (informeRecibido.getContenidoInforme().equals(VocabularioGestores.ResultadoArranqueGestorOK))
+            try {
+            this.terminarPorPropiaVoluntad();
+        } catch (Exception ex) {
+            Logger.getLogger(AccionesSemanticasIniciador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Throwable ex) {
+            Logger.getLogger(AccionesSemanticasIniciador.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

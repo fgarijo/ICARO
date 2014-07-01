@@ -238,14 +238,14 @@ public class AccionesSemanticasAgenteAplicacionAccesoAlta extends AccionesSemant
                                 " ha sido registrado con exito ");
                         visualizacion.cerrarVisualizadorAccesoAlta();
                         visualizacion.mostrarVisualizadorAcceso(this.nombreAgente, NombresPredefinidos.TIPO_REACTIVO);
-                        informaraMiAutomata("usuarioRegistrado", null);
+                        informaraMiAutomata("usuarioRegistrado");
                 }
                 else
                         visualizacion.mostrarMensajeAviso("Usuario ya Registrado", " El nombre de usuario y la clave ya estan registrados. introduzca un nombre de"
                                 + "usuario y/o una clave diferentes ");
         } catch (Exception ex) {
             Logger.getLogger(AccionesSemanticasAgenteAplicacionAccesoAlta.class.getName()).log(Level.SEVERE, null, ex);
-            informaraMiAutomata("usuarioRegistrado", null);
+            informaraMiAutomata("usuarioRegistrado");
         }
 
         }

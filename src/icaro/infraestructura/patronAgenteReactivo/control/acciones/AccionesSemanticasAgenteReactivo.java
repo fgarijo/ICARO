@@ -96,7 +96,7 @@ protected ItfProductorPercepcion itfEnvioEventosInternos;
    * Es necesario un constructor sin parmetros
    */
   public AccionesSemanticasAgenteReactivo() {
-	
+	 
 //    this.itfUsoRepositorio = NombresPredefinidos.REPOSITORIO_INTERFACES_OBJ;
 //    this.trazas = NombresPredefinidos.RECURSO_TRAZAS_OBJ;
 //    this.logger =  Logger.getLogger(this.getClass().getCanonicalName());
@@ -120,6 +120,7 @@ protected ItfProductorPercepcion itfEnvioEventosInternos;
    if(itfProductPercept!= null){
         this.itfEnvioEventosInternos=itfProductPercept;
     }else this.infoParaDesarrollador("La interfaz de la percepcion que implementa el  Control del agente es  null y debe ser definida");
+   this.getComunicator();
   }
           
 public void infoParaDesarrollador ( String mensaje){
@@ -237,7 +238,14 @@ public void informaraMiAutomata(String input, Object...infoComplementaria){
     else  trazas.trazar(nombreAgente, " El interfaz para el envio de eventos internos no esta definida "
                  + " El input:  " + input + " No sera procesado ", InfoTraza.NivelTraza.error);
 }
-
+public void informaraMiAutomata(String input){
+    
+  Object paramsAccion[] = new Object[0];
+    if ( itfEnvioEventosInternos !=null) 
+    itfEnvioEventosInternos.produceParaConsumirInmediatamente(new EventoInternoAgteReactivo(nombreAgente, input, paramsAccion));
+    else  trazas.trazar(nombreAgente, " El interfaz para el envio de eventos internos no esta definida "
+                 + " El input:  " + input + " No sera procesado ", InfoTraza.NivelTraza.error);
+}
 
 //
 // public void setItfAutomata (ItfUsoAutomataEFE automataItf){

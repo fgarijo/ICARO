@@ -142,7 +142,7 @@ public class AccionesSemanticasGestorNodo extends
             trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
 					"Se añade la interfaz del gestor de nodo :" +nombreAgente + " al RMI registry",
 					InfoTraza.NivelTraza.debug));
-            this.informaraMiAutomata("gestor_configurado", null);
+            this.informaraMiAutomata("gestor_configurado");
 //            this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //					"gestor_configurado",
 //					nombreAgente,
@@ -190,7 +190,7 @@ public class AccionesSemanticasGestorNodo extends
 			e.printStackTrace();
                     }
                          try {
-                             this.informaraMiAutomata("error_en_creacion_gestores", null);
+                             this.informaraMiAutomata("error_en_creacion_gestores");
 //				this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //						"error_en_creacion_gestores",
 //						NombresPredefinidos.NOMBRE_GESTOR_NODO,
@@ -283,7 +283,7 @@ public class AccionesSemanticasGestorNodo extends
 					InfoTraza.NivelTraza.error));
 			e.printStackTrace();
 			try {
-                            this.informaraMiAutomata("error_en_creacion_gestores", null);
+                            this.informaraMiAutomata("error_en_creacion_gestores");
 //				this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //						"error_en_creacion_gestores",
 //						NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION,
@@ -441,7 +441,7 @@ public class AccionesSemanticasGestorNodo extends
 			trazas.aceptaNuevaTraza(new InfoTraza("GestorOrganizacion",
 					"Gestores registrados correctamente.",
 					InfoTraza.NivelTraza.debug));
-                        this.informaraMiAutomata("gestores_creados", null);
+                        this.informaraMiAutomata("gestores_creados");
 //			this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte("gestores_creados",
 //					NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION,
 //					NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION));
@@ -453,7 +453,7 @@ public class AccionesSemanticasGestorNodo extends
 					InfoTraza.NivelTraza.error));
 			e.printStackTrace();
 			try {
-                             this.informaraMiAutomata("error_en_creacion_gestores", null);
+                             this.informaraMiAutomata("error_en_creacion_gestores");
 //				this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //						"error_en_creacion_gestores",
 //						NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION,
@@ -485,7 +485,7 @@ public class AccionesSemanticasGestorNodo extends
 					InfoTraza.NivelTraza.error));
 			e.printStackTrace();
 			try {
-                             this.informaraMiAutomata("error_en_arranque_gestor_agentes", null);
+                             this.informaraMiAutomata("error_en_arranque_gestor_agentes");
 //				this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //						"error_en_arranque_gestor_agentes",
 //						NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION,
@@ -516,7 +516,7 @@ public class AccionesSemanticasGestorNodo extends
 					InfoTraza.NivelTraza.error));
 			e.printStackTrace();
 			try {
-                             this.informaraMiAutomata("error_en_arranque_gestor_recursos", null);
+                             this.informaraMiAutomata("error_en_arranque_gestor_recursos");
 //				this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //						"error_en_arranque_gestor_recursos",
 //						NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION,
@@ -573,7 +573,7 @@ public class AccionesSemanticasGestorNodo extends
 				"Fue imposible recuperar el error en el arranque de los gestores.",
 				InfoTraza.NivelTraza.debug));
 		try {
-                     this.informaraMiAutomata("imposible_recuperar_arranque", null);
+                     this.informaraMiAutomata("imposible_recuperar_arranque");
 //			this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //					"imposible_recuperar_arranque",
 //					NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION,
@@ -594,7 +594,7 @@ public class AccionesSemanticasGestorNodo extends
 				"Finalizando gestor de la organizaci�n debido a un error irrecuperable.",
 				InfoTraza.NivelTraza.debug));
 		try {
-                    this.informaraMiAutomata("informe_generado", null);
+                    this.informaraMiAutomata("informe_generado");
 			this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte("informe_generado",
 					NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION,
 					NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION));
@@ -646,7 +646,7 @@ public class AccionesSemanticasGestorNodo extends
 					trazas.aceptaNuevaTraza(new InfoTraza("GestorOrganizacion",
 						"El GESTOR DE RECURSOS ha fallado. Su estado es "+ monitRecursos,
 						InfoTraza.NivelTraza.error));
-                                        this.informaraMiAutomata("error_al_monitorizar", null);
+                                        this.informaraMiAutomata("error_al_monitorizar");
 //				this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //						"error_al_monitorizar",
 //						NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION,
@@ -654,7 +654,7 @@ public class AccionesSemanticasGestorNodo extends
 				}
 			} 
 			else {
-                            this.informaraMiAutomata("gestores_ok", null);
+                            this.informaraMiAutomata("gestores_ok");
 //				this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte("gestores_ok",
 //						NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION,
 //						NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION));
@@ -665,7 +665,7 @@ public class AccionesSemanticasGestorNodo extends
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			try {
-                            this.informaraMiAutomata("error_al_monitorizar", null);
+                            this.informaraMiAutomata("error_al_monitorizar");
 //				this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //						"error_al_monitorizar",
 //						NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION,
@@ -699,7 +699,7 @@ public class AccionesSemanticasGestorNodo extends
 					nombreAgente,
 					nombreAgente);
                             }else
-                            this.informaraMiAutomata("continuaTerminacion", null);
+                            this.informaraMiAutomata("continuaTerminacion");
 //                                this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //					"continuaTerminacion",
 //					nombreAgente,
@@ -736,7 +736,7 @@ public class AccionesSemanticasGestorNodo extends
 					nombreAgente,
 					nombreAgente);
                     }else
-                            this.informaraMiAutomata("continuaTerminacion", null);    
+                            this.informaraMiAutomata("continuaTerminacion");    
 //                            this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //					"continuaTerminacion",
 //					nombreAgente,
@@ -946,7 +946,7 @@ public void crearUnRecursoEnNodoLocal(String  identInstRecurso) throws Exception
 			boolean ok = false;
              // Se crea el recurso en el mismo nodo
 			FactoriaRecursoSimple.instance().crearRecursoSimple(descRecurso);
-                        this.informaraMiAutomata("recurso_creado",null);
+                        this.informaraMiAutomata("recurso_creado");
 			logger.debug("GestorRecursos: Recurso " + descRecurso.getId() + " creado.");
 			trazas.aceptaNuevaTraza(new InfoTraza("GestorRecursos",
 					"Recurso " + descRecurso.getId() + " creado.",
@@ -957,7 +957,7 @@ public void crearUnRecursoEnNodoLocal(String  identInstRecurso) throws Exception
 					"Error al crear el recurso " + identInstRecurso+ ".",
 					InfoTraza.NivelTraza.error));
 			logger.error("GestorRecursos: Error al crear el recurso " + identInstRecurso+ ".", ex);
-                        this.informaraMiAutomata("error_en_creacion_recurso", null);  
+                        this.informaraMiAutomata("error_en_creacion_recurso");  
 //                        this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //						"error_en_creacion_recurso",
 //						nombreAgente,
@@ -992,7 +992,7 @@ public void crearUnRecursoEnNodoLocalyPublicIntfEnRMIO(String  identInstRecurso)
 			boolean ok = false;
              // Se crea el recurso en el mismo nodo
 			FactoriaRecursoSimple.instance().crearRecursoSimple(descRecurso);                
-                        this.informaraMiAutomata("recursoCreadoyRegistrado",null);
+                        this.informaraMiAutomata("recursoCreadoyRegistrado");
 			logger.debug("GestorRecursos: Recurso " + descRecurso.getId() + " creado.");
 			trazas.aceptaNuevaTraza(new InfoTraza("GestorRecursos",
 					"Recurso " + descRecurso.getId() + " creado.",
@@ -1023,7 +1023,7 @@ public void crearUnRecursoEnNodoLocalyPublicIntfEnRMIO(String  identInstRecurso)
 					"Error al crear el recurso " + identInstRecurso+ ".",
 					InfoTraza.NivelTraza.error));
 			logger.error("GestorNodo: Error al crear el recurso " + identInstRecurso+ ".", ex);
-                        this.informaraMiAutomata("error_en_creacion_recurso", null);  
+                        this.informaraMiAutomata("error_en_creacion_recurso");  
 //                        this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //						"error_en_creacion_recurso",
 //						nombreAgente,
@@ -1105,7 +1105,7 @@ public void crearUnAgenteEnNodoLocalyPublicIntfEnRMIO(String  identAgenteAcrear)
 					"No he podido obtener la interfaz   del agente: " +NombresPredefinidos.NOMBRE_GESTOR_AGENTES ,
 					InfoTraza.NivelTraza.error));
                              }
-                        this.informaraMiAutomata("agenteRemoto_creado",null);
+                        this.informaraMiAutomata("agenteRemoto_creado");
 			logger.debug("GestorNodo: Recurso " + identAgenteAcrear + " creado.");
 			trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,"Agente " + identAgenteAcrear + " creado.",
 					InfoTraza.NivelTraza.debug));
@@ -1116,7 +1116,7 @@ public void crearUnAgenteEnNodoLocalyPublicIntfEnRMIO(String  identAgenteAcrear)
 					"Error al crear el agente " + identAgenteAcrear+ ".",
 					InfoTraza.NivelTraza.error));
 			logger.error("GestorNodo: Error al crear el agente " + identAgenteAcrear+ ".", ex);
-                        this.informaraMiAutomata("error_en_creacion_agente", null);  
+                        this.informaraMiAutomata("error_en_creacion_agente");  
 //                        this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //						"error_en_creacion_agente",
 //						nombreAgente,
@@ -1138,13 +1138,13 @@ public Boolean addEntityIntfs2RMI_ORGregistry (String identEntity){
                                          trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
 					"No he podido añadir la entidad :" +identEntity + " -- al RMI registry de la organizacion.",
 					InfoTraza.NivelTraza.error));
-//                                         informaraMiAutomata("error_en_registroRemoto_recurso", null);
+//                                         informaraMiAutomata("error_en_registroRemoto_recurso");
                                          return interfacesRegistradas;
                                 } else {
                                     trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
 					"No he podido añadir la entidad :" +identEntity + " -- al RMI registry de la organizacion. La entidad no ha sido registrada en el registro local",
 					InfoTraza.NivelTraza.error));
-//                                        informaraMiAutomata("error_en_registroRemoto_recurso", null);
+//                                        informaraMiAutomata("error_en_registroRemoto_recurso");
                                         return interfacesRegistradas;
                                 }
          itfEntity = (Remote)itfUsoRepositorio.obtenerInterfaz(NombresPredefinidos.ITF_GESTION+identEntity);
@@ -1160,13 +1160,13 @@ public Boolean addEntityIntfs2RMI_ORGregistry (String identEntity){
 					"No he podido añadir la entidad :" +identEntity + " -- al RMI registry de la organizacion .",
 					InfoTraza.NivelTraza.error));
                                           return interfacesRegistradas;
-//                                         informaraMiAutomata("error_en_registroRemoto_recurso", null);
+//                                         informaraMiAutomata("error_en_registroRemoto_recurso");
                                 } else {
                                     trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
 					"No he podido añadir la entidad :" +identEntity + " -- al RMI registry de la organizacion. La entidad no ha sido registrada en el registro local",
 					InfoTraza.NivelTraza.error));
                                      return interfacesRegistradas;
-//                                        informaraMiAutomata("error_en_registroRemoto_recurso", null);
+//                                        informaraMiAutomata("error_en_registroRemoto_recurso");
                                 }
 
 		} catch (Exception ex) {
@@ -1174,7 +1174,7 @@ public Boolean addEntityIntfs2RMI_ORGregistry (String identEntity){
 					"Error al registrar  la entidad " + identEntity+ ". en el registro RMI de la organizacion",
 					InfoTraza.NivelTraza.error));
 			logger.error("GestorRecursos: Error al crear el recurso " + identEntity+ ".en el registro RMI de la organizacion", ex);
-                        informaraMiAutomata("error_en_registroRemoto_recurso", null);
+                        informaraMiAutomata("error_en_registroRemoto_recurso");
 //			throw ex;
 		}
      return interfacesRegistradas;
@@ -1192,13 +1192,13 @@ Boolean interfacesRegistradas = false;
                                          trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
 					"No he podido añadir la entidad :" +identEntity + " -- al RMI registry local.",
 					InfoTraza.NivelTraza.error));
-                                         informaraMiAutomata("error_en_registroRemoto_recurso", null);
+                                         informaraMiAutomata("error_en_registroRemoto_recurso");
                                          return interfacesRegistradas;
                                 } else {
                                     trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
 					"No he podido añadir la entidad :" +identEntity + " -- al RMI registry. La entidad no ha sido registrada en el registro local",
 					InfoTraza.NivelTraza.error));
-                                        informaraMiAutomata("error_en_registroRemoto_recurso", null);
+                                        informaraMiAutomata("error_en_registroRemoto_recurso");
                                         return interfacesRegistradas;
                                 }
          itfEntity = (Remote)itfUsoRepositorio.obtenerInterfaz(NombresPredefinidos.ITF_GESTION+identEntity);
@@ -1212,13 +1212,13 @@ Boolean interfacesRegistradas = false;
                                          trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
 					"No he podido añadir la entidad :" +identEntity + " -- al RMI registry local.",
 					InfoTraza.NivelTraza.error));
-                                         informaraMiAutomata("error_en_registroRemoto_recurso", null);
+                                         informaraMiAutomata("error_en_registroRemoto_recurso");
                                          return false;
                                 } else {
                                     trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
 					"No he podido añadir la entidad :" +identEntity + " -- al RMI registry. La entidad no ha sido registrada en el registro local",
 					InfoTraza.NivelTraza.error));
-                                        informaraMiAutomata("error_en_registroRemoto_recurso", null);
+                                        informaraMiAutomata("error_en_registroRemoto_recurso");
                                         return false;
                                 }
 
@@ -1227,7 +1227,7 @@ Boolean interfacesRegistradas = false;
 					"Error al registrar  la entidad " + identEntity+ ".",
 					InfoTraza.NivelTraza.error));
 			logger.error("GestorRecursos: Error al crear el recurso " + identEntity+ ". En el registro RMI local", ex);
-                        informaraMiAutomata("error_en_registroRemoto_recurso", null);
+                        informaraMiAutomata("error_en_registroRemoto_recurso");
 //			throw ex;
 		}
             return interfacesRegistradas;
@@ -1279,7 +1279,7 @@ public void arrancarRecurso(String identRecurso) {
 		if (errorEnArranque) { // ha ocurrido alg�n problema en el arranque del
 								// recurso
 			try {
-                            this.informaraMiAutomata("error_en_arranque_recurso", null);  
+                            this.informaraMiAutomata("error_en_arranque_recurso");  
 //				this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //						"error_en_arranque_recurso",
 //						NombresPredefinidos.NOMBRE_GESTOR_RECURSOS,
@@ -1295,7 +1295,7 @@ public void arrancarRecurso(String identRecurso) {
 		} else {// el recurso ha sido arrancado
 
 
-					this.informaraMiAutomata("recurso_arrancado", null);
+					this.informaraMiAutomata("recurso_arrancado");
 //                                        this.itfUsoGestorAReportar.aceptaEvento(new EventoRecAgte(
 //							"gestor_recursos_arrancado_ok",
 //							NombresPredefinidos.NOMBRE_GESTOR_RECURSOS,
@@ -1356,7 +1356,7 @@ public void arrancarRecurso(String identRecurso) {
 //			 EventoRecAgte ("termina",this.nombreAgente,this.nombreAgente));
 //                        this.ctrlGlobalAgenteReactivo.getItfControl().getEstadoControlAgenteReactivo();
                     this.ctrlGlobalAgenteReactivo.getItfControl().procesarInfoControlAgteReactivo(new InfoContEvtMsgAgteReactivo("termina") );
-//                  this.informaraMiAutomata("termina", null);
+//                  this.informaraMiAutomata("termina");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1452,7 +1452,7 @@ public void arrancarRecurso(String identRecurso) {
 				"Se ha recibido un evento de timeout debido a que un gestor no ha confirmado la terminaci�n. Se procede a continuar la terminaci�n del sistema",
 				InfoTraza.NivelTraza.debug));
 		try {
-                    this.informaraMiAutomata("continuaTerminacion", null); 
+                    this.informaraMiAutomata("continuaTerminacion"); 
 //			this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //					"continuaTerminacion",
 //					NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION,

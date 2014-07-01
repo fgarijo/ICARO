@@ -6,11 +6,11 @@ import icaro.aplicaciones.informacion.dominioClases.aplicacionAcceso.InfoAccesoV
 import icaro.aplicaciones.recursos.persistenciaAccesoBD.ItfUsoPersistenciaAccesoBD;
 import icaro.aplicaciones.recursos.persistenciaAccesoSimple.ItfUsoPersistenciaAccesoSimple;
 import icaro.aplicaciones.recursos.visualizacionAcceso.ItfUsoVisualizadorAcceso;
-import icaro.infraestructura.entidadesBasicas.comunicacion.EventoRecAgte;
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 import icaro.infraestructura.entidadesBasicas.comunicacion.AdaptadorRegRMI;
-import icaro.infraestructura.entidadesBasicas.comunicacion.InfoContMsgAgteReactivo;
+import icaro.infraestructura.entidadesBasicas.comunicacion.EventoRecAgte;
 import icaro.infraestructura.entidadesBasicas.comunicacion.InfoContEvtMsgAgteReactivo;
+import icaro.infraestructura.entidadesBasicas.comunicacion.InfoContMsgAgteReactivo;
 import icaro.infraestructura.entidadesBasicas.comunicacion.MensajeSimple;
 import icaro.infraestructura.entidadesBasicas.interfaces.InterfazGestion;
 import icaro.infraestructura.patronAgenteReactivo.control.acciones.AccionesSemanticasAgenteReactivo;
@@ -52,9 +52,7 @@ public class AccionesSemanticasAgenteAplicacionAcceso extends AccionesSemanticas
 
 		catch (Exception ex) {
 			try {
-			ItfUsoRecursoTrazas trazas = (ItfUsoRecursoTrazas)ClaseGeneradoraRepositorioInterfaces.instance().obtenerInterfaz(
-					NombresPredefinidos.ITF_USO+NombresPredefinidos.RECURSO_TRAZAS);
-					trazas.aceptaNuevaTraza(new InfoTraza(this.nombreAgente, "Ha habido un problema al abrir el visualizador"
+                    trazas.aceptaNuevaTraza(new InfoTraza(this.nombreAgente, "Ha habido un problema al abrir el visualizador"
                                                 + " de Acceso en accion semantica 'arranque()'",
                                                                 InfoTraza.NivelTraza.error));
 			}catch(Exception e){e.printStackTrace();}
@@ -68,11 +66,8 @@ public class AccionesSemanticasAgenteAplicacionAcceso extends AccionesSemanticas
 			(NombresPredefinidos.ITF_USO+"Persistencia1");
 			ok = Persistencia1.compruebaUsuario(infoUsuario.tomaUsuario(),infoUsuario.tomaPassword());
 			try {
-				ItfUsoRecursoTrazas trazas = (ItfUsoRecursoTrazas)ClaseGeneradoraRepositorioInterfaces.instance().obtenerInterfaz(
-						NombresPredefinidos.ITF_USO+NombresPredefinidos.RECURSO_TRAZAS);
-						trazas.aceptaNuevaTraza(new InfoTraza(this.nombreAgente, 
-															  "Comprobando usuario...", 
-															  InfoTraza.NivelTraza.debug));
+				trazas.aceptaNuevaTraza(new InfoTraza(this.nombreAgente, 
+					"Comprobando usuario...", InfoTraza.NivelTraza.debug));
 			}catch(Exception e){e.printStackTrace();}
 		}
 
@@ -87,23 +82,21 @@ public class AccionesSemanticasAgenteAplicacionAcceso extends AccionesSemanticas
 				}catch(Exception e){e.printStackTrace();}
 		}
 		try {
-			agenteAcceso = (ItfUsoAgenteReactivo) itfUsoRepositorio.obtenerInterfaz
-			(NombresPredefinidos.ITF_USO+this.nombreAgente);
-			Object[] datosEnvio = new Object[]{infoUsuario.tomaUsuario(), infoUsuario.tomaPassword()};
+//			agenteAcceso = (ItfUsoAgenteReactivo) itfUsoRepositorio.obtenerInterfaz
+//			(NombresPredefinidos.ITF_USO+this.nombreAgente);
+//			Object[] datosEnvio = new Object[]{infoUsuario.tomaUsuario(), infoUsuario.tomaPassword()};
 			if(ok){
-				agenteAcceso.aceptaEvento(new EventoRecAgte("usuarioValido",datosEnvio,this.nombreAgente,NombresPredefinidos.NOMBRE_AGENTE_APLICACION+"Acceso"));
+				this.informaraMiAutomata("usuarioValido",infoUsuario.tomaUsuario(),infoUsuario.tomaPassword());
 			}
 			else{
-				agenteAcceso.aceptaEvento(new EventoRecAgte("usuarioNoValido", datosEnvio,this.nombreAgente,this.nombreAgente));
+				this.informaraMiAutomata("usuarioNoValido",infoUsuario.tomaUsuario(),infoUsuario.tomaPassword());
 			}
 		}
 		catch (Exception e) {
 			try {
-				ItfUsoRecursoTrazas trazas = (ItfUsoRecursoTrazas)ClaseGeneradoraRepositorioInterfaces.instance().obtenerInterfaz(
-						NombresPredefinidos.ITF_USO+NombresPredefinidos.RECURSO_TRAZAS);
-						trazas.aceptaNuevaTraza(new InfoTraza(this.nombreAgente, 
-															  "Ha habido un problema enviar el evento usuario Valido/NoValido al agente", 
-															  InfoTraza.NivelTraza.error));
+				trazas.aceptaNuevaTraza(new InfoTraza(this.nombreAgente, 
+							"Ha habido un problema enviar el evento usuario Valido/NoValido al agente", 
+                                                         InfoTraza.NivelTraza.error));
 				}catch(Exception e2){e2.printStackTrace();}
 		}
 	}
@@ -131,42 +124,33 @@ public class AccionesSemanticasAgenteAplicacionAcceso extends AccionesSemanticas
                              //
 			ok = itfUsoRec.compruebaUsuario(infoUsuario.tomaUsuario(),infoUsuario.tomaPassword());
 			try {
-				ItfUsoRecursoTrazas trazas = (ItfUsoRecursoTrazas)ClaseGeneradoraRepositorioInterfaces.instance().obtenerInterfaz(
-						NombresPredefinidos.ITF_USO+NombresPredefinidos.RECURSO_TRAZAS);
-						trazas.aceptaNuevaTraza(new InfoTraza(this.nombreAgente,
-															  "Comprobando usuario...",
-															  InfoTraza.NivelTraza.debug));
+				trazas.aceptaNuevaTraza(new InfoTraza(this.nombreAgente,
+							"Comprobando usuario...",InfoTraza.NivelTraza.debug));
 			}catch(Exception e){e.printStackTrace();}
 		}
 
                 } catch (Exception ex) {
 			try {
-
-				ItfUsoRecursoTrazas trazas = (ItfUsoRecursoTrazas)ClaseGeneradoraRepositorioInterfaces.instance().obtenerInterfaz(
-						NombresPredefinidos.ITF_USO+NombresPredefinidos.RECURSO_TRAZAS);
-						trazas.aceptaNuevaTraza(new InfoTraza(this.nombreAgente,
+                            trazas.aceptaNuevaTraza(new InfoTraza(this.nombreAgente,
 							"Ha habido un problema en la Persistencia1 al comprobar el usuario y el password",
-															  InfoTraza.NivelTraza.error));
+							InfoTraza.NivelTraza.error));
 				}catch(Exception e){e.printStackTrace();}
 		}
 		try {
-			agenteAcceso = (ItfUsoAgenteReactivo) itfUsoRepositorio.obtenerInterfaz
-			(NombresPredefinidos.ITF_USO+this.nombreAgente);
-			Object[] datosEnvio = new Object[]{infoUsuario.tomaUsuario(), infoUsuario.tomaPassword()};
+//			agenteAcceso = (ItfUsoAgenteReactivo) itfUsoRepositorio.obtenerInterfaz
+//			(NombresPredefinidos.ITF_USO+this.nombreAgente);
+//			Object[] datosEnvio = new Object[]{infoUsuario.tomaUsuario(), infoUsuario.tomaPassword()};
 			if(ok){
-				agenteAcceso.aceptaEvento(new EventoRecAgte("usuarioValido",datosEnvio,this.nombreAgente,NombresPredefinidos.NOMBRE_AGENTE_APLICACION+"Acceso"));
+				this.informaraMiAutomata("usuarioValido",infoUsuario.tomaUsuario(),infoUsuario.tomaPassword());
 			}
 			else{
-				agenteAcceso.aceptaEvento(new EventoRecAgte("usuarioNoValido", datosEnvio,this.nombreAgente,this.nombreAgente));
+				this.informaraMiAutomata("usuarioNoValido",infoUsuario.tomaUsuario(),infoUsuario.tomaPassword());
 			}
 		}
 		catch (Exception e) {
 			try {
-				ItfUsoRecursoTrazas trazas = (ItfUsoRecursoTrazas)ClaseGeneradoraRepositorioInterfaces.instance().obtenerInterfaz(
-						NombresPredefinidos.ITF_USO+NombresPredefinidos.RECURSO_TRAZAS);
-						trazas.aceptaNuevaTraza(new InfoTraza(this.nombreAgente,
-															  "Ha habido un problema enviar el evento usuario Valido/NoValido al agente",
-															  InfoTraza.NivelTraza.error));
+			trazas.aceptaNuevaTraza(new InfoTraza(this.nombreAgente,"Ha habido un problema enviar el evento usuario Valido/NoValido al agente",
+						InfoTraza.NivelTraza.error));
 				}catch(Exception e2){e2.printStackTrace();}
 		}
 	}
@@ -183,11 +167,8 @@ public class AccionesSemanticasAgenteAplicacionAcceso extends AccionesSemanticas
 		}
 		catch (Exception ex) {
 			try {
-				ItfUsoRecursoTrazas trazas = (ItfUsoRecursoTrazas)ClaseGeneradoraRepositorioInterfaces.instance().obtenerInterfaz(
-						NombresPredefinidos.ITF_USO+NombresPredefinidos.RECURSO_TRAZAS);
-						trazas.aceptaNuevaTraza(new InfoTraza(this.nombreAgente, 
-															  "Ha habido un problema al abrir el visualizador de Acceso", 
-															  InfoTraza.NivelTraza.error));
+			trazas.aceptaNuevaTraza(new InfoTraza(this.nombreAgente, "Ha habido un problema al abrir el visualizador de Acceso", 
+								InfoTraza.NivelTraza.error));
 				}catch(Exception e2){e2.printStackTrace();}
 		}
 		pedirTerminacionGestorAgentes();
@@ -204,11 +185,8 @@ public class AccionesSemanticasAgenteAplicacionAcceso extends AccionesSemanticas
 
 		catch (Exception ex) {
 			try {
-				ItfUsoRecursoTrazas trazas = (ItfUsoRecursoTrazas)ClaseGeneradoraRepositorioInterfaces.instance().obtenerInterfaz(
-						NombresPredefinidos.ITF_USO+NombresPredefinidos.RECURSO_TRAZAS);
-						trazas.aceptaNuevaTraza(new InfoTraza(this.nombreAgente, 
-															  "Ha habido un problema al abrir el visualizador de Acceso", 
-															  InfoTraza.NivelTraza.error));
+                        trazas.aceptaNuevaTraza(new InfoTraza(this.nombreAgente,"Ha habido un problema al abrir el visualizador de Acceso", 
+						InfoTraza.NivelTraza.error));
 			}catch(Exception e2){e2.printStackTrace();}
 		}
 		// pedirTerminacionGestorAgentes();
@@ -216,11 +194,8 @@ public class AccionesSemanticasAgenteAplicacionAcceso extends AccionesSemanticas
 	
 	public void terminacion() {
 		try {
-			ItfUsoRecursoTrazas trazas = (ItfUsoRecursoTrazas)ClaseGeneradoraRepositorioInterfaces.instance().obtenerInterfaz(
-					NombresPredefinidos.ITF_USO+NombresPredefinidos.RECURSO_TRAZAS);
-					trazas.aceptaNuevaTraza(new InfoTraza(this.nombreAgente, 
-														  "Terminando agente: "+NombresPredefinidos.NOMBRE_AGENTE_APLICACION+"Acceso1", 
-														  InfoTraza.NivelTraza.debug));
+                    trazas.aceptaNuevaTraza(new InfoTraza(this.nombreAgente,  "Terminando agente: "+NombresPredefinidos.NOMBRE_AGENTE_APLICACION+"Acceso1", 
+                                                        InfoTraza.NivelTraza.debug));
 //		try {
 //			this.hebra.finalizar(); // CUIDADO, SI FALLASE LA CREACION DE LOS
 //									// RECURSOS ESTA HEBRA
@@ -284,28 +259,26 @@ public class AccionesSemanticasAgenteAplicacionAcceso extends AccionesSemanticas
 			itfUsoGestorOrgan.aceptaEvento(new EventoRecAgte("terminar_gestores_y_gestor_organizacion","AgenteAccesoUso","AgenteAccesoUso"));*/
 //			this.itfUsoGestorAReportar.aceptaEvento(new EventoRecAgte("peticion_terminar_todo",this.nombreAgente,NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
                          visualizacion.cerrarVisualizadorAcceso();
-                        this.itfUsoGestorAReportar.aceptaMensaje(new MensajeSimple (new InfoContEvtMsgAgteReactivo("peticion_terminar_todo"), this.nombreAgente,NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
+//                        this.itfUsoGestorAReportar.aceptaMensaje(new MensajeSimple (new InfoContEvtMsgAgteReactivo("peticion_terminar_todo"), this.nombreAgente,NombresPredefinidos.NOMBRE_GESTOR_AGENTES));
+                         this.comunicator.enviarInfoAotroAgente("peticion_terminar_todo", NombresPredefinidos.NOMBRE_GESTOR_AGENTES);
 		} catch (Exception e) {
 			logger.error("Error al mandar el evento de terminar_todo",e);
 			try {
 				ItfUsoRecursoTrazas trazas = (ItfUsoRecursoTrazas)ClaseGeneradoraRepositorioInterfaces.instance().obtenerInterfaz(
 						NombresPredefinidos.ITF_USO+NombresPredefinidos.RECURSO_TRAZAS);
-						trazas.aceptaNuevaTraza(new InfoTraza(this.nombreAgente, 
-															  "Error al mandar el evento de terminar_todo", 
-															  InfoTraza.NivelTraza.error));
+						trazas.aceptaNuevaTraza(new InfoTraza(this.nombreAgente, "Error al mandar el evento de terminar_todo", 
+						InfoTraza.NivelTraza.error));
 			}catch(Exception e2){e2.printStackTrace();}
 			try{
-				agenteAcceso = (ItfUsoAgenteReactivo) itfUsoRepositorio.obtenerInterfaz
-				(NombresPredefinidos.ITF_USO+this.nombreAgente);
-				agenteAcceso.aceptaEvento(new EventoRecAgte("error",this.nombreAgente,this.nombreAgente));
+//				agenteAcceso = (ItfUsoAgenteReactivo) itfUsoRepositorio.obtenerInterfaz
+//				(NombresPredefinidos.ITF_USO+this.nombreAgente);
+//				agenteAcceso.aceptaEvento(new EventoRecAgte("error",this.nombreAgente,this.nombreAgente));
+                            this.informaraMiAutomata("error");
 			}
 			catch(Exception exc){
 				try {
-					ItfUsoRecursoTrazas trazas = (ItfUsoRecursoTrazas)ClaseGeneradoraRepositorioInterfaces.instance().obtenerInterfaz(
-							NombresPredefinidos.ITF_USO+NombresPredefinidos.RECURSO_TRAZAS);
-							trazas.aceptaNuevaTraza(new InfoTraza(this.nombreAgente, 
-																  "Fallo al enviar un evento error.", 
-																  InfoTraza.NivelTraza.error));
+					trazas.aceptaNuevaTraza(new InfoTraza(this.nombreAgente, 
+								"Fallo al enviar un evento error.", InfoTraza.NivelTraza.error));
 				}catch(Exception e2){e2.printStackTrace();}
 				logger.error("Fallo al enviar un evento error.",exc);
 			}

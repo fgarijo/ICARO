@@ -48,7 +48,7 @@ public class AccionesSemanticasGestorOrganizacion extends AccionesSemanticasAgen
 	 * @uml.associationEnd  
 	 */
 	private HebraMonitorizacion hebra;
-        private InterfazGestion ItfGestionRecTrazas ;
+        private InterfazGestion itfGestionRecTrazas ;
         private ItfUsoConfiguracion config ;
         private ItfUsoAgenteReactivo itfUsoPropiadeEsteAgente;
 //        private ItfUsoRecursoTrazas ItfUsoRecTrazas;
@@ -58,16 +58,16 @@ public class AccionesSemanticasGestorOrganizacion extends AccionesSemanticasAgen
 		 super();
 //            try {
 //		
-//             ItfGestionRecTrazas = (InterfazGestion) this.itfUsoRepositorio.obtenerInterfaz(
+//             itfGestionRecTrazas = (InterfazGestion) this.itfUsoRepositorio.obtenerInterfaz(
 //                        NombresPredefinidos.ITF_GESTION + NombresPredefinidos.RECURSO_TRAZAS);
 //            
 //		} catch (Exception ex) {
-//			 logger.fatal("GestorOrganizacion: Fue imposible crear el repositorio de interfaces.");
+//			 logger.fatal("No sepuede obtener la interfaz de gestion del recurso de trazas.");
 //			trazas.aceptaNuevaTraza(new InfoTraza("GestorOrganizacion",
-//					"Fue imposible crear el repositorio de interfaces.",
+//					"No sepuede obtener la interfaz de gestion del recurso de trazas.",
 //					InfoTraza.NivelTraza.error));
 //			ex.printStackTrace();
-//			System.exit(1);
+////			System.exit(1);
 //		}
                 
 //                 trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
@@ -93,7 +93,9 @@ public class AccionesSemanticasGestorOrganizacion extends AccionesSemanticasAgen
                     tiempoParaNuevaMonitorizacion = Integer.parseInt(config.getValorPropiedadGlobal(NombresPredefinidos.INTERVALO_MONITORIZACION_ATR_PROPERTY));
                     itfUsoPropiadeEsteAgente=(ItfUsoAgenteReactivo)itfUsoRepositorio.obtenerInterfaz(NombresPredefinidos.ITF_USO
                                                                          +nombreAgente);
-                        this.informaraMiAutomata("gestor_configurado", null);					
+                     itfGestionRecTrazas = (InterfazGestion) this.itfUsoRepositorio.obtenerInterfaz(
+                        NombresPredefinidos.ITF_GESTION + NombresPredefinidos.RECURSO_TRAZAS);
+                        this.informaraMiAutomata("gestor_configurado");					
 		} catch (Exception e) {
 			e.printStackTrace();
 			 logger.error("GestorRecursos: Hubo problemas al configurar el gestor de Organizacion.");
@@ -119,13 +121,13 @@ public class AccionesSemanticasGestorOrganizacion extends AccionesSemanticasAgen
 			DescInstanciaGestor descGestor = config.getDescInstanciaGestor(NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION);
 			String esteNodo = descGestor.getNodo().getNombreUso();
 
-			DescInstanciaGestor gestorAgentes = config.getDescInstanciaGestor(NombresPredefinidos.NOMBRE_GESTOR_AGENTES);
-			String nodoDestino = gestorAgentes.getNodo().getNombreUso();
+			DescInstanciaGestor gestorRecursos = config.getDescInstanciaGestor(NombresPredefinidos.NOMBRE_GESTOR_RECURSOS);
+			String nodoDestino = gestorRecursos.getNodo().getNombreUso();
 			int intentos = 0;
 			boolean ok = false;		
 			if (nodoDestino.equals(esteNodo)) {
 //				FactoriaAgenteReactivo.instancia().crearAgenteReactivo(gestorAgentes);
-                                FactoriaComponenteIcaro.instanceAgteReactInpObj().crearAgenteReactivo(gestorAgentes);
+                                FactoriaComponenteIcaro.instanceAgteReactInpObj().crearAgenteReactivo(gestorRecursos);
 			}
                         
                         
@@ -166,9 +168,9 @@ public class AccionesSemanticasGestorOrganizacion extends AccionesSemanticasAgen
 //				}
 //			}
 
-			logger.debug("GestorOrganizacion: Gestor de agentes creado.");
+			logger.debug("GestorOrganizacion: Gestor de recursos creado.");
 			trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
-					"Gestor de agentes creado.",
+					"Gestor de recursos creado.",
 					InfoTraza.NivelTraza.debug));
 
 //			Set<Object> conjuntoEventos = new HashSet<Object>();
@@ -180,23 +182,23 @@ public class AccionesSemanticasGestorOrganizacion extends AccionesSemanticasAgen
 			((ItfGestionAgenteReactivo) itfUsoRepositorio
 					.obtenerInterfaz(
 							NombresPredefinidos.ITF_GESTION
-									+ NombresPredefinidos.NOMBRE_GESTOR_AGENTES))
+									+ NombresPredefinidos.NOMBRE_GESTOR_RECURSOS))
 					.setGestorAReportar(NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION);
 
-			logger.debug("GestorOrganizacion: Creando gestor de recursos ...");
+			logger.debug("GestorOrganizacion: Creando gestor de agentes ...");
 			trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
-					"Creando gestor de recursos ...",
+					"Creando gestor de agentes ...",
 					InfoTraza.NivelTraza.debug));
 			
 			
 			
 			// Gestor de recursos: local o remoto?
 			
-			DescInstanciaAgente gestorRecursos = config.getDescInstanciaGestor(NombresPredefinidos.NOMBRE_GESTOR_RECURSOS); 
-			 nodoDestino = gestorRecursos.getNodo().getNombreUso();
+			DescInstanciaAgente gestorAgentes = config.getDescInstanciaGestor(NombresPredefinidos.NOMBRE_GESTOR_AGENTES); 
+			 nodoDestino = gestorAgentes.getNodo().getNombreUso();
 			if (nodoDestino.equals(esteNodo)) {
 //				FactoriaAgenteReactivo.instancia().crearAgenteReactivo(gestorRecursos);
-                                FactoriaComponenteIcaro.instanceAgteReactInpObj().crearAgenteReactivo(gestorRecursos);
+                                FactoriaComponenteIcaro.instanceAgteReactInpObj().crearAgenteReactivo(gestorAgentes);
 			}
 //                        else {
 //				intentos = 0;
@@ -235,32 +237,31 @@ public class AccionesSemanticasGestorOrganizacion extends AccionesSemanticasAgen
 //					}
 //				}
 //			}
-			logger.debug("GestorOrganizacion: Gestor de recursos creado.");
+			logger.debug("GestorOrganizacion: Gestor de agentes creado.");
 			trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
-					"Gestor de recursos creado.",
+					"Gestor de agentes creado.",
 					InfoTraza.NivelTraza.debug));
 
 			// indico a quien debe reportar
 			((ItfGestionAgenteReactivo) this.itfUsoRepositorio.obtenerInterfaz(
-							NombresPredefinidos.ITF_GESTION+ NombresPredefinidos.NOMBRE_GESTOR_RECURSOS))
+							NombresPredefinidos.ITF_GESTION+ NombresPredefinidos.NOMBRE_GESTOR_AGENTES))
 					.setGestorAReportar(NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION);
 
 			logger.debug("GestorOrganizacion: Gestores registrados correctamente.");	
 			trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
 					"Gestores registrados correctamente.",
 					InfoTraza.NivelTraza.debug));
-			this.informaraMiAutomata("gestores_creados",null);
-
-                        
+			this.informaraMiAutomata("gestores_creados");
+   
                         
 		} catch (Exception e) {
-			logger.error("GestorOrganizacion: Fue imposible crear los gestores de agentes y recursos en el gestor de la organizaci�n",e);
+			logger.error("GestorOrganizacion: Fue imposible crear los gestores de agentes y recursos en el gestor de la organizacion",e);
 			trazas.aceptaNuevaTraza(new InfoTraza(nombreAgente,
 					"Fue imposible crear los gestores de agentes y recursos en el gestor de la organizacion",
 					InfoTraza.NivelTraza.error));
 			e.printStackTrace();
 			try {
-				this.informaraMiAutomata ("error_en_creacion_gestores", null);
+				this.informaraMiAutomata ("error_en_creacion_gestores");
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
@@ -278,7 +279,7 @@ public class AccionesSemanticasGestorOrganizacion extends AccionesSemanticasAgen
 					.obtenerInterfaz(NombresPredefinidos.ITF_GESTION
 							+ NombresPredefinidos.NOMBRE_GESTOR_AGENTES))
 					.arranca();
-                        this.informaraMiAutomata("gestor_agentes_arrancado_ok", null);
+                        this.informaraMiAutomata("gestor_agentes_arrancado_ok");
 			// this.itfUsoAgente.aceptaEvento(new
 			// EventoRecAgte("gestor_agentes_arrancado_ok"));
 
@@ -293,7 +294,7 @@ public class AccionesSemanticasGestorOrganizacion extends AccionesSemanticasAgen
 //						"error_en_arranque_gestor_agentes",
 //						NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION,
 //						NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION));
-                            this.informaraMiAutomata("error_en_arranque_gestor_agentes", null);
+                            this.informaraMiAutomata("error_en_arranque_gestor_agentes");
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
@@ -311,7 +312,7 @@ public class AccionesSemanticasGestorOrganizacion extends AccionesSemanticasAgen
 					.obtenerInterfaz(NombresPredefinidos.ITF_GESTION
 							+ NombresPredefinidos.NOMBRE_GESTOR_RECURSOS))
 					.arranca();
-                        this.informaraMiAutomata("gestor_recursos_arrancado_ok", null);
+                        this.informaraMiAutomata("gestor_recursos_arrancado_ok");
 			// this.itfUsoAgente.aceptaEvento(new
 			// EventoRecAgte("gestor_recursos_arrancado_ok"));
 		} catch (Exception e) {
@@ -325,7 +326,7 @@ public class AccionesSemanticasGestorOrganizacion extends AccionesSemanticasAgen
 //						"error_en_arranque_gestor_recursos",
 //						NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION,
 //						NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION));
-                             this.informaraMiAutomata("error_en_arranque_gestor_recursos", null);
+                             this.informaraMiAutomata("error_en_arranque_gestor_recursos");
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
@@ -403,7 +404,7 @@ public class AccionesSemanticasGestorOrganizacion extends AccionesSemanticasAgen
 //			this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte("informe_generado",
 //					NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION,
 //					NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION));
-                        this.informaraMiAutomata("informe_generado", null);
+                        this.informaraMiAutomata("informe_generado");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -557,7 +558,6 @@ public class AccionesSemanticasGestorOrganizacion extends AccionesSemanticasAgen
 				"Procesando la peticion de terminacion",
 				InfoTraza.NivelTraza.debug));
 
-	String estadoInternoAgente =	this.ctrlGlobalAgenteReactivo.getItfControl().getEstadoControlAgenteReactivo();
 		trazas.setIdentAgenteAReportar(nombreAgente);
                 trazas.pedirConfirmacionTerminacionAlUsuario();
 		
@@ -582,15 +582,15 @@ public class AccionesSemanticasGestorOrganizacion extends AccionesSemanticasAgen
 				"Comenzando la terminacion de la organizacion...",
 				InfoTraza.NivelTraza.info));
 		try {
-           String estadoInternoAgente = this.ctrlGlobalAgenteReactivo.getItfControl().getEstadoControlAgenteReactivo();
-           ItfGestionAgenteReactivo gestion = (ItfGestionAgenteReactivo) this.itfUsoRepositorio
-				.obtenerInterfaz(NombresPredefinidos.ITF_GESTION
-						+ NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION);
+//           String estadoInternoAgente = this.ctrlGlobalAgenteReactivo.getItfControl().getEstadoControlAgenteReactivo();
+//           ItfGestionAgenteReactivo gestion = (ItfGestionAgenteReactivo) this.itfUsoRepositorio
+//				.obtenerInterfaz(NombresPredefinidos.ITF_GESTION
+//						+ NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION);
 		//	gestion.termina();
 //            this.itfUsoPropiadeEsteAgente.aceptaEvento(new
 //			 EventoRecAgte ("termina",this.nombreAgente,this.nombreAgente));
 //                        this.ctrlGlobalAgenteReactivo.getItfControl().getEstadoControlAgenteReactivo();
-                        this.informaraMiAutomata("termina", null);
+                        this.informaraMiAutomata("termina");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -616,7 +616,7 @@ public class AccionesSemanticasGestorOrganizacion extends AccionesSemanticasAgen
 
 	/**
 	 * destruye los recursos que se crearon a lo largo del ciclo de vida del
-	 * gestor de la organizaci�n-
+	 * gestor de la organizacion-
 	 */
 	public void terminarGestorOrganizacion() {
 		// termina el gestor.
@@ -628,7 +628,7 @@ public class AccionesSemanticasGestorOrganizacion extends AccionesSemanticasAgen
 		try {
 			// se acaba con los recursos de la organizacion que necesiten ser
 			// terminados
-			ItfGestionRecTrazas.termina();
+			itfGestionRecTrazas.termina();
                        
 			// y a continuacion se termina el gestor de organizacion
 			((ItfGestionAgenteReactivo) this.itfUsoRepositorio
@@ -667,7 +667,7 @@ public class AccionesSemanticasGestorOrganizacion extends AccionesSemanticasAgen
 //					"continuaTerminacion",
 //					NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION,
 //					NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION));
-                        this.informaraMiAutomata("continuaTerminacion", null);
+                        this.informaraMiAutomata("continuaTerminacion");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

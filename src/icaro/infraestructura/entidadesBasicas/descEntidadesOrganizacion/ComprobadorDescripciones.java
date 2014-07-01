@@ -1,25 +1,21 @@
 package icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion;
 
-import com.thoughtworks.xstream.io.path.Path;
-import java.io.InputStream;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.jaxb.*;
 import icaro.infraestructura.entidadesBasicas.excepciones.ExcepcionEnComponente;
-import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.imp.FactoriaAgenteReactivoImp;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.ItfUsoRecursoTrazas;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.imp.componentes.InfoTraza;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.imp.componentes.InfoTraza.NivelTraza;
-import icaro.infraestructura.recursosOrganizacion.repositorioInterfaces.imp.ClaseGeneradoraRepositorioInterfaces;
 import java.io.File;
-import java.net.URI;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
+import java.util.regex.Pattern;
+import org.apache.log4j.Logger;
 
 
 public class ComprobadorDescripciones {
@@ -181,7 +177,7 @@ public class ComprobadorDescripciones {
                         rutaDirectorioCompt =rutaClaseAcciones.substring(0, rutaClaseAcciones.indexOf("." +NombresPredefinidos.PREFIJO_CLASE_ACCIONES_SEMANTICAS));
                         rutaFicheroAutomata= rutaDirectorioCompt + "." +NombresPredefinidos.FICHERO_AUTOMATA;
                 }          
-                rutaClaseAcciones= validarRutaClaseEntidad(rutaClaseAcciones,rutaDirectorioCompt, identComportmto );
+                rutaClaseAcciones= verificarRutaClasesAccion(rutaClaseAcciones,rutaDirectorioCompt);
                 rutaFicheroAutomata = validarRutaEntidadComportamiento(rutaFicheroAutomata, rutaDirectorioCompt, identComportmto );
                 comptAgente.setLocalizacionClaseAcciones(rutaClaseAcciones);
                 comptAgente.setLocalizacionFicheroAutomata(rutaFicheroAutomata);
@@ -265,16 +261,18 @@ public class ComprobadorDescripciones {
               errores.add(traza);
               logger.fatal(msgInfoUsuario);              
           }else especCorrecta= true;
-      if (!existeClase(rutaEntidadEspecificada)){
-           msgInfoUsuario = "Error no se encuentra la  clase especificada \n"+
-                            "Para la  entidad:" + identDescComptoEntidad + 
-                            "En la ruta: " + rutaEntidadEspecificada + "\n" +
-                            "Verifique la existencia del fichero en el directorio src \n";
-                    InfoTraza traza = new InfoTraza(NombresPredefinidos.CONFIGURACION,msgInfoUsuario, NivelTraza.error);
-            //        ItfUsoRecTrazas.aceptaNuevaTraza(traza);
-                    errores.add(traza);
-                    logger.fatal(msgInfoUsuario);
-      }//else if (especCorrecta) return true;
+           if (!existeClase(rutaEntidadEspecificada)){
+           
+                msgInfoUsuario = "Error no se encuentra la  clase  \n"+
+                        "Para la  entidad:" + identDescComptoEntidad +
+                        "En la ruta: " + rutaEntidadEspecificada + "\n" +
+                        "Verifique  el contenido del directorio \n";
+                InfoTraza traza = new InfoTraza(NombresPredefinidos.CONFIGURACION,msgInfoUsuario, NivelTraza.error);
+                //        ItfUsoRecTrazas.aceptaNuevaTraza(traza);
+                errores.add(traza);
+                logger.fatal(msgInfoUsuario);
+            }//else if (especCorrecta) return true;
+        
       return rutaEntidadEspecificada;
   } 
   /*
@@ -640,5 +638,95 @@ public class ComprobadorDescripciones {
         }
 }
 */
+    private String verificarRutaClasesAccion(String rutaClaseAS, String rutaComportamiento){
+        // buscamos las clases existente en la ruta de comportamiento. Puede ser la clase AccionesSemanticas y/o otras clases de tipo Accion
+        // Si no se encuentra la clase de AS  se devuelve null, y si se encuentra se devuelve la ruta de la clase
+        // lo dejamos para cuando se construya el auntomata 
+        // verificamos si la ruta es un directorio o si es el nombre de la clase Acciones semnanticas
+        try {
+            if (rutaClaseAS.indexOf(NombresPredefinidos.NOMBRE_ACCIONES_SEMANTICAS)>0 &&
+            existeClase(rutaClaseAS)) return rutaClaseAS;
+        if (rutaComportamiento == null) return null;
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        assert classLoader != null;
+        String path = rutaComportamiento.replace('.', '/');
+        Enumeration<URL> resources = classLoader.getResources(path);
+        List<File> dirs = new ArrayList<File>();
+        while (resources.hasMoreElements()) {
+            URL resource = resources.nextElement();
+            dirs.add(new File(resource.getFile()));
+        }
+        if (dirs.isEmpty()){
+            if (rutaComportamiento.indexOf(NombresPredefinidos.NOMBRE_ACCIONES_SEMANTICAS)>0 &&
+            existeClase(rutaComportamiento)) return rutaComportamiento;
+            else return null;
+        }
+              ArrayList<Class> classes = new ArrayList<Class>();
+        for (File directory : dirs) {
+            classes.addAll(findClasses(directory, rutaComportamiento));
+        }
+//            boolean encontradoClaseAccion= false;
+            if (classes.isEmpty()) return null;
+            for (Class clazz : classes) {
+                if (clazz.getSimpleName().startsWith(NombresPredefinidos.NOMBRE_ACCIONES_SEMANTICAS))
+                    return rutaComportamiento+"."+clazz.getSimpleName() ;              
+            }
+            return null;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+           return null;   
+         }
+        
+     /**
+     * Load all classes from a package.
+     * 
+     * @param packageName
+     * @return
+     * @throws ClassNotFoundException
+     * @throws IOException
+     */
+    public static Class[] getAllClassesFromPackage(final String packageName) throws ClassNotFoundException, IOException {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        assert classLoader != null;
+        String path = packageName.replace('.', '/');
+        Enumeration<URL> resources = classLoader.getResources(path);
+        List<File> dirs = new ArrayList<File>();
+        while (resources.hasMoreElements()) {
+            URL resource = resources.nextElement();
+            dirs.add(new File(resource.getFile()));
+        }
+        ArrayList<Class> classes = new ArrayList<Class>();
+        for (File directory : dirs) {
+            classes.addAll(findClasses(directory, packageName));
+        }
+        return classes.toArray(new Class[classes.size()]);
+    }
+
+    /**
+     * Find file in package.
+     * 
+     * @param directory
+     * @param packageName
+     * @return
+     * @throws ClassNotFoundException
+     */
+    public static List<Class<?>> findClasses(File directory, String packageName) throws ClassNotFoundException {
+        List<Class<?>> classes = new ArrayList<Class<?>>();
+        if (!directory.exists()) {
+            return classes;
+        }
+        File[] files = directory.listFiles();
+        for (File file : files) {
+            if (file.isDirectory()) {
+                assert !file.getName().contains(".");
+                classes.addAll(findClasses(file, packageName + "." + file.getName()));
+            }
+            else if (file.getName().endsWith(".class")) {
+                classes.add(Class.forName(packageName + '.' + file.getName().substring(0, file.getName().length() - 6)));
+            }
+        }
+        return classes;
+    }     
 }   
 

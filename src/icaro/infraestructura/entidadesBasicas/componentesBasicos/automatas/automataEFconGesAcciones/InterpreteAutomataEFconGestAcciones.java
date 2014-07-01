@@ -423,7 +423,7 @@ public synchronized void interpretarTransicion(TransicionAutomataEF transicion){
                if (transicion == null){
                    // mensaje de error el input no es valido en el estado actual 
                     this.trazas.trazar (this.getClass().getSimpleName()," No existe transicion asociada al input : " + input + 
-                       " en el estado  :" + estadoActual ,InfoTraza.NivelTraza.error );
+                       " en el estado  :" + estadoActual ,InfoTraza.NivelTraza.debug );
                    return false;
            }
             this.cambiaEstado(transicion.getidentEstadoSiguiente());

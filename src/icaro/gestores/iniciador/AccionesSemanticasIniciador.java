@@ -125,10 +125,10 @@ public void verificarExistenciaEntidadesDescripcion () {
     try {
 
         if (SeHapodidoLocalizarEsquema && SeHapodidoLocalizarFicheroDescripcion){
-          this.informaraMiAutomata("existenEntidadesDescripcion",null);
+          this.informaraMiAutomata("existenEntidadesDescripcion");
          }
          else {
-            this.informaraMiAutomata("errorLocalizacionFicherosDescripcion",null);
+            this.informaraMiAutomata("errorLocalizacionFicherosDescripcion");
           
                }
         }
@@ -159,7 +159,7 @@ public void crearRecursosNucleoOrganizacion () throws Exception {
                         "Se produjo un error al interpretar el fichero de descripcion de la organizacion",
                         InfoTraza.NivelTraza.error));
                   
-                this.informaraMiAutomata("error_InterpretacionDescripcionOrganizacion",null);
+                this.informaraMiAutomata("error_InterpretacionDescripcionOrganizacion");
             }else {
                 // registro la configuracion
                itfUsoRepositorio.registrarInterfaz(
@@ -181,7 +181,7 @@ public void crearRecursosNucleoOrganizacion () throws Exception {
                
                     // arranco la organizacion
 
-                    this.informaraMiAutomata("recursosNucleoCreados",null);
+                    this.informaraMiAutomata("recursosNucleoCreados");
                } //    ItfgestGestorOrg.arranca();
             } catch (IllegalArgumentException ie) {
             	System.err.println("Error. La organizacion no se ha compilado correctamente. Compruebe que los ficheros xml de los automatas se encuentren en el classpath.");
@@ -193,7 +193,7 @@ public void crearRecursosNucleoOrganizacion () throws Exception {
                   msgUsuario = "Se produjo un error al interpretar el fichero de descripcion de la organizacion  \n"+
                      "La ruta especificada es : " + rutaDescripcionOrganizacion; 
             	  ItfUsoRecTrazas.aceptaNuevaTraza(new InfoTraza("Iniciador", msgUsuario,InfoTraza.NivelTraza.error));
-                this.informaraMiAutomata("error_InterpretacionDescripcionOrganizacion",null);
+                this.informaraMiAutomata("error_InterpretacionDescripcionOrganizacion");
             }
             catch (Exception e) {
                 msgUsuario = "Se produjo un error al interpretar el fichero de descripcion de la organizacion  \n"+
@@ -201,7 +201,7 @@ public void crearRecursosNucleoOrganizacion () throws Exception {
                 System.err.println(msgUsuario);
                 e.printStackTrace();
                 ItfUsoRecTrazas.aceptaNuevaTraza(new InfoTraza("Iniciador",msgUsuario,InfoTraza.NivelTraza.error));
-                this.informaraMiAutomata("error_InterpretacionDescripcionOrganizacion",null);
+                this.informaraMiAutomata("error_InterpretacionDescripcionOrganizacion");
                         }
         }
 
@@ -292,14 +292,14 @@ public void crearRecursosNucleoOrganizacion () throws Exception {
                     ItfgestGestorInicial = (ItfGestionAgenteReactivo) itfUsoRepositorio.obtenerInterfaz(
                             NombresPredefinidos.ITF_GESTION + identGestorNodo);
 
-                        this.informaraMiAutomata("GestorInicialCreado",null);
+                        this.informaraMiAutomata("GestorInicialCreado");
 
                      }
                         catch (ExcepcionEnComponente ie) {
                         ItfUsoRecTrazas.aceptaNuevaTraza(new InfoTraza("Iniciador",
                         "No se pudo crear el comportamiento del Gestor inicial",
                         InfoTraza.NivelTraza.error));
-                         this.informaraMiAutomata("error_al_crearGestorInicial",null);
+                         this.informaraMiAutomata("error_al_crearGestorInicial");
                          
                     }
                         catch (Exception e) {
@@ -315,7 +315,7 @@ public void crearRecursosNucleoOrganizacion () throws Exception {
             FactoriaComponenteIcaro.instanceAgteReactInpObj().crearAgenteReactivo(NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION,NombresPredefinidos.COMPORTAMIENTO_PORDEFECTO_GESTOR_ORGANIZACION);
             ItfgestGestorInicial = (ItfGestionAgenteReactivo) itfUsoRepositorio.obtenerInterfaz(
                             NombresPredefinidos.ITF_GESTION + NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION);
-              this.informaraMiAutomata("GestorOrganizacionCreado", null);
+              this.informaraMiAutomata("GestorOrganizacionCreado");
 //              this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //                        "GestorOrganizacionCreado",
 //                        NombresPredefinidos.NOMBRE_INICIADOR,
@@ -326,7 +326,7 @@ public void crearRecursosNucleoOrganizacion () throws Exception {
             	 ItfUsoRecTrazas.aceptaNuevaTraza(new InfoTraza("Iniciador",
                         "No se pudo crear el comportamiento del Gestor de Organizacion",
                         InfoTraza.NivelTraza.error));
-                 this.informaraMiAutomata("error_al_crearGestorInicial", null);
+                 this.informaraMiAutomata("error_al_crearGestorInicial");
 //                 this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //                        "error_al_crearGestorInicial",
 //                        NombresPredefinidos.NOMBRE_INICIADOR,
@@ -353,7 +353,7 @@ public void crearRecursosNucleoOrganizacion () throws Exception {
             if  (ItfgestGestorInicial != null ){
                  // arranca  el Gestor de  Organizacion y Termina el iniciador
                        this. ItfgestGestorInicial.arranca();
-                      this.informaraMiAutomata("GestorInicial_arrancado_ok", null); 
+                      this.informaraMiAutomata("GestorInicial_arrancado_ok"); 
 //                       this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //                        "GestorInicial_arrancado_ok",
 //                        nombreAgente,
@@ -366,7 +366,7 @@ public void crearRecursosNucleoOrganizacion () throws Exception {
               ItfUsoRecTrazas.aceptaNuevaTraza(new InfoTraza("Iniciador",
                     "La interfaz del GO es nula . ", InfoTraza.NivelTraza.error));
              // genero un evento interno de error
-              this.informaraMiAutomata("error_al_arrancarGestorOrganizacion", null); 
+              this.informaraMiAutomata("error_al_arrancarGestorOrganizacion"); 
 //              this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //                        "error_al_arrancarGestorOrganizacion",
 //                        NombresPredefinidos.NOMBRE_INICIADOR,
@@ -374,7 +374,7 @@ public void crearRecursosNucleoOrganizacion () throws Exception {
             }
         } catch (Exception e2) {
             e2.printStackTrace();
-            this.informaraMiAutomata("error_al_arrancarGestorInicial", null); 
+            this.informaraMiAutomata("error_al_arrancarGestorInicial"); 
 //             this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //                        "error_al_arrancarGestorInicial",
 //                        NombresPredefinidos.NOMBRE_INICIADOR,
@@ -427,7 +427,7 @@ public void crearRecursosNucleoOrganizacion () throws Exception {
         }
 
         try {
-             this.informaraMiAutomata("tratamiento_terminar_agentes_y_gestor_agentes", null); 
+             this.informaraMiAutomata("tratamiento_terminar_agentes_y_gestor_agentes"); 
 //            this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //                    "tratamiento_terminar_agentes_y_gestor_agentes",
 //                    nombreAgente,
@@ -454,7 +454,7 @@ public void crearRecursosNucleoOrganizacion () throws Exception {
             e2.printStackTrace();
         }
         try {
-            this.informaraMiAutomata("imposible_recuperar_arranque", null); 
+            this.informaraMiAutomata("imposible_recuperar_arranque"); 
 //            this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //                    "imposible_recuperar_arranque",
 //                    nombreAgente,
@@ -476,7 +476,7 @@ public void crearRecursosNucleoOrganizacion () throws Exception {
                     "Iniciador",
                     " Iniciador a la espera de terminacion por parte del usuario debido a un error irrecuperable.",
                     InfoTraza.NivelTraza.error));
-             this.informaraMiAutomata("informe_generado", null);
+             this.informaraMiAutomata("informe_generado");
         } catch (Exception e2) {
             e2.printStackTrace();
         }
@@ -516,7 +516,7 @@ public void crearRecursosNucleoOrganizacion () throws Exception {
     }
 
     /**
-     * Monitoriza secuencialmente todos los agentes activos que est�n definidos
+     * Monitoriza secuencialmente todos los agentes activos que estan definidos
      * como necesarios en la configuraci�n.
      */
     public void monitorizarAgentes() {
@@ -562,7 +562,7 @@ public void crearRecursosNucleoOrganizacion () throws Exception {
 
         if (errorEncontrado) {
             try {
-                this.informaraMiAutomata("error_al_monitorizar", null); 
+                this.informaraMiAutomata("error_al_monitorizar"); 
 //                this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte(
 //                        "error_al_monitorizar",
 //                        nombreAgente,
@@ -572,7 +572,7 @@ public void crearRecursosNucleoOrganizacion () throws Exception {
             }
         } else {
             try {
-                this.informaraMiAutomata("agentes_ok", null); 
+                this.informaraMiAutomata("agentes_ok"); 
 //                this.itfUsoPropiadeEsteAgente.aceptaEvento(new EventoRecAgte("agentes_ok",
 //                        nombreAgente,
 //                        nombreAgente));
