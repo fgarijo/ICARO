@@ -3,6 +3,8 @@ package icaro.infraestructura.entidadesBasicas.factorias;
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.FactoriaAutomatas;
 import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.DescInstanciaRecursoAplicacion;
+import icaro.infraestructura.patronAgenteCognitivo.factoriaEInterfacesPatCogn.FactoriaAgenteCognitivo;
+import icaro.infraestructura.patronAgenteCognitivo.factoriaEInterfacesPatCogn.imp.FactoriaAgenteCognitivoImp2;
 import icaro.infraestructura.patronAgenteReactivo.control.factoriaEInterfaces.imp.FactoriaControlAgteReactivoInputObjImp0;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.FactoriaAgenteReactivo;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.imp.FactoriaAgenteReactivoInputObjImp0;
@@ -21,6 +23,7 @@ public  class FactoriaComponenteIcaro {
         private static FactoriaAutomatas instanceFactoriaAutomatas;
         private static FactoriaControlAgteReactivoInputObjImp0 instanceFactoriaControlAgteReactivoInputObjImp0;
         private static FactoriaAgenteReactivoInputObjImp0 instanceFactoriaAgteReactivoInputObjImp0;
+        private static FactoriaAgenteCognitivo instanceFactoriaAgteReactivo;
         public ItfUsoRecursoTrazas recursoTrazas ;
         public ItfUsoRepositorioInterfaces repositorioInterfaces;
 
@@ -51,6 +54,11 @@ public  class FactoriaComponenteIcaro {
             if (instanceFactoriaAgteReactivoInputObjImp0 == null)
 			instanceFactoriaAgteReactivoInputObjImp0 = new FactoriaAgenteReactivoInputObjImp0();
 		return instanceFactoriaAgteReactivoInputObjImp0;
+        }
+        public static FactoriaAgenteCognitivo instanceAgteCognitivoImp2(){
+            if (instanceFactoriaAgteReactivo == null)
+			instanceFactoriaAgteReactivo = new FactoriaAgenteCognitivoImp2();
+		return instanceFactoriaAgteReactivo;
         }
 	
       public  void crearRepositorioInterfaces(){ 	
