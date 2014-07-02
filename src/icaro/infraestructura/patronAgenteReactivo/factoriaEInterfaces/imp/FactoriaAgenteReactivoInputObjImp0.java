@@ -48,7 +48,7 @@ import org.apache.log4j.Logger;
  * @created 20  Mayo  2010
  */
 
-public class FactoriaAgenteReactivoInputObjImp0 extends FactoriaComponenteIcaro {
+public class FactoriaAgenteReactivoInputObjImp0 extends FactoriaAgenteReactivo {
 
 	/*
 	 * Crea una instancia del patron que crea un agente reactivo con el
@@ -135,6 +135,7 @@ public class FactoriaAgenteReactivoInputObjImp0 extends FactoriaComponenteIcaro 
 //	throw new ExcepcionEnComponente("\n\nError al comprobar los comportamientos de los gestores, agentes y recursos descritos en el fichero de descripcion del XML " );
         }
         }
+     @Override
     public synchronized void crearAgenteReactivo(DescInstanciaAgente descInstanciaAgente)throws ExcepcionEnComponente {
 
         // Paso 1 Se obtienen los objetos de la descripcion
@@ -274,7 +275,8 @@ public class FactoriaAgenteReactivoInputObjImp0 extends FactoriaComponenteIcaro 
          }
  }
  
-public synchronized void crearAgenteReactivo(String agenteId,String rutaComportamiento){
+     @Override
+     public synchronized void crearAgenteReactivo(String agenteId,String rutaComportamiento){
 //     DescInstanciaAgente descInsPrueba = new DescInstanciaAgente();
 //     descInsPrueba.setId(agenteId);
 //     DescComportamientoAgente comprtAgteDesc = new DescComportamientoAgente();

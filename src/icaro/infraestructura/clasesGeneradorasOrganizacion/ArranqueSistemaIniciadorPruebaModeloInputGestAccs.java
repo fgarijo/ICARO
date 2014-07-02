@@ -97,7 +97,7 @@ public class ArranqueSistemaIniciadorPruebaModeloInputGestAccs {
              try {
 //             AgenteReactivoAbstracto itfPrueba = FactoriaAgenteReactivoInputObjImp0.instance().
 //                     crearAgenteReactivo(rutaFicheroAutomata,rutaCarpetaAcciones,identPropietario);
-             FactoriaComponenteIcaro.instanceAgteReactInpObj().crearAgenteReactivo(rutaFicheroAutomata, rutaCarpetaAcciones,identPropietario);
+             FactoriaComponenteIcaro.instanceAgteReactInpObj().crearAgenteReactivo(identPropietario, rutaCarpetaAcciones);
              itfUsoIniciador =  (ItfUsoAgenteReactivo) NombresPredefinidos.REPOSITORIO_INTERFACES_OBJ.obtenerInterfazUso(identPropietario);
             itfGestIniciador = (ItfGestionAgenteReactivo) NombresPredefinidos.REPOSITORIO_INTERFACES_OBJ.obtenerInterfazGestion(identPropietario);
             itfGestIniciador.arranca();

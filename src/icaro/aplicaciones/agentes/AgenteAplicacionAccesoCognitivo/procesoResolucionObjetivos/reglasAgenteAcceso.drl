@@ -1,6 +1,7 @@
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.ItfUsoRecursoTrazas;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.imp.componentes.InfoTraza;
 import icaro.infraestructura.entidadesBasicas.procesadorCognitivo.*;
+import icaro.infraestructura.entidadesBasicas.informes.*;
 import icaro.infraestructura.patronAgenteCognitivo.procesadorObjetivos.gestorTareas.ItfGestorTareas;
 import icaro.infraestructura.entidadesBasicas.PerformativaUsuario;
 import icaro.aplicaciones.agentes.AgenteAplicacionAccesoCognitivo.objetivos.*;

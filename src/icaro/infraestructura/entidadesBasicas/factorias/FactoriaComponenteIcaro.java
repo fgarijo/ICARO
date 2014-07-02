@@ -2,10 +2,11 @@ package icaro.infraestructura.entidadesBasicas.factorias;
 
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 import icaro.infraestructura.entidadesBasicas.componentesBasicos.automatas.FactoriaAutomatas;
-import icaro.infraestructura.patronRecursoSimple.*;
 import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.DescInstanciaRecursoAplicacion;
 import icaro.infraestructura.patronAgenteReactivo.control.factoriaEInterfaces.imp.FactoriaControlAgteReactivoInputObjImp0;
+import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.FactoriaAgenteReactivo;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.imp.FactoriaAgenteReactivoInputObjImp0;
+import icaro.infraestructura.patronRecursoSimple.*;
 import icaro.infraestructura.patronRecursoSimple.imp.FactoriaRecursoSimpleImp2;
 import icaro.infraestructura.recursosOrganizacion.configuracion.ItfUsoConfiguracion;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.ItfUsoRecursoTrazas;
@@ -44,7 +45,7 @@ public  class FactoriaComponenteIcaro {
 		return instanceFactoriaControlAgteReactivoInputObjImp0;
         }
 	public  void crearRecursoSimple(DescInstanciaRecursoAplicacion recurso){
-            
+            FactoriaComponenteIcaro.instanceFRS().crearRecursoSimple(recurso);
         }
         public static FactoriaAgenteReactivoInputObjImp0 instanceAgteReactInpObj(){
             if (instanceFactoriaAgteReactivoInputObjImp0 == null)
