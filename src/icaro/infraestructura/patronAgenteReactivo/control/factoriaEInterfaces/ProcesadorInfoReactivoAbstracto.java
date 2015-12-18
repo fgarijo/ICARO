@@ -68,7 +68,10 @@ import icaro.infraestructura.patronAgenteReactivo.percepcion.factoriaEInterfaces
 	{
 		if (DEBUG)
 			System.out.println(identAgte + ": arranca()");
-		estado = InterfazGestion.ESTADO_ACTIVO;
+		if(estado ==InterfazGestion.ESTADO_CREADO ){
+                    
+                    estado = InterfazGestion.ESTADO_ACTIVO;
+                }
 		
 	}
      /**

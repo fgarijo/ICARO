@@ -1,6 +1,5 @@
 package icaro.infraestructura.entidadesBasicas.procesadorCognitivo;
 
-import icaro.infraestructura.entidadesBasicas.informes.InformeTimeout;
 import icaro.infraestructura.entidadesBasicas.informes.InformeDeTarea;
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 import icaro.infraestructura.entidadesBasicas.comunicacion.ComunicacionAgentes;
@@ -79,7 +78,7 @@ public abstract class Tarea extends Thread {
             goalId= contxtGoal.getgoalId();
         }
         InformeDeTarea informeTarea = new InformeDeTarea (idTarea,goalId,idAgenteOrdenante, contenido );
-        InformeTimeout informeTemporizado = new InformeTimeout ( milis, itfProcObjetivos,informeTarea );
+        Temporizador informeTemporizado = new Temporizador ( milis, itfProcObjetivos,informeTarea );
         informeTemporizado.start();
     }
    public ItfUsoConfiguracion getItfUsoConfiguracion() {

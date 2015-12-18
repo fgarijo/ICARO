@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package icaro.infraestructura.entidadesBasicas.informes;
+package icaro.infraestructura.entidadesBasicas.procesadorCognitivo;
 
 import icaro.infraestructura.entidadesBasicas.informes.InformeDeTarea;
 import icaro.infraestructura.entidadesBasicas.informes.Informe;
@@ -17,7 +17,7 @@ import java.util.Calendar;
  *
  * @author FGarijo
  */
-public class InformeTimeout extends Thread {
+public class Temporizador extends Thread {
 
 	protected long milis;
         protected boolean trazar = false;
@@ -28,21 +28,16 @@ public class InformeTimeout extends Thread {
 	 */
     protected boolean finalizar;
 
-    /**
-	 * Agente reactivo al que se pasan los eventos de monitorizacion
-	 * @uml.property  name="agente"
-	 * @uml.associationEnd  multiplicity="(1 1)"
-	 */
+    
      protected ItfProcesadorObjetivos itfEnvioHechos;
 
      /**
-	 * Evento a producir
-	 * @uml.property  name="evento"
+	 * Informe a producir
 	 */
      protected Informe informeAGenerar;
 
     
-     public InformeTimeout(long milis, ItfProcesadorObjetivos envioHechosItf, Informe informeAGenerar) {
+     public Temporizador(long milis, ItfProcesadorObjetivos envioHechosItf, Informe informeAGenerar) {
       super("Timeout "+informeAGenerar.getidentEntidadEmisora());
       this.milis= milis;
       this.finalizar= false;
@@ -50,7 +45,7 @@ public class InformeTimeout extends Thread {
       this.setDaemon(true);
       this.informeAGenerar = informeAGenerar;
     }
-     public InformeTimeout(long milis, ItfProcesadorObjetivos envioHechosItf, InformeDeTarea informeAGenerar,boolean traza) {
+     public Temporizador(long milis, ItfProcesadorObjetivos envioHechosItf, InformeDeTarea informeAGenerar,boolean traza) {
       super("Timeout "+informeAGenerar.getIdentTarea());
       this.milis= milis;
       this.finalizar= false;
@@ -136,7 +131,7 @@ public class InformeTimeout extends Thread {
         } catch (InterruptedException ex) {}
 
         // Genera un nuevo evento de input
-        this.itfEnvioHechos.insertarHecho(informeAGenerar); 
+        this.itfEnvioHechos.insertarHecho(informeAGenerar);
 
       }    
       

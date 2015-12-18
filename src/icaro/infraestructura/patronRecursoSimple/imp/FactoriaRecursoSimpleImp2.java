@@ -38,11 +38,11 @@ public class FactoriaRecursoSimpleImp2 extends FactoriaRecursoSimple {
         private ItfUsoRepositorioInterfaces repoIntfaces = NombresPredefinidos.REPOSITORIO_INTERFACES_OBJ;
         private ItfUsoAutomataEFsinAcciones itfAutomata;
         private NombresPredefinidos.TipoEntidad tipoEntidad = NombresPredefinidos.TipoEntidad.Recurso ;
-
+        private String idRecurso;
 
 	@Override
 	public void crearRecursoSimple(DescInstanciaRecursoAplicacion recurso) {
-		String idRecurso = recurso.getId();
+		 idRecurso = recurso.getId();
 		try {
 			// obtengo la clase generadora del recurso
 		    trazas.aceptaNuevaTraza(new InfoTraza(idRecurso,tipoEntidad,
@@ -98,16 +98,13 @@ public class FactoriaRecursoSimpleImp2 extends FactoriaRecursoSimple {
     private ImplRecursoSimple obtenerInstClaseGeneradora(DescInstanciaRecursoAplicacion instRecurso) {
 
 		DescRecursoAplicacion descComportamiento = instRecurso.getDescRecurso();
-
- //       TipoAgente tipo = comportamiento.getTipo();
-//		if (comportamiento.getTipo().equals(TipoAgente.REACTIVO)) {
-//			DescComportamientoAgenteReactivo comportamientoReactivo = (DescComportamientoAgenteReactivo) comportamiento;
-			String rutaClase = descComportamiento.getLocalizacionClaseGeneradora();
-//		} else
-//            logger.debug(nombreInstanciaAgente + ":La descripcion del comportamiento no es la de un agente reactivo");
-
-		String idRecurso = instRecurso.getId();
-
+                if ( descComportamiento == null){    
+                    msgError = "Factoria de recurso simple: Error al crear el recurso "+ idRecurso + "la descripcion del comportamiento es null. \n" ;
+                    trazas.aceptaNuevaTraza(new InfoTraza(idRecurso,msgError,InfoTraza.NivelTraza.error));
+                    System.err.println(msgError);
+                        }
+                else {
+                String rutaClase = descComportamiento.getLocalizacionClaseGeneradora();	
 		try {	
                     Integer posicion = rutaClase.indexOf(".class");
                     if ( posicion < 0) posicion = rutaClase.indexOf(".java");
@@ -143,6 +140,7 @@ public class FactoriaRecursoSimpleImp2 extends FactoriaRecursoSimple {
                     trazas.aceptaNuevaTraza(new InfoTraza(idRecurso,msgError,InfoTraza.NivelTraza.error));
                     System.err.println(msgError);
 		}
+                }
 		// si falla algo, devuelvo un null
 		return null;
 	}

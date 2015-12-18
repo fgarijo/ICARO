@@ -66,8 +66,7 @@ public class ProcesadorObjetivosImp1 extends ProcesadorObjetivos {
            // verificamos la cardinalidad del contenido de la informacion extraida. Si es mayor que uno se trata de una
            // colección de elementos que seran enviados al motor
            // Metemos en el motor el contenido de extrInfo
-           if (extrInfo == null) return false;
-           
+           if (extrInfo == null) return false;           
            if ( !(extrInfo.isContentACollection())){    
                 Object msgContent = extrInfo.getContenido();			
                 ruleEngine.assertFact(msgContent);
@@ -75,16 +74,21 @@ public class ProcesadorObjetivosImp1 extends ProcesadorObjetivos {
                                //			return true;
            }
            else {
-                ArrayList aux = (ArrayList) extrInfo.getContenido();
-                ExtractedInfo extrInfoEnArray;
-                Iterator it = aux.iterator();
-                while(it.hasNext()){
-                    extrInfoEnArray = (ExtractedInfo) it.next();
-                    if (extrInfoEnArray !=null) {
-                        ruleEngine.assertFact(extrInfoEnArray);
-                        ruleEngine.assertFact(extrInfoEnArray.getContenido());
+                Object[] aux = (Object[]) extrInfo.getContenido();
+                ArrayList extrInfoEnArray = (ArrayList)extrInfo.getContenido();
+//                Iterator it =(ArrayList) aux.iterator();
+//                int it=0;
+//                while(it.hasNext()){
+                Object objetoExtraido = null;
+                for (int i=0; i<extrInfoEnArray.size(); i++){
+//                    extrInfoEnArray = (ExtractedInfo) it.next();
+                    objetoExtraido = extrInfoEnArray.get(i);
+                    if (objetoExtraido!=null) {
+                        ruleEngine.assertFact(objetoExtraido);
+//                        ruleEngine.assertFact(extrInfoEnArray.getContenido());
                     }
-		        }
+		}
+                
                 
            }
      // Opcional se puede anadir al motor el InfoExtracted o solo su contenido. Esto se podria configurar      

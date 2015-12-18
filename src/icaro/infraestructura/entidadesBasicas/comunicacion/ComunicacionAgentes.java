@@ -3,6 +3,7 @@ package icaro.infraestructura.entidadesBasicas.comunicacion;
 /* ********************************************************************** */
  
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
+import icaro.infraestructura.entidadesBasicas.comunicacion.EventoRecAgte;
 import icaro.infraestructura.entidadesBasicas.interfaces.InterfazUsoAgente;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.ItfUsoAgenteReactivo;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.imp.componentes.InfoTraza;
@@ -71,6 +72,11 @@ public class ComunicacionAgentes {
     
 public synchronized  boolean enviarInfoAotroAgente (Object infoAEnviar,  String identAgteReceptor) {
         try {
+            if (infoAEnviar==null){
+                trazas.aceptaNuevaTraza(new InfoTraza(agentePropietario,
+						"No se envian objetos  : " +infoAEnviar +" Al agente: " + identAgteReceptor ,InfoTraza.NivelTraza.error));
+                return false;
+            }
             if (existItfAgte (identAgteReceptor)) {
                 MensajeSimple mensajeAenviar = new MensajeSimple(infoAEnviar, agentePropietario,identAgteReceptor);
                itfUsoAgente.aceptaMensaje(mensajeAenviar);
@@ -131,7 +137,7 @@ public synchronized boolean enviarMsgaOtroAgente (MensajeSimple mensajeAenviar) 
 
     public synchronized void informaraOtroAgenteReactivo(InfoContEvtMsgAgteReactivo infoAEnviar,String identAgenteReceptor, ItfUsoAgenteReactivo itfUsoAgenteReceptor ){
 
-   // Este método crea un evento con la información de entrada y se le envía al agente REACTIVO que se indique por medio de
+   // Este mÃ©todo crea un evento con la informaciÃ³n de entrada y se le envÃ­a al agente REACTIVO que se indique por medio de
   // la  interfaz de uso
 //        EventoRecAgte eventoaEnviar = null;
    // Se verifica que la interfaz del agente no es vacia
@@ -161,7 +167,7 @@ public synchronized boolean enviarMsgaOtroAgente (MensajeSimple mensajeAenviar) 
     
      public synchronized void informaraOtroAgenteReactivo(InfoContEvtMsgAgteReactivo infoAEnviar,String identAgenteReceptor){
 
-   // Este método crea un evento con la información de entrada y se le envía al agente REACTIVO que se indique por medio de
+   // Este mÃ©todo crea un evento con la informaciÃ³n de entrada y se le envÃ­a al agente REACTIVO que se indique por medio de
   // la  interfaz de uso
         EventoRecAgte eventoaEnviar = null;
 

@@ -176,8 +176,7 @@ public class AgenteReactivoImp2 extends AgenteReactivoAbstracto implements Seria
                 itfAutomataCicloVida.transita(NombresPredefinidos.INPUT_OK);
                 estadoAgente = itfAutomataCicloVida.estadoActual();
                 itfControlAgteReactivo.arranca();
-//                aceptaEvento(new EventoRecAgte("comenzar", nombre, nombre));
-                itfControlAgteReactivo.procesarInput("comenzar", (Object)null);
+                itfControlAgteReactivo.procesarInput(NombresPredefinidos.INPUT_COMENZAR, (Object)null);
             } else {
                 itfAutomataCicloVida.transita(NombresPredefinidos.INPUT_ERROR);
                 estadoAgente = itfAutomataCicloVida.estadoActual();

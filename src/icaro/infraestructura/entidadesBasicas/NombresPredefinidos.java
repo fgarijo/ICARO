@@ -28,7 +28,9 @@ public class NombresPredefinidos {
   public static final String NOMBRE_ITF_USO_CONFIGURACION = "Itf_Uso_Configuracion";
   public static final String CONFIGURACION = "Configuracion";
   public static final String INTERVALO_MONITORIZACION_ATR_PROPERTY = "intervaloMonitorizacion";
-  public static final String NOMBRE_PROPIEDAD_GLOBAL_EQUIPO_AGENTES = "identificadorEquipo" ;
+  public static final String NOMBRE_PROPIEDAD_GLOBAL_IDENT_EQUIPO = "identificadorEquipo" ;
+  public static final String NOMBRE_PROPIEDAD_GLOBAL_JEFE_EQUIPO = "nombreJefeEquipo" ;
+  public static final String NOMBRE_PROPIEDAD_GLOBAL_MODELO_ORGANIZATIVO = "organizacion" ;
   public static final String RECURSO_TRAZAS = "RecursoTrazas";
 
   public static final String EXPR_REG_NOMBRE_AGENTE = "AgenteAplicacion([0-9a-zA-Z])*";
@@ -112,6 +114,7 @@ public class NombresPredefinidos {
   public static final String INPUT_ARRANCA = "arrancar";
   public static final String INPUT_FALLO = "fallo";
   public static final String INPUT_ERROR = "error";
+  public static final String INPUT_COMENZAR = "comenzar";
   public static final String INPUT_OK = "ok";
   public static final String INPUT_PARAR = "parar";
   public static final String INPUT_CONTINUAR = "continuar";
@@ -135,7 +138,7 @@ public class NombresPredefinidos {
  // public final static String FICHERO_AUTOMATA_CICLO_VIDA_COMPONENTE = "/icaro/infraestructura/patronRecursoSimple/TablaEstadosCicloVidaRecursos.xml";
 //  public final static String FICHERO_AUTOMATA_CICLO_VIDA_COMPONENTE = "./schemas/TablaEstadosCicloVidaRecursos.xml";
   public final static String FICHERO_AUTOMATA_CICLO_VIDA_COMPONENTE = "/icaro/infraestructura/entidadesBasicas/componentesBasicos/automatas/automataEFsinAcciones/TablaEstadosCicloVidaEntidades.xml";
-  public static  String DESCRIPCION_XML_POR_DEFECTO = "descripcionAplicacionAccesoSimple";
+  public static  String DESCRIPCION_XML_POR_DEFECTO = "descripcionAcceso.xml";
   public  static  ItfUsoRecursoTrazas RECURSO_TRAZAS_OBJ = null;
   public  static ItfUsoRepositorioInterfaces REPOSITORIO_INTERFACES_OBJ = null;
 

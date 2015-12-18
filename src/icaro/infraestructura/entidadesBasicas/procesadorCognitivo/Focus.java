@@ -3,7 +3,9 @@ package icaro.infraestructura.entidadesBasicas.procesadorCognitivo;
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.ItfUsoRecursoTrazas;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.imp.componentes.InfoTraza;
-import java.util.Arrays;
+import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.LinkedBlockingDeque;
+import org.openide.util.Exceptions;
 
 
 
@@ -22,15 +24,15 @@ public class Focus {
     /**
      *  Cola circular que guarda los focos anteriores
      */
-    protected Objetivo[] focosAnteriores = null;
+    protected BlockingDeque <Objetivo> focosAnteriores;
     /**
      *  Tamao mximo de la cola circular
      */
-    protected final static int TAM_COLA_FOCOS = 5;
+    protected String faseProcesoConsecObjetivos;
     /**
      *  Indice de la cola circular
      */
-    protected int indice = 0;
+   
     protected Objetivo objetivoFocalizado;
     
     protected ItfUsoRecursoTrazas trazas= NombresPredefinidos.RECURSO_TRAZAS_OBJ;
@@ -41,11 +43,9 @@ public class Focus {
      *
      *@param  motor  Description of the Parameter
      */
-    public Focus() {
+    public  Focus() {
         // Crea cola circular
-        this.focosAnteriores = new Objetivo[TAM_COLA_FOCOS];
-        Arrays.fill(this.focosAnteriores, null);
-        this.indice = 0;
+        this.focosAnteriores = new LinkedBlockingDeque<Objetivo>();
         objetivoFocalizado = null;
         
 		}
@@ -56,25 +56,19 @@ public class Focus {
      *
      *@param  obj  Objetivo al cual apuntar el foco
      */
-    public void setFoco(Objetivo obj) {
+    public synchronized void setFoco(Objetivo obj) {
 //    	trazas.aceptaNuevaTraza(new InfoTraza("Focalizaciones","Foco: Focalizando el objetivo "+obj.getID(),InfoTraza.NivelTraza.debug));
     	
     	//Añadido para depurar los objetivos: informo del identificador y la clase de objetivo
         if (obj == null)this.foco=null;
         else {
-        int posobjetivos = 0;
-        String claseobjetivo = obj.getClass().getName();
-        posobjetivos = claseobjetivo.indexOf("objetivos");
-        claseobjetivo = claseobjetivo.substring(posobjetivos);
-        
     	//trazas.aceptaNuevaTraza(new InfoTraza("Focalizaciones","Foco: Focalizando el objetivo "+obj.getID() + " , class -> " + claseobjetivo,InfoTraza.NivelTraza.debug));  	
     	// Introduce el foco nuevo en la cola, siempre que no fuera el mismo objetivo que el anterior
              if (obj != this.foco) {
                 if (foco != null) foco.setisfocused(false);
                  this.foco = obj;
                  obj.setisfocused(true);
-                 this.focosAnteriores[indice] = obj;
-                 this.indice = (this.indice + 1) % TAM_COLA_FOCOS;
+                 this.focosAnteriores.add(obj);
 
             }
         }
@@ -85,30 +79,34 @@ public class Focus {
      *
      *@return    Refernacia al objetivo
      */
-    public Objetivo getFoco() {
+    public synchronized Objetivo getFoco() {
         return this.foco;
     }
-
+    public synchronized String getfaseProcesoConsecObjetivos() {
+        return faseProcesoConsecObjetivos;
+    }
+    public synchronized void setfaseProcesoConsecObjetivos(String faseProcesoConsec) {
+         faseProcesoConsecObjetivos= faseProcesoConsec;
+    }
     /**
      *  Devolvemos la referencia al Objetivo al cual apuntaba el foco
      *  anteriormente
      *
      *@return    Refernacia al objetivo en el que estaba antes el foco
      */
-    public Objetivo getFocoAnterior() {
-        return this.focosAnteriores[(TAM_COLA_FOCOS + this.indice - 1) % TAM_COLA_FOCOS];
+    public synchronized Objetivo getFocoAnterior() {
+        return this.focosAnteriores.peek();
     }
 
     /**
-     *  Refocaliza en el objetivo anterior al actualmente focalizado Solo se
-     *  puede refocalizar al objetivo inmediantamente anterior (memoria 1 slo
-     *  paso)
+     *  Refocaliza en el objetivo anterior al actualmente focalizado 
+     *  Elimina de la pila el foco y lo toma como foco actual
+     *  
      */
-    public void refocus() {
-        this.indice = (TAM_COLA_FOCOS + this.indice - 1) % TAM_COLA_FOCOS;
-        this.foco = this.focosAnteriores[this.indice];
-        trazas.aceptaNuevaTraza(new InfoTraza("","Foco: Focalizando el objetivo "+foco.getgoalId(),InfoTraza.NivelTraza.debug));
-        
+      public synchronized void refocus() {
+       if (this.focosAnteriores.peekLast() == null) this.setFoco(null);
+       else this.setFoco (this.focosAnteriores.pollLast());
+//        trazas.aceptaNuevaTraza(new InfoTraza("","Foco: Focalizando el objetivo "+foco.getgoalId(),InfoTraza.NivelTraza.debug));
         
         
     }
@@ -119,52 +117,43 @@ public class Focus {
      *  paso) Actualiza el objetivo que acabamos de re-focalizar al estado
      *  pending
      */
-    public void refocusYCambiaAPending() {
-        this.indice = (TAM_COLA_FOCOS + this.indice - 1) % TAM_COLA_FOCOS;
-        this.foco = this.focosAnteriores[this.indice];
-        this.foco.setPending();
-        trazas.aceptaNuevaTraza(new InfoTraza("","Foco: Focalizando el objetivo "+foco.getgoalId(),InfoTraza.NivelTraza.debug));
-    }
+    public synchronized void refocusYCambiaAPending() {
+       
+        this.foco = this.focosAnteriores.poll();
+        if (foco !=null){
+            this.foco.setPending();
+            trazas.aceptaNuevaTraza(new InfoTraza("","Foco: Focalizando el objetivo "+foco.getgoalId(),InfoTraza.NivelTraza.debug));
+        }
+        }
     
-    public void setFocusToObjetivoMasPrioritario(MisObjetivos misObjs){
+    public synchronized void setFocusToObjetivoMasPrioritario(MisObjetivos misObjs){
         Objetivo obj = misObjs.getobjetivoMasPrioritario();
         if (obj == null) this.foco= null;
-        else
-         if (obj != this.foco) {
-
+        if (this.foco!=null && obj != this.foco) {
+            try {
+                this.wait();
+                this.focosAnteriores.addFirst(this.foco);
             this.foco = obj;
-
-            this.indice = (this.indice + 1) % TAM_COLA_FOCOS;
-            this.focosAnteriores[indice] = obj;
-
-
+            } catch (InterruptedException ex) {
+                Exceptions.printStackTrace(ex);
+            }
         }
     }
+    public synchronized void refocusUltimoObjetivoSolving(){
     /**
-     *  Devuelve el contenido del foco como una cadena de texto
-     *
+     *  Devuelve el ultimo objetivo focalizado que sigue en solving . Esto permite refocalizar en el ultimo 
+     *  Objetivo solving. De paso eliminamos los objetivos  conseguidos 
      *@return    Description of the Return Value
      */
+        
+        while (foco!=null && foco.getState()== Objetivo.SOLVED){
+            foco=this.focosAnteriores.pollLast();
+        }
+    }
+    @Override
     public String toString() {
-        return "(FOCO: focoActual= " + this.foco + "  focoAnterior= " + this.focosAnteriores[(this.indice + TAM_COLA_FOCOS - 1) % TAM_COLA_FOCOS] + " )";
+        return "(FOCO: focoActual= " + this.foco + "  focosAnteriores= " + this.focosAnteriores + " )";
     }
 
-    /**
-     *  Obtiene el contenido de la cola de focos anteriores
-     *
-     *@return    Description of the Return Value
-     */
-    public String toStringCola() {
-
-        String res = "";
-        res += "Cola de Objetivos focalizados:\n";
-        for (int i = 0; i < TAM_COLA_FOCOS; i++) {
-            res += "Posicion " + i + ": " + this.focosAnteriores[i] + '\n';
-        }
-
-        res += "Objetivo focalizado en posicion " + this.indice + ": " + this.focosAnteriores[this.indice];
-
-        return res;
-    }
 }
 

@@ -57,6 +57,10 @@ public class ExtractedInfo {
 		this.contenido = contenido;
         esElContenidoUnaColeccion = true;
 	}
+        public ArrayList getContentCollection() {
+         if(esElContenidoUnaColeccion) return (ArrayList)this.contenido;
+         else return null;
+	}
     
 	public void addElementToContent(Object elemento) {
         if (esElContenidoUnaColeccion)

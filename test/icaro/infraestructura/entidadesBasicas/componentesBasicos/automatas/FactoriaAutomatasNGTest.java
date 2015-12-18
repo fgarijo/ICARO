@@ -49,7 +49,7 @@ public class FactoriaAutomatasNGTest {
         Boolean trazar = null;
         FactoriaAutomatas instance = new FactoriaAutomatas();
         InterpreteAutomataEFconGestAcciones expResult = null;
-        InterpreteAutomataEFconGestAcciones result = instance.crearAutomataEFconGestAcciones(identPropietario, rutaFicheroAutomata, rutaCarpetaAcciones, trazar);
+        InterpreteAutomataEFconGestAcciones result = instance.crearAutomataParaControlAgteReactivo(identPropietario, rutaFicheroAutomata, rutaCarpetaAcciones, trazar);
         assertEquals(result, expResult);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

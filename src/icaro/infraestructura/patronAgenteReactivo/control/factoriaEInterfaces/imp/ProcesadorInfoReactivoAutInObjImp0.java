@@ -52,6 +52,10 @@ public class ProcesadorInfoReactivoAutInObjImp0 extends ProcesadorInfoReactivoAb
 
 	/**
 	 * Nombre del componente a efectos de traza
+     * @param interpAutom
+     * @param gestAcciones
+     * @param implItfsagente
+     * @throws java.rmi.RemoteException
 	 * @uml.property  name="nombre"
 	 */
 //	private String nombre;
