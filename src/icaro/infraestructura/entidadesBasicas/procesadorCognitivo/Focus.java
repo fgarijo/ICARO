@@ -131,10 +131,11 @@ public class Focus {
         if (obj == null) this.foco= null;
         if (this.foco!=null && obj != this.foco) {
             try {
-                this.wait();
+//                this.wait();
                 this.focosAnteriores.addFirst(this.foco);
             this.foco = obj;
-            } catch (InterruptedException ex) {
+//            } catch (InterruptedException ex) {
+            } catch (Exception ex) {
                 Exceptions.printStackTrace(ex);
             }
         }

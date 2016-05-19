@@ -64,6 +64,7 @@ public class MotorDeReglasDroolsImp5 implements ItfMotorDeReglas,ItfConfigMotorD
     private boolean factHandlesMonitoring_DEBUGGING = false;  //ANTES ESTABA A true      
     private boolean factHandlesMonitoringUPDATE_DEBUGGING = false;
     private boolean factHandlesMonitoring_afterActivationFired_DEBUGGING = false;
+    private boolean terminarSesion=false;
 	//variables para la depuracion
 //	private int index; 
 //	private String number; //numero de agente. Ejemplo IAMasterCognitivo1 --> number es 1
@@ -90,6 +91,7 @@ public class MotorDeReglasDroolsImp5 implements ItfMotorDeReglas,ItfConfigMotorD
     @Override
     public void fireRules() {
         kSesion.fireAllRules();
+        if(terminarSesion)kSesion.dispose();
                                     
 	}
     public boolean compilarReglas(InputStream fichero, String identFicheroReglas) {
@@ -640,15 +642,24 @@ public void compileRules2(URL fichero)  {
             }     	  
       });//fin del DefaultWorkingMemoryEventListener listener            	  
    }
+    @Override
+    public void reinicializarSesion() {
+//        Iterator it;
+	Collection<FactHandle> cFH = kSesion.getFactHandles();
+	Iterator<FactHandle>    it = cFH.iterator();
+	    while( it.hasNext() ) {
+                kSesion.retract(it.next());
+            }
+    }
     
     @Override
   public ItfConfigMotorDeReglas getItfConfigMotorDeReglas (){
       return this;
   }
-    @Override
-    public ItfMotorDeReglas getItfMotorDeReglas (){
-      return this;
-  }
+//    @Override
+//    public ItfMotorDeReglas getItfMotorDeReglas (){
+//      return this;
+//  }
   @Override
   public void setDepuracionActivationRulesDebugging (boolean boolValor){
       depuracionActivationRulesDebugging = boolValor;
@@ -728,5 +739,7 @@ public void compileRules2(URL fichero)  {
 //		}
 //
 //	}
+
+    
 
 }

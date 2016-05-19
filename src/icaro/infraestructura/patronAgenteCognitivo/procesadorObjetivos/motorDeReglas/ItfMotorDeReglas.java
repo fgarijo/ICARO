@@ -26,7 +26,9 @@ public interface ItfMotorDeReglas {
     
     public StatefulKnowledgeSession getStatefulKnowledgeSession();
     public ItfConfigMotorDeReglas getItfConfigMotorDeReglas ();
-    public ItfMotorDeReglas getItfMotorDeReglas ();
+    public void reinicializarSesion(); // conserva las reglas compiladas de la sesion anterior. eliina la sesion actual 
+                                          //y crea una nueva con las mismas reglas compiladas 
+//    public ItfMotorDeReglas getItfMotorDeReglas ();
     public boolean crearKbSesionConNuevasReglas(InputStream fichero,String identFicheroReglas);
     public void assertFact(Object fact);
     public void retracttFact(Object objeto);

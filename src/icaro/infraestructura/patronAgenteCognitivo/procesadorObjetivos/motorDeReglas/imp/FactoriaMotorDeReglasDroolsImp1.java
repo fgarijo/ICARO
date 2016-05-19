@@ -45,7 +45,7 @@ public class FactoriaMotorDeReglasDroolsImp1 extends FactoriaMotorDeReglas {
     public ItfMotorDeReglas crearMotorDeReglas(AgenteCognitivo agent){
    //     return new MotorDeReglasDroolsImp(agent);
    //       return new MotorDeReglasDroolsImp2(agent);
-        return new MotorDeReglasDroolsImp4(agent);
+        return new MotorDeReglasDroolsImp5(agent);
     }
     
  

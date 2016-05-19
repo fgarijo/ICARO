@@ -237,10 +237,10 @@ public class ProcesadorObjetivosImp extends ProcesadorObjetivos {
     public ItfConfigMotorDeReglas getItfConfigMotorDeReglas (){
     return ruleEngine.getItfConfigMotorDeReglas();
 }
-    @Override
-    public ItfMotorDeReglas getItfMotorDeReglas (){
-    return ruleEngine.getItfMotorDeReglas();
-}
+//    @Override
+//    public ItfMotorDeReglas getItfMotorDeReglas (){
+//    return ruleEngine.getItfMotorDeReglas();
+//}
      @Override
     public String   getAgentId (){
           return this.idAgente ;
@@ -265,5 +265,15 @@ public class ProcesadorObjetivosImp extends ProcesadorObjetivos {
 	    while( it.hasNext() ) {
                 this.insertarHecho(it.next());
 	    }
+    }
+
+    @Override
+    public ItfMotorDeReglas getItfMotorDeReglas() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void reinicializarComportamiento() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

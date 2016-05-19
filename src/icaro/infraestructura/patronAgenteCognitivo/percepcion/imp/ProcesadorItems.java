@@ -44,7 +44,8 @@ public class ProcesadorItems implements ItfProcesadorItems {
 		this.infoExtractedQ = new LinkedBlockingQueue<ExtractedInfo>(
 				CAPACIDAD_BUZON_CONT_MESSG);
 		this.itfProcesadorInfoExtracted = agente.getControl();
-		this.envioEvidencias = new EnvioInfoExtractedThread();		
+		this.envioEvidencias = new EnvioInfoExtractedThread();
+                this.envioEvidencias.setName(agente.getIdentAgente()+"envioEvidenciasThread");
 	}
 	
 	
@@ -207,8 +208,7 @@ public class ProcesadorItems implements ItfProcesadorItems {
 		             if (filtradoPercepcion==false){                    	
                     	ExtractedInfo infoExtr = null;
 				        try {
-					         log.debug("Recogiendo item desde el buzon de items de la percepcion...");
-					         infoExtr = infoExtractedQ.take();
+					         log.debug("Recogiendo item desde el buzon de items de la percepcion...");					         infoExtr = infoExtractedQ.take();
 					         if (infoExtr != null) {
 ////					  if (filtradoPercepcion==false){      	 
 						         boolean seguirEnviando = itfProcesadorInfoExtracted.procesarExtractedInfo(infoExtr);
@@ -246,6 +246,7 @@ public class ProcesadorItems implements ItfProcesadorItems {
     @Override
 	public void arranca() {
         this.envioEvidencias = new EnvioInfoExtractedThread();
+        this.envioEvidencias.setName(agente.getIdentAgente()+"envioEvidenciasThread");
         envioEvidencias.start();
 	}
 	
