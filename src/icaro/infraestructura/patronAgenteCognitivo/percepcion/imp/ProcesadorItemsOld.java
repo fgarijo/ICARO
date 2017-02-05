@@ -13,9 +13,6 @@ import icaro.infraestructura.entidadesBasicas.procesadorCognitivo.ExtractedInfo;
 import icaro.infraestructura.patronAgenteCognitivo.procesadorObjetivos.factoriaEInterfacesPrObj.ItfProcesadorObjetivos;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.ItfUsoRecursoTrazas;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.imp.componentes.InfoTraza;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 
 import java.util.concurrent.LinkedBlockingQueue;
@@ -24,7 +21,7 @@ import java.util.logging.Level;
 import org.apache.log4j.Logger;
 
 
-public class ProcesadorItems implements ItfProcesadorItems {
+public class ProcesadorItemsOld implements ItfProcesadorItems {
 //    public class ProcesadorItems {
 
 	private static final int CAPACIDAD_BUZON_CONT_MESSG = 15;
@@ -36,25 +33,23 @@ public class ProcesadorItems implements ItfProcesadorItems {
 	private Object item;
 	private AgenteCognitivo agente;
 
-	private Logger log = Logger.getLogger(ProcesadorItems.class);
+	private Logger log = Logger.getLogger(ProcesadorItemsOld.class);
 	private ItfUsoRecursoTrazas trazas= NombresPredefinidos.RECURSO_TRAZAS_OBJ;
         private InterpreteEventosSimples interpreteEvS = null;
         private InterpreteMensajesSimples interpreteMsgS = null;
-        private ExecutorService executorService1;
-        private Future ejecucionHebra;
 
-	public ProcesadorItems(AgenteCognitivo agente) {
+	public ProcesadorItemsOld(AgenteCognitivo agente) {
 		this.agente = agente;
 
 		this.infoExtractedQ = new LinkedBlockingQueue<ExtractedInfo>(
 				CAPACIDAD_BUZON_CONT_MESSG);
 		this.itfProcesadorInfoExtracted = agente.getControl();
 		this.envioEvidencias = new EnvioInfoExtractedThread();
-//                this.envioEvidencias.setName(agente.getIdentAgente()+"envioEvidenciasThread");
+                this.envioEvidencias.setName(agente.getIdentAgente()+"envioEvidenciasThread");
 	}
 	
 	
-    public ProcesadorItems() {
+    public ProcesadorItemsOld() {
 		this.agente = null;
 
 		this.infoExtractedQ = null;
@@ -193,7 +188,7 @@ public class ProcesadorItems implements ItfProcesadorItems {
 	////////////////////////////////////////////////////////////////////////////////////////
 	
     //Envia evidencias por la interfaz del control.
-	private class EnvioInfoExtractedThread implements Runnable {
+	private class EnvioInfoExtractedThread extends Thread {
 		
 		//JM: Variable para hacer que la percepcion no pasen informacion al motor 
 		public boolean filtradoPercepcion = false;
@@ -202,7 +197,7 @@ public class ProcesadorItems implements ItfProcesadorItems {
 		private boolean termina;
 
 		public EnvioInfoExtractedThread() {
-//			setDaemon(true);
+			setDaemon(true);
 			termina = false;
 		}
 
@@ -238,8 +233,7 @@ public class ProcesadorItems implements ItfProcesadorItems {
     @Override
 	public void termina() {				
 		this.infoExtractedQ.clear();
-                ejecucionHebra.cancel(true); 
-//        envioEvidencias.interrupt();
+        envioEvidencias.interrupt();
         		//        try {
         		//            //           envioEvidencias.interrupt();
         		//            envioEvidencias.join();
@@ -251,9 +245,8 @@ public class ProcesadorItems implements ItfProcesadorItems {
     @Override
 	public void arranca() {
         this.envioEvidencias = new EnvioInfoExtractedThread();
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-//        this.envioEvidencias.setName(agente.getIdentAgente()+"envioEvidenciasThread");
-        ejecucionHebra=executor.submit(envioEvidencias);
+        this.envioEvidencias.setName(agente.getIdentAgente()+"envioEvidenciasThread");
+        envioEvidencias.start();
 	}
 	
 	
@@ -261,8 +254,7 @@ public class ProcesadorItems implements ItfProcesadorItems {
     @Override
 	public void pararProcesoEnvioInfoExtracted(){       
 		//envioEvidencias.suspend();
-		envioEvidencias.filtradoPercepcion = true; 
-                ejecucionHebra.cancel(true);                
+		envioEvidencias.filtradoPercepcion = true;        		
 	}
 	
 	

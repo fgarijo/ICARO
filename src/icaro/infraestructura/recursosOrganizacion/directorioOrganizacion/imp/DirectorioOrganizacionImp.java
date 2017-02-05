@@ -7,6 +7,7 @@ import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.DescInst
 import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.DescInstanciaRecursoAplicacion;
 import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.jaxb.DescRecursoAplicacion;
 import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.jaxb.DescComportamientoAgentes;
+import icaro.infraestructura.recursosOrganizacion.directorioOrganizacion.imp.ClaseGeneradoraDirectorioOrganizacion;
 import icaro.infraestructura.entidadesBasicas.excepciones.UsoRecursoException;
 import java.io.File;
 import java.io.FileInputStream;

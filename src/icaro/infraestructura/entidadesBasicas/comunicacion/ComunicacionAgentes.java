@@ -137,7 +137,7 @@ public synchronized boolean enviarMsgaOtroAgente (MensajeSimple mensajeAenviar) 
 
     public synchronized void informaraOtroAgenteReactivo(InfoContEvtMsgAgteReactivo infoAEnviar,String identAgenteReceptor, ItfUsoAgenteReactivo itfUsoAgenteReceptor ){
 
-   // Este mÃ©todo crea un evento con la informaciÃ³n de entrada y se le envÃ­a al agente REACTIVO que se indique por medio de
+   // Este método crea un evento con la información de entrada y se le envía al agente REACTIVO que se indique por medio de
   // la  interfaz de uso
 //        EventoRecAgte eventoaEnviar = null;
    // Se verifica que la interfaz del agente no es vacia
@@ -167,7 +167,7 @@ public synchronized boolean enviarMsgaOtroAgente (MensajeSimple mensajeAenviar) 
     
      public synchronized void informaraOtroAgenteReactivo(InfoContEvtMsgAgteReactivo infoAEnviar,String identAgenteReceptor){
 
-   // Este mÃ©todo crea un evento con la informaciÃ³n de entrada y se le envÃ­a al agente REACTIVO que se indique por medio de
+   // Este método crea un evento con la información de entrada y se le envía al agente REACTIVO que se indique por medio de
   // la  interfaz de uso
         EventoRecAgte eventoaEnviar = null;
 

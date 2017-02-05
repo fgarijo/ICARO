@@ -2,7 +2,6 @@ package icaro.infraestructura.clasesGeneradorasOrganizacion;
 
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 import icaro.infraestructura.entidadesBasicas.excepciones.ExcepcionEnComponente;
-import icaro.infraestructura.entidadesBasicas.factorias.FactoriaComponenteIcaro;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.FactoriaAgenteReactivo;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.ItfGestionAgenteReactivo;
 import icaro.infraestructura.patronAgenteReactivo.factoriaEInterfaces.ItfUsoAgenteReactivo;
@@ -20,16 +19,16 @@ public class ArranqueSistemaConCrtlGestorO {
     private static final long serialVersionUID = 1L;
 
     /**
-     * M�todo de arranque principal de la organizaci�n
+     * M?todo de arranque principal de la organizaci?n
      * 
      * @param args
-     *            Entrada: ruta completa hasta el fichero de configuraci�n
+     *            Entrada: ruta completa hasta el fichero de configuraci?n
      */
     public static void main(String args[]) {
 
         boolean herramientaArrancada = false;
 
-        // creamos los recursos de la organizaci�n
+        // creamos los recursos de la organizaci?n
 
         ItfUsoConfiguracion configuracionExterna = null;
         ItfUsoRecursoTrazas recursoTrazas = null;
@@ -39,7 +38,7 @@ public class ArranqueSistemaConCrtlGestorO {
 
         if (args.length == 0) {
             System.err.println("Error. Ningun argumento recibido.\n Causa: Es necesario pasar como argumento la ruta del fichero de descripcion.\n Ejemplo: ./config/descripcionAcceso.xml");
-            int opcion = JOptionPane.showConfirmDialog(new JFrame(), "Descripción de Organizacion no encontrado. ¿Desea arrancar el asistente de creación de Descripción de Organización?", "Confirmación", JOptionPane.YES_NO_OPTION);
+            int opcion = JOptionPane.showConfirmDialog(new JFrame(), "Descripcion de Organizacion no encontrado. Desea arrancar el asistente de creaci�n de Descripcion de Organizacion?", "Confirmacion", JOptionPane.YES_NO_OPTION);
            // if (opcion == JOptionPane.YES_OPTION) {
            //     arrancarHerramienta();
           //      herramientaArrancada = true;
@@ -66,7 +65,7 @@ public class ArranqueSistemaConCrtlGestorO {
                 } catch (Exception e) {
                     System.err.println("Error. No se pudo crear o registrar el recurso de trazas");
                     e.printStackTrace();
-                //no es error cr�tico
+                //no es error cr?tico
                }
             // Se crea el iniciador que se encargara de crear el resto de componentes
 
@@ -76,9 +75,8 @@ public class ArranqueSistemaConCrtlGestorO {
     //                DescInstanciaAgente descGestor = configuracionExterna.getDescInstanciaGestor(NombresPredefinidos.NOMBRE_GESTOR_ORGANIZACION);
                     // creo el agente gestor de organizacion
                    
-//                    FactoriaAgenteReactivo.instancia().crearAgenteReactivo( NombresPredefinidos.NOMBRE_INICIADOR, NombresPredefinidos.COMPORTAMIENTO_PORDEFECTO_INICIADOR);
-                    FactoriaComponenteIcaro.instanceAgteReactInpObj().crearAgenteReactivo(NombresPredefinidos.NOMBRE_INICIADOR,NombresPredefinidos.COMPORTAMIENTO_PORDEFECTO_INICIADOR );
-                    
+                    FactoriaAgenteReactivo.instancia().crearAgenteReactivo( NombresPredefinidos.NOMBRE_INICIADOR, NombresPredefinidos.COMPORTAMIENTO_PORDEFECTO_INICIADOR);
+               
                     ItfGestIniciador = (ItfGestionAgenteReactivo) ClaseGeneradoraRepositorioInterfaces.instance().obtenerInterfaz(
                             NombresPredefinidos.ITF_GESTION + NombresPredefinidos.NOMBRE_INICIADOR);
                      ItfUsoIniciador = (ItfUsoAgenteReactivo) ClaseGeneradoraRepositorioInterfaces.instance().obtenerInterfaz(

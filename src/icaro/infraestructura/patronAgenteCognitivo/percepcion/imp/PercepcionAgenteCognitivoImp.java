@@ -12,6 +12,9 @@ import icaro.infraestructura.patronAgenteCognitivo.procesadorObjetivos.factoriaE
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.ItfUsoRecursoTrazas;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.imp.componentes.InfoTraza;
 import java.rmi.RemoteException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -29,7 +32,8 @@ public class PercepcionAgenteCognitivoImp extends PercepcionAgenteCognitivo {
 	private EnvioItemsThread envioItems;
 	
 	private AgenteCognitivo agente;
-
+        private ExecutorService executorService1;
+        private Future ejecucionHebra;
 	private Logger log = Logger.getLogger(PercepcionAgenteCognitivoImp.class);
 	private ItfUsoRecursoTrazas trazas=NombresPredefinidos.RECURSO_TRAZAS_OBJ ;
 
@@ -67,7 +71,7 @@ public class PercepcionAgenteCognitivoImp extends PercepcionAgenteCognitivo {
 		this.agente = agente;
 		this.procesador = prItems;
 		this.envioItems = new EnvioItemsThread();
-                this.envioItems.setName(agente.getIdentAgente()+"envioItemsThread");
+//                this.envioItems.setName(agente.getIdentAgente()+"envioItemsThread");
 	}
     
     public void SetProcesadorEvidencias(ItfProcesadorObjetivos itfProcesEvidencias) {
@@ -108,13 +112,13 @@ public class PercepcionAgenteCognitivoImp extends PercepcionAgenteCognitivo {
 		buzon.offer(mensaje);
 	}
 	
-	private class EnvioItemsThread extends Thread {
+	private class EnvioItemsThread implements Runnable{
 
 		private static final long TIEMPO_ESPERA = 10;		
 		private boolean termina;
 
 		public EnvioItemsThread() {
-			this.setDaemon(true);
+//			this.setDaemon(true);
 			termina = false;
 		}
 		
@@ -142,7 +146,7 @@ public class PercepcionAgenteCognitivoImp extends PercepcionAgenteCognitivo {
 		
 		public void termina() {
 			this.termina = true;
-			envioItems.interrupt();
+//			envioItems.interrupt();
 		}		
 	}
 
@@ -152,11 +156,14 @@ public class PercepcionAgenteCognitivoImp extends PercepcionAgenteCognitivo {
 		this.envioItems.termina();
 		this.buzon.clear();
 		this.procesador.termina();
+                ejecucionHebra.cancel(true);   
 	}
 
         @Override
 	public void arranca() {
-		this.envioItems.start();
+//		this.envioItems.start();
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+        ejecucionHebra=executor.submit(envioItems);
 		this.procesador.arranca();
 	}
 	

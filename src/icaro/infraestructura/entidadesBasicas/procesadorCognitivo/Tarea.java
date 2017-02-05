@@ -1,8 +1,8 @@
 package icaro.infraestructura.entidadesBasicas.procesadorCognitivo;
 
-import icaro.infraestructura.entidadesBasicas.informes.InformeDeTarea;
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 import icaro.infraestructura.entidadesBasicas.comunicacion.ComunicacionAgentes;
+import icaro.infraestructura.entidadesBasicas.informes.InformeDeTarea;
 import icaro.infraestructura.patronAgenteCognitivo.factoriaEInterfacesPatCogn.AgenteCognitivo;
 import icaro.infraestructura.patronAgenteCognitivo.procesadorObjetivos.factoriaEInterfacesPrObj.ItfProcesadorObjetivos;
 import icaro.infraestructura.patronAgenteCognitivo.procesadorObjetivos.gestorTareas.GestorTareas;
@@ -78,7 +78,8 @@ public abstract class Tarea extends Thread {
             goalId= contxtGoal.getgoalId();
         }
         InformeDeTarea informeTarea = new InformeDeTarea (idTarea,goalId,idAgenteOrdenante, contenido );
-        Temporizador informeTemporizado = new Temporizador ( milis, itfProcObjetivos,informeTarea );
+        Temporizador informeTemporizado;
+        informeTemporizado = new Temporizador ( milis, itfProcObjetivos,informeTarea );
         informeTemporizado.start();
     }
    public ItfUsoConfiguracion getItfUsoConfiguracion() {

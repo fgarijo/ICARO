@@ -4,18 +4,19 @@ import java.util.ArrayList;
 
 public class ExtractedInfo {
 	
-    // El contenido puede ser un objeto o  una colección de entidades que se obtiene a partir de mensajes o de eventos
-    // Se puede crear la evidencia a partir de una collección de objetos o con una colección vacía a la que
-    //  se van añadiendo elementos
+    // El contenido puede ser un objeto o  una colecci?n de entidades que se obtiene a partir de mensajes o de eventos
+    // Se puede crear la evidencia a partir de una colleccion de objetos o con una coleccion vacia a la que
+    //  se van a?adiendo elementos
 	private Object origen;      //JM: Identificador de la entidad que creo (y lo envio) el mensaje/evento
     private Object creador;     //JM: Identificdor  del agente que recibe el mensaje/evento (es decir el destinatario del mensaje/evento)
 	private Object contenido;   //JM: Contenido del mensaje/evento que fue creado en el origen
     private Boolean esElContenidoUnaColeccion = false;
+   
 	
 	public ExtractedInfo(){
         contenido = null;
         origen = null;
-        creador = null;      
+        creador = null;
     }
 	
 	public ExtractedInfo(Object origen, Object creador, Object contenidoInicial) {
@@ -42,11 +43,12 @@ public class ExtractedInfo {
 	}
 	
 	public Object getContenido() {
-		return contenido;
+		return this.contenido;
 	}
     
 	public Boolean isContentACollection() {
-		return esElContenidoUnaColeccion;
+
+                return esElContenidoUnaColeccion;
 	}
 	
 	public void setContenido(Object contenido) {
@@ -56,10 +58,6 @@ public class ExtractedInfo {
 	public void setContentCollection(ArrayList contenido) {
 		this.contenido = contenido;
         esElContenidoUnaColeccion = true;
-	}
-        public ArrayList getContentCollection() {
-         if(esElContenidoUnaColeccion) return (ArrayList)this.contenido;
-         else return null;
 	}
     
 	public void addElementToContent(Object elemento) {
@@ -76,12 +74,13 @@ public class ExtractedInfo {
         	 this.contenido = null ;	        
 	}
     
-
     /**
-     *  JM: Cadena de texto para la depuración
+     *  JM: Cadena de texto para la depuraci?n
      */
+        @Override
     public String toString() {
-    	return "ExtractedInfo:" + " origen->" + this.getOrigen() + " ; creador->" + this.getCreador() + " ; contenido->" + this.getContenido(); 
+    	return "ExtractedInfo:"+"clase -> "+" origen->" + this.getOrigen() + " ; creador->" + this.getCreador() + " ; contenido->"+contenido.getClass().getSimpleName() + this.contenido; 
     }
     
+   
 }

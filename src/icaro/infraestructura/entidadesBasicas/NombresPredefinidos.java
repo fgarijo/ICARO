@@ -156,7 +156,7 @@ public class NombresPredefinidos {
   public final static String DROOLS_Debugging_BEFORE_RuleFired = "BEFORE_ActivationFired";
   public final static String DROOLS_Debugging_AFTER_RuleFired = "AFTER_ActivationFired";
   public final static String PROPERTY_TIME_TIMEOUT_POR_DEFECTO = "timeTimeoutPorDefecto"; 
-  // aÃ±adir los nombres de cada aplicacion en concreto
+  // añadir los nombres de cada aplicacion en concreto
   public final static String RUTA_PRUEBAS = "icaro.pruebas";
   public static String RUTA_Carpeta_CodigoFuente_ICARO = "src/";  //cambiar el valor a "src/main/java" si pone el icaro en un proyecto maven
 }

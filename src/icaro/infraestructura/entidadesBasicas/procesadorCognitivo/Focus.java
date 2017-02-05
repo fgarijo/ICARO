@@ -50,7 +50,10 @@ public class Focus {
         
 		}
         
-
+    public void inicializar(){
+        this.focosAnteriores = new LinkedBlockingDeque<Objetivo>();
+        objetivoFocalizado = null;
+    }
     /**
      *  Fija el foco al objetivo obj
      *
@@ -59,7 +62,7 @@ public class Focus {
     public synchronized void setFoco(Objetivo obj) {
 //    	trazas.aceptaNuevaTraza(new InfoTraza("Focalizaciones","Foco: Focalizando el objetivo "+obj.getID(),InfoTraza.NivelTraza.debug));
     	
-    	//AÃ±adido para depurar los objetivos: informo del identificador y la clase de objetivo
+    	//Añadido para depurar los objetivos: informo del identificador y la clase de objetivo
         if (obj == null)this.foco=null;
         else {
     	//trazas.aceptaNuevaTraza(new InfoTraza("Focalizaciones","Foco: Focalizando el objetivo "+obj.getID() + " , class -> " + claseobjetivo,InfoTraza.NivelTraza.debug));  	
@@ -131,11 +134,10 @@ public class Focus {
         if (obj == null) this.foco= null;
         if (this.foco!=null && obj != this.foco) {
             try {
-//                this.wait();
+                this.wait();
                 this.focosAnteriores.addFirst(this.foco);
             this.foco = obj;
-//            } catch (InterruptedException ex) {
-            } catch (Exception ex) {
+            } catch (InterruptedException ex) {
                 Exceptions.printStackTrace(ex);
             }
         }

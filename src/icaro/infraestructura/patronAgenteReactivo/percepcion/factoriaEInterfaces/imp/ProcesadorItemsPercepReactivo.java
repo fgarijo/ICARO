@@ -25,18 +25,13 @@ public class ProcesadorItemsPercepReactivo {
 
 //	private static final int CAPACIDAD_BUZON_EVIDENCIAS = 15;
 	
-
-
-
 	private ItfControlAgteReactivo itfControlReactivo;
 	private Object item;
 	private AgenteReactivoAbstracto agente;
    //   private InfoControlAgteReactivo infoControlExtraida = null;
         private String nombreAgente = null;
-
 	private Logger log = Logger.getLogger(ProcesadorItemsPercepReactivo.class);
 	private ItfUsoRecursoTrazas trazas= NombresPredefinidos.RECURSO_TRAZAS_OBJ;
-
 	public ProcesadorItemsPercepReactivo(AgenteReactivoAbstracto agente, ItfControlAgteReactivo itfControl) {
 		this.agente = agente;
 
@@ -48,24 +43,14 @@ public class ProcesadorItemsPercepReactivo {
                     } catch (RemoteException ex) {
                     java.util.logging.Logger.getLogger(ProcesadorItemsPercepReactivo.class.getName()).log(Level.SEVERE, null, ex);
                  }
-
-
-
 	}
         public ProcesadorItemsPercepReactivo() {
 		this.agente = null;
 		this.itfControlReactivo = null;
-		
-
-
 	}
-
-     
-
 	// De momento filtra los items que no tengan como destinatario este agente.
 	private boolean filtrarItem() {
 		
-
 		if (item instanceof EventoSimple) {
 			EventoSimple evento = (EventoSimple) item;
 //			log.warn("El evento" + evento.toString()

@@ -42,7 +42,6 @@ public  InfoContEvtMsgAgteReactivo(String input,Object[] valoresParametrosAccion
         this.valoresParametrosAccion = valoresParametrosAccion;
     }
 
-
     public InfoContEvtMsgAgteReactivo() {
 
     }

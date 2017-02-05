@@ -230,7 +230,7 @@ public void inicializarInfoAcciones(Class claseAccionAinicializar, Object... par
         }
         else {
             this.trazas.trazar ( this.getClass().getSimpleName(), "Error en  la ejecucion de la accion: "+ claseAccionEjecutar.getSimpleName() +
-                    " debe extender a AccionSincrona o a AccionAsincrona ", InfoTraza.NivelTraza.error );
+                    " La clase de la accion es vacia o si no lo es  debe extender a AccionSincrona o a AccionAsincrona ", InfoTraza.NivelTraza.error );
         }
         }
     @Override

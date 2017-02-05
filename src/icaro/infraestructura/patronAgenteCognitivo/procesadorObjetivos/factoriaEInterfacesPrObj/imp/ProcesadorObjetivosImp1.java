@@ -28,7 +28,7 @@ public class ProcesadorObjetivosImp1 extends ProcesadorObjetivos {
     private Logger log = Logger.getLogger(ProcesadorObjetivosImp1.class);	
     private ArrayList<Creencia> creencias;
     private ArrayList<Object> extractecItems;
-    String idAgente;
+    private String idAgente;
     public ProcesadorObjetivosImp1(ItfMotorDeReglas ruleEngine,ItfGestorTareas taskManager) {
 	   this.ruleEngine = ruleEngine;
            this.taskManager = taskManager;
@@ -69,8 +69,8 @@ public class ProcesadorObjetivosImp1 extends ProcesadorObjetivos {
            if (extrInfo == null) return false;
            
            if ( !(extrInfo.isContentACollection())){    
-                Object msgContent = extrInfo.getContenido();			
-                ruleEngine.assertFact(msgContent);
+//                Object msgContent = extrInfo.getContenido();			
+                ruleEngine.assertFact(extrInfo.getContenido());
                                //                        ruleEngine.assertFact(extrInfo);
                                //			return true;
            }
@@ -174,4 +174,5 @@ public class ProcesadorObjetivosImp1 extends ProcesadorObjetivos {
     public void reinicializarComportamiento() {  
        ruleEngine.reinicializarSesion();
     }
+    
 }

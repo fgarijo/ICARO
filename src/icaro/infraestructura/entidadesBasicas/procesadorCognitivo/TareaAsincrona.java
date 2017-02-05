@@ -7,6 +7,8 @@ package icaro.infraestructura.entidadesBasicas.procesadorCognitivo;
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 import icaro.infraestructura.patronAgenteCognitivo.factoriaEInterfacesPatCogn.AgenteCognitivo;
 import icaro.infraestructura.patronAgenteCognitivo.procesadorObjetivos.factoriaEInterfacesPrObj.ItfProcesadorObjetivos;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 /**
  *
@@ -14,7 +16,8 @@ import icaro.infraestructura.patronAgenteCognitivo.procesadorObjetivos.factoriaE
  */
 
 public abstract class TareaAsincrona extends TareaSincrona implements Runnable {
-    Thread tareaActiva;
+//    Thread tareaActiva;
+   
 		
     public TareaAsincrona(){	
                 this.trazas = NombresPredefinidos.RECURSO_TRAZAS_OBJ;
@@ -35,10 +38,10 @@ public abstract class TareaAsincrona extends TareaSincrona implements Runnable {
     	return terminada;
     }
     public void comenzar() {
-        tareaActiva = new Thread (this);
-        tareaActiva.setDaemon(true);
-        tareaActiva.setName(identTarea);
-    	tareaActiva.start();
+//        tareaActiva = new Thread (this);
+//        tareaActiva.setDaemon(true);
+//        tareaActiva.setName(identTarea);
+//    	tareaActiva.start();
     }
     
     @Override

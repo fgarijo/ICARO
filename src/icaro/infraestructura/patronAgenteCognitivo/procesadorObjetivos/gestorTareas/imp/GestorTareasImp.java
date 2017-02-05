@@ -17,6 +17,8 @@ import icaro.infraestructura.recursosOrganizacion.recursoTrazas.ItfUsoRecursoTra
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.imp.componentes.InfoTraza;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 import org.apache.log4j.Logger;
 
@@ -36,6 +38,8 @@ public class GestorTareasImp implements ItfGestorTareas{
     private String tareaSincSimpleName;
     private Map<String, TareaSincrona> tareasCreadas;
     private Logger log = Logger.getLogger(GestorTareasImp.class);
+    private ExecutorService executorService1;
+    private Future ejecucionHebra;
     
     public GestorTareasImp(AgenteCognitivo agente,ItfProcesadorObjetivos envioHechos){
         this.agente = agente;
@@ -116,6 +120,7 @@ public class GestorTareasImp implements ItfGestorTareas{
        // Extraccion de parametros y verificacion de la clase
         String superclase = claseTareaEjecutar.getSuperclass().getSimpleName();
         int numparam = paramsEjecucion.length -1;
+        
    
         for (int i = 0; i<numparam; i++){
            paramsEjecucion[i]= paramsEjecucion[i+1];
@@ -129,7 +134,8 @@ public class GestorTareasImp implements ItfGestorTareas{
              tareaAsinc = (TareaAsincrona) claseTareaEjecutar.newInstance();
              inicializarTarea(tareaAsinc);
              tareaAsinc.setParams(paramsEjecucion);
-             tareaAsinc.comenzar();
+             ejecucionHebra = executorService1.submit(tareaAsinc);
+//             tareaAsinc.comenzar();
         }
         else {
             this.trazas.trazar ( this.getClass().getSimpleName(), "Error en  la ejecucion de la tarea: "+ claseTareaEjecutar.getSimpleName() +

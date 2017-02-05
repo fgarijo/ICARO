@@ -564,20 +564,15 @@ public  class ConstructorDescOrganizacion implements Serializable{
 	public DescInstanciaRecursoAplicacion construirDescInstanciaRecursoAplicacion(
 			String id) throws ExcepcionEnComponente {
 		try {
-			Instancia instanciaDefinida = (Instancia)tablaInstanciasDefinidas.get(id);                      
+			
+			Instancia instanciaDefinida = (Instancia)tablaInstanciasDefinidas.get(id);
 			if (instanciaDefinida != null) {
-                            String refDescripcion=instanciaDefinida.getRefDescripcion();
                             DescInstanciaRecursoAplicacion descInstanciaRecursoAplicacion = new DescInstanciaRecursoAplicacion();
                             descInstanciaRecursoAplicacion.setId(id);
                             descInstanciaRecursoAplicacion.setCategoriaComponente(NombresPredefinidos.NOMBRE_ENTIDAD_RECURSO);
                             // Obtener descripcion
-                            DescRecursoAplicacion descRec = this.getDescRecursoAplicacion(refDescripcion);
-                            if ( descRec ==null){
-                                throw new ExcepcionEnComponente(
-				"La referencia a la descripcion de recurso : "+refDescripcion+ "  definida en la instancia "
-							+ id + "  es incorrecta. Verificar identificadores de descripcion de recursos  o la referencia definida");
-                            }
-                            descInstanciaRecursoAplicacion.setDescRecurso(descRec);
+                            descInstanciaRecursoAplicacion.setDescRecurso(this.getDescRecursoAplicacion
+                                                                                (instanciaDefinida.getRefDescripcion()));
 				// Obtener lista de propiedades
                             descInstanciaRecursoAplicacion.setPropiedades(ConstructorProperties
 						.obtenerProperties(instanciaDefinida.getListaPropiedades()));

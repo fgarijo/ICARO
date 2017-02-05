@@ -3,10 +3,10 @@
  * and open the template in the editor.
  */
 package icaro.infraestructura.entidadesBasicas.procesadorCognitivo;
-import icaro.infraestructura.entidadesBasicas.informes.InformeDeTarea;
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 import icaro.infraestructura.entidadesBasicas.comunicacion.ComunicacionAgentes;
 import icaro.infraestructura.entidadesBasicas.excepciones.ExcepcionEnComponente;
+import icaro.infraestructura.entidadesBasicas.informes.InformeDeTarea;
 import icaro.infraestructura.patronAgenteCognitivo.factoriaEInterfacesPatCogn.AgenteCognitivo;
 import icaro.infraestructura.patronAgenteCognitivo.procesadorObjetivos.factoriaEInterfacesPrObj.ItfProcesadorObjetivos;
 import icaro.infraestructura.patronAgenteCognitivo.procesadorObjetivos.gestorTareas.GestorTareas;
@@ -110,7 +110,7 @@ public abstract class TareaSincrona {
                  if(contenido==null)contenido = NombresPredefinidos.PREFIJO_MSG_TIMEOUT;
                    this.generarInformeTemporizado(valorTimeout, identproperty, contxtGoal, idAgenteOrdenante, contenido);      
                    trazas.trazar(idAgenteOrdenante, "Se ejecuta la tarea " + this.getIdentTarea()+
-                                         " Se activa un informe temporizado :  "+ contenido, NivelTraza.debug);                    
+                    "propiedad en la configuracion: " + identproperty + " Se activa un informe temporizado de :  "+ valorTimeout + "  y contenido : " + contenido, NivelTraza.debug);                    
               
         } catch (ExcepcionEnComponente ex) {
             trazas.trazar(idAgenteOrdenante, "Se ejecuta la tarea " + this.getIdentTarea()+

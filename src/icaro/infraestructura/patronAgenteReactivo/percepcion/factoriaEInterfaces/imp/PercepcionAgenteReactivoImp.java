@@ -9,6 +9,9 @@ import icaro.infraestructura.patronAgenteReactivo.percepcion.factoriaEInterfaces
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.ItfUsoRecursoTrazas;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.imp.componentes.InfoTraza;
 import java.rmi.RemoteException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingDeque;
 
 import java.util.concurrent.PriorityBlockingQueue;
@@ -30,7 +33,8 @@ public class PercepcionAgenteReactivoImp extends PercepcionAbstracto {
         static final AtomicLong seq = new AtomicLong(0);
 
 	private AgenteReactivoAbstracto agente;
-
+        private ExecutorService executorService1;
+        private Future ejecucionHebra;
 	private Logger log = Logger.getLogger(PercepcionAgenteReactivoImp.class);
 	private ItfUsoRecursoTrazas trazas=NombresPredefinidos.RECURSO_TRAZAS_OBJ ;
 
@@ -90,14 +94,14 @@ public class PercepcionAgenteReactivoImp extends PercepcionAbstracto {
 	}
 
 
-	private class EnvioItemsThread extends Thread {
+	private class EnvioItemsThread implements Runnable {
 
 		private static final long TIEMPO_ESPERA = 10;
 
 		private boolean termina;
 
 		public EnvioItemsThread() {
-			this.setDaemon(true);
+//			this.setDaemon(true);
 			termina = false;
 		}
 
@@ -125,30 +129,27 @@ public class PercepcionAgenteReactivoImp extends PercepcionAbstracto {
 
 		public void termina() {
 			this.termina = true;
-                        this.interrupt();
-          
-//                try {
-//                    envioItems.finalize();
-//                } catch (Throwable ex) {
-//                    java.util.logging.Logger.getLogger(PercepcionAgenteReactivoImp.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-           
 		}
 	}
 
 
+        @Override
 	public void termina() {
 		this.envioItems.termina();
 		this.buzon.clear();
 //		this.procesador.termina();
+                ejecucionHebra.cancel(true);
 	}
 
+        @Override
 	public void arranca() {
-		this.envioItems.start();
+	ExecutorService executor = Executors.newSingleThreadExecutor();
+        ejecucionHebra=executor.submit(envioItems);
 //		this.procesador.arranca();
 	}
 
-public Object consumeConTimeout(int tiempoEnMilisegundos)throws ExcepcionSuperadoTiempoLimite {
+        @Override
+        public Object consumeConTimeout(int tiempoEnMilisegundos)throws ExcepcionSuperadoTiempoLimite {
     // No tiene mucho sentido la ponemos para compatibilizar las interfaces
 
     try
@@ -162,7 +163,8 @@ public Object consumeConTimeout(int tiempoEnMilisegundos)throws ExcepcionSuperad
 			throw new ExcepcionSuperadoTiempoLimite("Percepcion: Interrumpida la espera de nuevo item en el buzon de items");
 		}
 }
-public void produce(Object evento)
+        @Override
+        public void produce(Object evento)
 	{
 		buzon.offer(evento);
 	}

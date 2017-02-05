@@ -207,7 +207,7 @@ public class CopyOfProcesadorItems implements ItfProcesadorItems {
                                  trazas.aceptaNuevaTraza(new InfoTraza (agente.getIdentAgente(),"Procesador de Items: El mensaje " + infoExtr.toString()
 						                     + " se envia al motor " +agente.getIdentAgente() ,InfoTraza.NivelTraza.debug ));
 						         if (!seguirEnviando)
-							         Thread.sleep(TIEMPO_ESPERA);
+							         this.sleep(TIEMPO_ESPERA);
 					         }
 					         else
 						        log.debug("Item == NULL!!!!!");

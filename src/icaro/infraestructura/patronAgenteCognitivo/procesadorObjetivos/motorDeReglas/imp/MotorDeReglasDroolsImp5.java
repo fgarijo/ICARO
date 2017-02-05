@@ -305,7 +305,7 @@ public void compileRules2(URL fichero)  {
     @Override
     public synchronized void assertFact(Object objeto) {
 		if (depuracionHechosInsertados)
-		trazas.aceptaNuevaTraza(new InfoTraza(agentId, "Motor de Reglas : nuevo Hecho insertado : " + objeto,
+		trazas.aceptaNuevaTraza(new InfoTraza(agentId, "Motor de Reglas : nuevo Hecho insertado : " + " clase : " + objeto.getClass().getSimpleName() + objeto,
                                                     InfoTraza.NivelTraza.debug));
                 if (objeto==null){
                     trazas.aceptaNuevaTraza(new InfoTraza(agentId, "Motor de Reglas : Se intenta insertar en el motor un objeto null : ",
@@ -485,16 +485,16 @@ public void compileRules2(URL fichero)  {
                 	  //Creeo que este metodo nos permite conocer como quedan los hechos que provoron que se dispare la regla
                 	  //Observo que no se mostraran aquellos para los que se hace un retract
 //  
- @Override
- public void activationCreated(ActivationCreatedEvent activationCreatedEvent) {
-        
-    	trazas.aceptaNuevaTrazaEjecReglas(agentId,
+        @Override
+        public void activationCreated(ActivationCreatedEvent activationCreatedEvent) {
+
+            trazas.aceptaNuevaTrazaEjecReglas(agentId,
     			"\n regla activada - " + activationCreatedEvent.getActivation().getRule().getName()+
                          "\n objetos en la activacion : " + activationCreatedEvent.getActivation().getObjects() );
 //        log.debug("Activacion creada: "+activationCreatedEvent.toString());
-    }    
-           @Override
-            public void afterActivationFired(AfterActivationFiredEvent event) {
+        }    
+        @Override
+         public void afterActivationFired(AfterActivationFiredEvent event) {
                 super.afterActivationFired( event );
                 String ruleName = event.getActivation().getRule().getName();
             //Mostrar todos los facthandles de la memoria de trabajo
@@ -663,19 +663,17 @@ public void compileRules2(URL fichero)  {
   @Override
   public void setDepuracionActivationRulesDebugging (boolean boolValor){
       depuracionActivationRulesDebugging = boolValor;
-///      if (depuracionActivationRulesDebugging)trazarRuleActivation();
       
   }
   @Override
   public void setDepuracionHechosInsertados (boolean boolValor) {
       depuracionHechosInsertados = boolValor;
-///      if (depuracionActivationRulesDebugging)trazarRuleActivation();
+
       
   }
   @Override
   public void setDepuracionHechosModificados (boolean boolValor) {
       depuracionHechosModificados = boolValor;
-///      if (depuracionActivationRulesDebugging)trazarRuleActivation();
       
   }
     @Override

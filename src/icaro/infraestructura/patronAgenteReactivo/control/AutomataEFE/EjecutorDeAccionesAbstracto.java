@@ -7,13 +7,13 @@ import icaro.infraestructura.patronAgenteReactivo.control.acciones.ExcepcionEjec
 /**
  *  
  *
- *@author     Felipe Polo
+ *@author     
  *@created    3 de Diciembre de 2007
  */
 // public abstract class EjecutroDeAccionesAbstracto extends java.lang.Thread implements ItfAccionesSemanticas {
-public abstract class EjecutorDeAccionesAbstracto extends java.lang.Thread  {
+public abstract class EjecutorDeAccionesAbstracto implements Runnable {
 	public EjecutorDeAccionesAbstracto(String string) {
-		super(string);
+		
 	}
 
 	public EjecutorDeAccionesAbstracto() {}

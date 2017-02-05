@@ -5,6 +5,9 @@ import icaro.infraestructura.patronAgenteReactivo.control.acciones.AccionesSeman
 import icaro.infraestructura.patronAgenteReactivo.control.acciones.ExcepcionEjecucionAcciones;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.logging.Logger;
         
         
@@ -36,7 +39,8 @@ public class EjecutorDeAccionesImp extends EjecutorDeAccionesAbstracto {
      * @uml.property  name="parametros" multiplicity="(0 -1)" dimension="1"
      */
     protected Object[] parametros;
-
+    private ExecutorService executorService1;
+    private Future ejecucionHebra;
     /**
      *  Constructor
      *	@param accionesSemanticas Clase que contiene las acciones ejecutables java
@@ -44,6 +48,7 @@ public class EjecutorDeAccionesImp extends EjecutorDeAccionesAbstracto {
     public EjecutorDeAccionesImp(AccionesSemanticasAgenteReactivo accionesSemanticas) {
         super("Acciones semanticas");
         this.accionesSemanticas = accionesSemanticas;
+        executorService1 = Executors.newSingleThreadExecutor();
     }
 
     /**
@@ -245,7 +250,8 @@ public class EjecutorDeAccionesImp extends EjecutorDeAccionesAbstracto {
 		
 		this.setAccion(nombre);
 		this.setParametros(parametros);
-		this.setDaemon(true);
-		this.start();
+//		this.setDaemon(true);
+                executorService1.submit(this);
+//		this.run();
 	}
 }

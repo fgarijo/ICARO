@@ -1,5 +1,7 @@
 package icaro.infraestructura.entidadesBasicas.comunicacion;
 
+import icaro.infraestructura.entidadesBasicas.comunicacion.SimpleMessage;
+
 
 /**
  *  

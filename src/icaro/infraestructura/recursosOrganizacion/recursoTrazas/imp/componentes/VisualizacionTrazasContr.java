@@ -67,8 +67,7 @@ public class VisualizacionTrazasContr {
        activacionPanelTrazas = false;
    }   
     public synchronized void visualizarNuevaTraza(InfoTraza traza) {
-         String idEntidad = traza.getEntidadEmisora();
-         if (idEntidad==null)idEntidad=NombresPredefinidos.NOMBRE_ENTIDAD_INDEFINIDA;
+         String idEntidad = traza.getEntidadEmisora(); 
          tipoEntidadEmisora= traza.getTipoEntidadEmisora();
          if ( tipoEntidadEmisora==null)tipoEntidadEmisora = NombresPredefinidos.TipoEntidad.noDefinido;
             if (activacionPanelTrazas){

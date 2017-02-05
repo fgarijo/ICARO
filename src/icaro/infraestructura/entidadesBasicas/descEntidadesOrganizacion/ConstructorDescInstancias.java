@@ -1,8 +1,12 @@
 package icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion;
 
-import icaro.infraestructura.recursosOrganizacion.configuracion.imp.ConfiguracionImp;
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
 import icaro.infraestructura.recursosOrganizacion.configuracion.imp.*;
+import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.ConstructorProperties;
+import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.DescInstancia;
+import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.DescInstanciaAgenteAplicacion;
+import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.DescInstanciaGestor;
+import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.DescInstanciaRecursoAplicacion;
 import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.jaxb.ComponenteGestionado;
 import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.jaxb.Instancia;
 import icaro.infraestructura.entidadesBasicas.descEntidadesOrganizacion.jaxb.InstanciaGestor;

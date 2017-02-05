@@ -11,7 +11,7 @@ import java.util.concurrent.PriorityBlockingQueue;
 
 /**
  * Esta clase  modela los objetivos gestionados por el agente
- * En esta primera version se modelan los objetivos que el agente tiene que realizar y que requiren energÃ­a, utilizacion de sensores y 
+ * En esta primera version se modelan los objetivos que el agente tiene que realizar y que requiren energía, utilizacion de sensores y 
  * otros recursos del agente. Se excluyen los objetivos internos que implican procesos de razomiento o decision
  * Se utiliza una cola de prioridad donde se insertan los objetivos pendientes y se eliminan cuando estan realizados
  * @author FGarijo
@@ -41,14 +41,18 @@ public class MisObjetivos {
         // verificamos que el objetivo no esta en la cola de objetivos
         String goalRefId = obj.getobjectReferenceId();
         if(goalRefId==null)goalRefId= obj.getgoalId();
-        if (! existeObjetivoConEsteIdentRef(goalRefId)){    
-                    misObjetivosPriorizados.add((Objetivo)obj);
-                    setOfIGoalRefIds.add(goalRefId);
-        }
+        if ( existeObjetivoConEsteIdentRef(goalRefId))this.eliminarObjetivo(obj);
+        misObjetivosPriorizados.add((Objetivo)obj);
+        setOfIGoalRefIds.add(goalRefId);
+        
+    }
+    public void inicializar(){
+        misObjetivosPriorizados = new PriorityBlockingQueue <Objetivo> (11,c);
+        setOfIGoalRefIds = new TreeSet<String>();
+        objetivoMasPrioritario=null;
     }
     public boolean eliminarObjetivo ( Objetivo obj){
         String goalRefId = obj.getobjectReferenceId();
-        if(goalRefId==null)goalRefId= obj.getgoalId();
         if (goalRefId==null)return false;
         if ( existeObjetivoConEsteIdentRef(goalRefId)){
             setOfIGoalRefIds.remove(goalRefId);

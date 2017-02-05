@@ -4,9 +4,9 @@
  */
 package icaro.infraestructura.entidadesBasicas.procesadorCognitivo;
 
-import icaro.infraestructura.entidadesBasicas.informes.InformeDeTarea;
-import icaro.infraestructura.entidadesBasicas.informes.Informe;
 import icaro.infraestructura.entidadesBasicas.NombresPredefinidos;
+import icaro.infraestructura.entidadesBasicas.informes.Informe;
+import icaro.infraestructura.entidadesBasicas.informes.InformeDeTarea;
 import icaro.infraestructura.patronAgenteCognitivo.procesadorObjetivos.factoriaEInterfacesPrObj.ItfProcesadorObjetivos;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.ItfUsoRecursoTrazas;
 import icaro.infraestructura.recursosOrganizacion.recursoTrazas.imp.componentes.InfoTraza;
@@ -46,7 +46,7 @@ public class Temporizador extends Thread {
       this.informeAGenerar = informeAGenerar;
     }
      public Temporizador(long milis, ItfProcesadorObjetivos envioHechosItf, InformeDeTarea informeAGenerar,boolean traza) {
-      super("Timeout "+informeAGenerar.getIdentTarea());
+      super("Timeout "+informeAGenerar.getidentEntidadEmisora());
       this.milis= milis;
       this.finalizar= false;
       this.itfEnvioHechos = envioHechosItf;

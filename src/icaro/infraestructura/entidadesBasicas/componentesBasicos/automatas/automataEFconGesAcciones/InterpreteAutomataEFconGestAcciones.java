@@ -355,6 +355,8 @@ public synchronized void interpretarTransicion(TransicionAutomataEF transicion){
       }
         @Override
      public synchronized boolean procesaInput(String input, Object[] parametros){
+         this.trazas.trazar(this.getClass().getSimpleName()," Automata en el estado : "+this.getEstadoAutomata() +
+                 " input : " + input, InfoTraza.NivelTraza.info);
          return ejecutarTransicion( input, parametros);
      }
            
@@ -438,6 +440,7 @@ public synchronized void interpretarTransicion(TransicionAutomataEF transicion){
                 if (metodoId!=null )
                     try {
                     // se trata de una claseAcciones semanticas, ejecutamos el metodo de la clase
+                        
                         if (tipoTransicion == NombresPredefinidos.AUTOMATA_EF_TIPO_TRANSICION_METODO_AS_BLOQ ){
                         this.itfGestAcciones.ejecutarMetodo(accion,metodoId, params);
                         }

@@ -59,7 +59,7 @@ public class AgenteCognitivotImp2 extends AgenteCognitivo implements Serializabl
         this.procObjetivos = procObjetivos;
     }
     @Override
-    public void setEstado(String estado){
+    public synchronized void setEstado(String estado){
         this.estadoAgente= estado;
     }
     /**
@@ -80,20 +80,20 @@ public class AgenteCognitivotImp2 extends AgenteCognitivo implements Serializabl
                 }
     }
     @Override
-    public void aceptaMensaje(MensajeSimple mensaje) {
-        if ((estadoAgente.equals(NombresPredefinidos.ESTADO_ACTIVO))){
+    public synchronized void aceptaMensaje(MensajeSimple mensaje) {
+//        if ((estadoAgente.equals(NombresPredefinidos.ESTADO_ACTIVO))){
             try {
                 percepcion.aceptaMensaje(mensaje);
                 trazas.aceptaNuevaTrazaMensajeRecibido(mensaje);
             } catch (RemoteException ex) {
                 java.util.logging.Logger.getLogger(AgenteCognitivotImp2.class.getName()).log(Level.SEVERE, null, ex);
             }
-                }else
-                    {
-                  trazas.aceptaNuevaTraza(new InfoTraza(identAgente,
-                ": El agente se encuentra en el estado: " + estadoAgente + " y no puede procesar el mensaje recibido",
-                InfoTraza.NivelTraza.debug));
-                }
+//                }else
+//                    {
+//                  trazas.aceptaNuevaTraza(new InfoTraza(identAgente,
+//                ": El agente se encuentra en el estado: " + estadoAgente + " y no puede procesar el mensaje recibido",
+//                InfoTraza.NivelTraza.debug));
+//                }
 
         trazas.aceptaNuevaTraza(new InfoTraza(identAgente,
 				"Estado: "+ estadoAgente + " recibo el mensaje con contenido:"+mensaje.getContenido().toString(),
@@ -118,7 +118,7 @@ public class AgenteCognitivotImp2 extends AgenteCognitivo implements Serializabl
                 }
 	}
     @Override
-    public void aceptaEvento(EventoRecAgte evento) {
+    public synchronized void aceptaEvento(EventoRecAgte evento) {
 		if ((estadoAgente.equals(NombresPredefinidos.ESTADO_ACTIVO))){
                    try {
 			percepcion.aceptaEvento(evento);
@@ -136,7 +136,7 @@ public class AgenteCognitivotImp2 extends AgenteCognitivo implements Serializabl
 
     //JM: El siguiente metodo lo he añadido para poder enviar eventos simples
     @Override
-    public void aceptaEvento(EventoSimple evento) {
+    public synchronized void aceptaEvento(EventoSimple evento) {
 		if ((estadoAgente.equals(NombresPredefinidos.ESTADO_ACTIVO))){
                    try {
 			percepcion.aceptaEvento(evento);
@@ -165,29 +165,34 @@ public class AgenteCognitivotImp2 extends AgenteCognitivo implements Serializabl
   //     estadoAgente =  itfAutomataEstadoAgente.estadoActual();
        if (  estadoAgente.equals( NombresPredefinidos.ESTADO_CREADO)){
            itfAutomataEstadoAgente.transita(NombresPredefinidos.INPUT_OK);
-           estadoAgente= itfAutomataEstadoAgente.estadoActual();
+           this.setEstado(itfAutomataEstadoAgente.estadoActual());
            percepcion.arranca();
            procObjetivos.arranca();
+//           this.setEstado(NombresPredefinidos.ESTADO_ACTIVO);
 
        }else {
            itfAutomataEstadoAgente.transita(NombresPredefinidos.INPUT_ERROR);
-           estadoAgente= itfAutomataEstadoAgente.estadoActual();
+           this.setEstado(itfAutomataEstadoAgente.estadoActual());
        }
     }
 
+    @Override
     public void para() {
         this.setEstado(NombresPredefinidos.ESTADO_PARADO);
     }
 
+    @Override
     public void termina() {
         this.percepcion.termina();
     }
 
+    @Override
     public void continua() {
        this.setEstado(NombresPredefinidos.ESTADO_ACTIVO);
     }
 
-    public int obtenerEstado() {
+    @Override
+    public synchronized int obtenerEstado() {
   //  	estadoAgente = itfAutomataEstadoAgente.estadoActual();
 //
 //        trazas.aceptaNuevaTraza(new InfoTraza(this.identAgente,
@@ -227,6 +232,7 @@ public class AgenteCognitivotImp2 extends AgenteCognitivo implements Serializabl
 		this.percepcion = perception;
 	}
 
+    @Override
 	public ProcesadorObjetivos getControl() {
 		return this.procObjetivos;
 	}
